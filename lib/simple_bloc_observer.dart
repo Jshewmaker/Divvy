@@ -8,9 +8,15 @@ class SimpleBlocObserver extends BlocObserver {
   }
 
   @override
-  void onError(Bloc bloc, Object error, StackTrace stackTrace) {
+  void onError(Cubit cubit, Object error, StackTrace stackTrace) {
     print(error);
-    super.onError(bloc, error, stackTrace);
+    super.onError(cubit, error, stackTrace);
+  }
+
+  @override
+  void onChange(Cubit cubit, Change change) {
+    print(change);
+    super.onChange(cubit, change);
   }
 
   @override
