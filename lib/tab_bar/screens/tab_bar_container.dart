@@ -5,10 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/tab_bar/blocs/blocs.dart';
 import 'package:divvy/tab_bar/widgets/widgets.dart';
-import 'package:divvy/localization.dart';
 import 'package:divvy/tab_bar/models/models.dart';
 
-import '../../theme.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
