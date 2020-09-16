@@ -34,7 +34,7 @@ class LoginForm extends StatelessWidget {
             const SizedBox(height: 8.0),
             _LoginButton(),
             const SizedBox(height: 8.0),
-            _GoogleLoginButton(),
+            // _GoogleLoginButton(),
             const SizedBox(height: 4.0),
             _SignUpButton(),
           ],
