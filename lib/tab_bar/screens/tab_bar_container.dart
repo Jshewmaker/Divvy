@@ -1,6 +1,5 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/tab_bar/widgets/invoices.dart';
-import 'package:divvy/tab_bar/widgets/logout_button.dart';
 import 'package:divvy/tab_bar/widgets/project_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,29 +11,6 @@ class HomeScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => HomeScreen());
   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return BlocBuilder<TabBloc, AppTab>(
-//       builder: (context, activeTab) {
-//         return Scaffold(
-//           appBar: AppBar(
-//             title: Text(FlutterBlocLocalizations.of(context).appTitle),
-//             actions: [
-//               logout(context),
-//             ],
-//           ),
-//           body: activeTab == AppTab.home ? ProjectScreen() : InvoiceScreen(),
-//           bottomNavigationBar: TabSelector(
-//             activeTab: activeTab,
-//             onTabSelected: (tab) =>
-//                 BlocProvider.of<TabBloc>(context).add(TabUpdated(tab)),
-//           ),
-//         );
-//       },
-//     );
-//   }
-// }
 
   @override
   Widget build(BuildContext context) {
