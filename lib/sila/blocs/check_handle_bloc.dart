@@ -24,4 +24,10 @@ class CheckHandleBloc extends Bloc<CheckHandleEvent, CheckHandleState> {
       }
     }
   }
+
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    print('$error, $stackTrace');
+    super.onError(error, stackTrace);
+  }
 }

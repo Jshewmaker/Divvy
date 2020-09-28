@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 class CheckHandle extends Equatable {
-  final String success;
+  final bool success;
   final String message;
   final String reference;
   final String status;

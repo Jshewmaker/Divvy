@@ -23,4 +23,6 @@ class CheckHandleLoadSuccess extends CheckHandleState {
   List<Object> get props => [checkHandle];
 }
 
-class CheckHandleLoadFailure extends CheckHandleState {}
+class CheckHandleLoadFailure extends CheckHandleState {
+  
+}
