@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/sila/blocs/blocs.dart';
+import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
@@ -11,22 +13,29 @@ class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
+    @required this.checkHandleRepository,
   })  : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
+  final CheckHandleRepository checkHandleRepository;
 
   @override
   Widget build(BuildContext context) {
     return RepositoryProvider.value(
-      value: authenticationRepository,
-      child: BlocProvider(
-        create: (_) => AuthenticationBloc(
-          authenticationRepository: authenticationRepository,
-        ),
-        child: AppView(),
-      ),
-    );
+        value: authenticationRepository,
+        child: MultiBlocProvider(providers: [
+          BlocProvider(
+            create: (_) => AuthenticationBloc(
+              authenticationRepository: authenticationRepository,
+            ),
+          ),
+          BlocProvider(
+            create: (_) => CheckHandleBloc(
+              checkHandleRepository: checkHandleRepository,
+            ),
+          ),
+        ], child: AppView()));
   }
 }
 
@@ -50,7 +59,7 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-              _navigator.pushAndRemoveUntil<void>(
+                _navigator.pushAndRemoveUntil<void>(
                   HomeScreen.route(),
                   (route) => false,
                 );
