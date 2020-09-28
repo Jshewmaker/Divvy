@@ -57,7 +57,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(apiResponse.message),
-                  RaisedButton(child: Text('Continue'), onPressed: )
+                  RaisedButton(child: Text('Continue')),
                 ],
               );
             }
