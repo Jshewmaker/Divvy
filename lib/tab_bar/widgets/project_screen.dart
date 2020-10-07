@@ -1,6 +1,7 @@
-import 'package:divvy/sila/blocs/check_handle_bloc.dart';
-import 'package:divvy/sila/blocs/check_handle_event.dart';
-import 'package:divvy/sila/blocs/check_handle_state.dart';
+import 'package:divvy/sila/blocs/check_handle/check_handle_bloc.dart';
+import 'package:divvy/sila/blocs/check_handle/check_handle_event.dart';
+import 'package:divvy/sila/blocs/check_handle/check_handle_state.dart';
+import 'package:divvy/tab_bar/screens/register_handle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -14,7 +15,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       body: Center(
         child: BlocBuilder<CheckHandleBloc, CheckHandleState>(
@@ -57,7 +57,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(apiResponse.message),
-                  RaisedButton(child: Text('Continue')),
+                  RaisedButton(child: Text('Continue'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (contest) => RegisterHandleScreenState(handle: _textController.text))),
+                  ),
                 ],
               );
             }

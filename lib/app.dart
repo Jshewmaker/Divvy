@@ -13,12 +13,12 @@ class App extends StatelessWidget {
   const App({
     Key key,
     @required this.authenticationRepository,
-    @required this.checkHandleRepository,
+    @required this.silaRepository,
   })  : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
-  final CheckHandleRepository checkHandleRepository;
+  final SilaRepository silaRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => CheckHandleBloc(
-              checkHandleRepository: checkHandleRepository,
+              checkHandleRepository: silaRepository,
             ),
           ),
         ], child: AppView()));
