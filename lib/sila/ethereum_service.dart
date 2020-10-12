@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
+import 'package:crypto_keys/crypto_keys.dart';
+import 'package:bip39/bip39.dart' as bip39;
 import 'package:web3dart/web3dart.dart';
 import 'package:convert/convert.dart';
 import 'package:authentication_repository/authentication_repository.dart';
@@ -11,10 +14,7 @@ class EthereumService {
     this._firebaseService = FirebaseService();
   }
 
-  Future<String> signing(Map message) async {
-    var privateKey =
-        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
-
+  Future<String> signing(Map message, String privateKey) async {
     var encodedMessage = jsonEncode(message);
 
     Credentials key = EthPrivateKey.fromHex(privateKey);
@@ -27,17 +27,25 @@ class EthereumService {
     return signing;
   }
 
-  Future<String> createAddress() async {
+  Future<String> createAddress(String handle) async {
+    String collection = "users";
     var data;
-    var randomNum =  Random.secure().nextInt(1000000);
-    print('random: ' + randomNum);
-    data = {"userPrivateKey": randomNum.toString()};
+    // var mnemonic = bip39.generateMnemonic({64});
+    String privateKey = //bip39.mnemonicToSeedHex(mnemonic);
+        "badba7368134dcd61c60f9b56979c09196d03f5891a20c1557b1afac0202a97c";
+
+    data = {"privateKey": privateKey};
+
     _firebaseService.addDataToFirestoreDocument('users', data);
 
-    Credentials privateKey = EthPrivateKey.createRandom(randomNum);
-    print('privateKey: ' );
+    Credentials credentials =
+        EthPrivateKey(Uint8List.fromList(privateKey.codeUnits));
+
+    print('privateKey: ' + privateKey.toString());
     var wallet =
-        await privateKey.extractAddress().then((value) => value.toString());
+        await credentials.extractAddress().then((value) => value.toString());
+    data = {"wallet": wallet};
+    _firebaseService.addDataToFirestoreDocument(collection, data);
     return wallet;
   }
 }

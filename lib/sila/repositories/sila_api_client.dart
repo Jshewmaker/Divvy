@@ -1,13 +1,10 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
-import 'package:web3dart/web3dart.dart';
-import 'package:convert/convert.dart';
 
 class SilaApiClient {
   static const baseUrl = 'https://sandbox.silamoney.com';
@@ -19,20 +16,25 @@ class SilaApiClient {
     @required this.httpClient,
   }) : assert(httpClient != null);
 
+  /// Check if a SILA hande is avaible
+  ///
+  /// This does not regiester the handle, just makes sure it is avaible
   Future<Handle> checkHandle(String handle) async {
+    var privateKey =
+        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
         "auth_handle": "divvy",
-        "user_handle": handle,
+        "user_handle": "divvy-$handle",
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       },
     };
-    String authsignature = await eth.signing(body);
+    String authsignature = await eth.signing(body, privateKey);
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authsignature,
@@ -53,14 +55,19 @@ class SilaApiClient {
     return Handle.fromJson(silaHandleResponse);
   }
 
+  /// Registers Handle is SILA ecosystem
+  ///
+  /// Requires the user handle and the UserModel to fill out body
+  ///
   Future<Handle> register(
     String handle,
-    User user,
+    UserModel user,
   ) async {
-    
+    var privateKey =
+        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+
     var utcTime = DateTime.now().millisecondsSinceEpoch;
-    var address = await eth.createAddress();
-    
+    var address = await eth.createAddress(handle);
 
     Map body = {
       "header": {
@@ -103,11 +110,11 @@ class SilaApiClient {
       }
     };
 
-    String authsignature = await eth.signing(body);
+    String authSignature = await eth.signing(body, privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
-      "authsignature": authsignature,
+      "authsignature": authSignature,
     };
 
     final silaURL = '$baseUrl/0.2/register';
@@ -119,6 +126,46 @@ class SilaApiClient {
 
     if (silaResponse.statusCode != 200) {
       throw Exception('error connecting to SILA /register');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return Handle.fromJson(silaHandleResponse);
+  }
+
+  Future<Handle> requestKYC(String handle, String signature, String wallet) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    var privateKey =
+        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": "divvy",
+        "user_handle": handle,
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "header_msg",
+    };
+    String authSignature = await eth.signing(body, privateKey);
+    String userSignature = await eth.signing( body, signature);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/request_kyc';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /check_handle');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

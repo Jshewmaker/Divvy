@@ -13,29 +13,34 @@ class UserEntity extends Equatable {
   final String postalCode;
   final String phone;
   final String email;
+  final String privateKey;
   final String silaEntityName;
   final String silaHandle;
   final String silaAuthSignature;
   final String silaUserSignature;
   final String cryptoAddress;
+  final String wallet;
 
   const UserEntity(
-      this.id,
-      this.name,
-      this.dateOfBirthYYYYMMDD,
-      this.ssn,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.country,
-      this.postalCode,
-      this.phone,
-      this.email,
-      this.silaEntityName,
-      this.silaHandle,
-      this.silaAuthSignature,
-      this.silaUserSignature,
-      this.cryptoAddress,);
+    this.id,
+    this.name,
+    this.dateOfBirthYYYYMMDD,
+    this.ssn,
+    this.streetAddress,
+    this.city,
+    this.state,
+    this.country,
+    this.postalCode,
+    this.phone,
+    this.email,
+    this.privateKey,
+    this.silaEntityName,
+    this.silaHandle,
+    this.silaAuthSignature,
+    this.silaUserSignature,
+    this.cryptoAddress,
+    this.wallet,
+  );
 
   Map<String, Object> toJson() {
     return {
@@ -50,11 +55,13 @@ class UserEntity extends Equatable {
       "postalCode": postalCode,
       "phone": phone,
       "email": email,
+      "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
       "silaAuthSignature": silaAuthSignature,
       "silaUserSignature": silaUserSignature,
       "cryptoAddress": cryptoAddress,
+      "wallet": wallet,
     };
   }
 
@@ -70,11 +77,13 @@ class UserEntity extends Equatable {
         postalCode,
         phone,
         email,
+        privateKey,
         silaEntityName,
         silaHandle,
         silaAuthSignature,
         silaUserSignature,
         cryptoAddress,
+        wallet,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -90,11 +99,13 @@ class UserEntity extends Equatable {
       json["postalCode"] as String,
       json["phone"] as String,
       json["email"] as String,
+      json["privateKey"] as String,
       json["silaEntityName"] as String,
       json["silaHandle"] as String,
       json["silaAuthSignature"] as String,
       json["silaUserSignature"] as String,
       json["cryptoAddress"] as String,
+      json["wallet"] as String,
     );
   }
 
@@ -112,11 +123,13 @@ class UserEntity extends Equatable {
       snap.data['postalCode'],
       snap.data['phone'],
       snap.data['email'],
+      snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
       snap.data['silaAuthSignature'],
       snap.data['silaUserSignature'],
       snap.data['cryptoAddress'],
+      snap.data['wallet'],
     );
   }
 
@@ -134,11 +147,13 @@ class UserEntity extends Equatable {
       "postalCode": postalCode,
       "phone": phone,
       "email": email,
+      "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
       "silaAuthsiganture": silaAuthSignature,
       "silaUserSignature": silaUserSignature,
       "cryptoAddress": cryptoAddress,
+      "wallet": wallet,
     };
   }
 }

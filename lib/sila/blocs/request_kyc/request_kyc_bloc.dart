@@ -1,27 +1,28 @@
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
+import 'package:divvy/sila/blocs/request_kyc/request_kyc.dart';
 import 'package:divvy/sila/models/handle.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
-class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
+class RequestKYCBloc extends Bloc<RequestKYCEvent, RequestKYCState> {
   final SilaRepository silaRepository;
 
-  RegisterBloc({@required this.silaRepository})
+  RequestKYCBloc({@required this.silaRepository})
       : assert(silaRepository != null),
-        super(RegisterInitial());
+        super(RequestKYCInitial());
 
   @override
-  Stream<RegisterState> mapEventToState(
-      RegisterEvent event) async* {
-    if (event is RegisterRequest) {
-      yield RegisterLoadInProgress();
+  Stream<RequestKYCState> mapEventToState(
+      RequestKYCEvent event) async* {
+    if (event is RequestKYCRequest) {
+      yield RequestKYCLoadInProgress();
       try {
         final Handle handle =
-            await silaRepository.register(event.handle );
-        yield RegisterLoadSuccess(handle: handle);
+            await silaRepository.requestKYC();
+        yield RequestKYCLoadSuccess(handle: handle);
       } catch (_) {
-        yield RegisterLoadFailure();
+        yield RequestKYCLoadFailure();
       }
     }
   }

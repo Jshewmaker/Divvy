@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/blocs/register/register.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
@@ -6,12 +7,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterHandleScreenState extends StatelessWidget {
+  final FirebaseService _firebaseService = FirebaseService();
   final String handle;
+  final String collection = "users";
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
   RegisterHandleScreenState({Key key, @required this.handle}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,8 @@ class RegisterHandleScreenState extends StatelessWidget {
               }
               if (state is RegisterLoadSuccess) {
                 final apiResponse = state.handle;
+                Map<String, String> data = {"silaHandle": "divvy-$handle"};
+                _firebaseService.addDataToFirestoreDocument(collection, data);
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,

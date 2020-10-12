@@ -190,20 +190,19 @@ class SignUpForm extends StatelessWidget {
                 ),
                 color: Colors.orangeAccent,
                 onPressed: state.status.isValidated
-                    ? () => context.bloc<SignUpCubit>().signUpFormSubmitted(
-                        User(
-                            name: _nameController.text,
-                            dateOfBirthYYYYMMDD: _birthdayController.text,
-                            ssn: _ssnController.text,
-                            streetAddress: _streetAddressController.text,
-                            city: _cityController.text,
-                            state: _stateController.text,
-                            country: _countryController.text,
-                            postalCode: _postalCodeController.text,
-                            phone: _phoneNumberController.text,
-                            silaEntityName: "null",
-                            silaAuthSignature: "null",
-                            silaUserSignature: "null"))
+                    ? () => context
+                        .bloc<SignUpCubit>()
+                        .signUpFormSubmitted(UserModel(
+                          name: _nameController.text,
+                          dateOfBirthYYYYMMDD: _birthdayController.text,
+                          ssn: _ssnController.text,
+                          streetAddress: _streetAddressController.text,
+                          city: _cityController.text,
+                          state: _stateController.text,
+                          country: _countryController.text,
+                          postalCode: _postalCodeController.text,
+                          phone: _phoneNumberController.text,
+                        ))
                     : null,
               );
       },
@@ -212,7 +211,6 @@ class SignUpForm extends StatelessWidget {
 }
 
 class _EmailInput extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(

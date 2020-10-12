@@ -1,41 +1,51 @@
 import 'package:divvy/sila/blocs/blocs.dart';
+import 'package:divvy/sila/repositories/sila_api_client.dart';
+import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
 
-class AccountScreen extends StatefulWidget {
-  @override
-  State<AccountScreen> createState() => _AccountScreenState();
-}
-
-class _AccountScreenState extends State<AccountScreen> {
-  final TextEditingController _textEditingController = TextEditingController();
+class AccountScreen extends StatelessWidget {
+  final String collection = "users";
+  final SilaRepository silaRepository =
+      SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Form(
-        child: Row(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.0),
-                child: TextFormField(
-                  controller: _textEditingController,
-                  decoration: InputDecoration(
-                    labelText: 'user name',
-                    hintText: 'Divvy',
-                  ),
-                ),
-              ),
-            ),
-            IconButton(
-              icon: Icon(Icons.search),
-              onPressed: () {
-                BlocProvider.of<CheckHandleBloc>(context).add(
-                    CheckHandleRequest(handle: _textEditingController.text));
-              },
-            ),
-          ],
+    return BlocProvider(
+      create: (context) => RequestKYCBloc(silaRepository: silaRepository),
+      child: Scaffold(
+        body: Center(
+          child: BlocBuilder<RequestKYCBloc, RequestKYCState>(
+            builder: (context, state) {
+              if (state is RequestKYCInitial) {
+                BlocProvider.of<RequestKYCBloc>(context)
+                    .add(RequestKYCRequest());
+                return Container();
+              }
+              if (state is RequestKYCLoadInProgress) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (state is RequestKYCLoadSuccess) {
+                final apiResponse = state.handle;
+
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(apiResponse.message),
+                  ],
+                );
+              }
+              if (state is RequestKYCLoadFailure) {
+                return Text(
+                  'Something went wrong with KYC!',
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+              return Container();
+            },
+          ),
         ),
       ),
     );

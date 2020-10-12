@@ -1,19 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'models/models.dart';
+
 class FirebaseService {
   FirebaseAuth firebaseAuth;
-  var firestoreUser;
+  String collection;
+
   FirebaseService() {
     this.firebaseAuth = FirebaseAuth.instance;
+    this.collection = "users";
   }
 
-  userSetupCreateFirestore(String collection, data) async {
+  void userSetupCreateFirestore(String collection, data) async {
     var user = await firebaseAuth.currentUser();
     Firestore.instance.collection(collection).document(user.uid).setData(data);
   }
 
-  addDataToFirestoreDocument(String collection, data) async {
+  void addDataToFirestoreDocument(String collection, data) async {
     firebaseAuth.currentUser().then((value) {
       Firestore.instance
           .collection(collection)
@@ -22,14 +26,23 @@ class FirebaseService {
     });
   }
 
-  getUser() async {
+  /// Return user data in a UserModel
+  Future<UserModel> getUserData() async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    DocumentSnapshot _documentSnapshot =
+        await Firestore.instance.collection(collection).document(user.uid).get();
+    return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+  }
+
+  /// Return user data in a FirebaseUser object
+  Future<FirebaseUser> getUser() async {
     return firebaseAuth.currentUser();
   }
 
   void addUserEmailToFirebaseDocument() async {
     FirebaseAuth.instance.currentUser().then((value) {
       var data = {"email": value.email};
-      addDataToFirestoreDocument('users', data);
+      addDataToFirestoreDocument(collection, data);
     });
   }
 }

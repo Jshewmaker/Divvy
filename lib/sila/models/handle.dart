@@ -5,8 +5,9 @@ class Handle extends Equatable {
   final String message;
   final String reference;
   final String status;
+  final String verificationUUID;
 
-  const Handle({this.success, this.message, this.reference, this.status});
+  const Handle({this.success, this.message, this.reference, this.status, this.verificationUUID});
 
   @override
   List<Object> get props => [
@@ -14,6 +15,7 @@ class Handle extends Equatable {
         message,
         reference,
         status,
+        verificationUUID,
       ];
 
   static Handle fromJson(dynamic json) {
@@ -22,7 +24,7 @@ class Handle extends Equatable {
       message: json['message'],
       reference: json['reference'],
       status: json['status'],
+      verificationUUID: json['verification_uuid'],
     );
   }
-
 }

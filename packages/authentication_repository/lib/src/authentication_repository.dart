@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:authentication_repository/src/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
@@ -37,13 +36,13 @@ class AuthenticationRepository {
 
   // final GoogleSignIn _googleSignIn;
 
-  /// Stream of [User] which will emit the current user when
+  /// Stream of [UserModel] which will emit the current user when
   /// the authentication state changes.
   ///
-  /// Emits [User.empty] if the user is not authenticated.
-  Stream<User> get user {
+  /// Emits [UserModel.empty] if the user is not authenticated.
+  Stream<UserModel> get user {
     return _firebaseAuth.onAuthStateChanged.map((firebaseUser) {
-      return firebaseUser == null ? User.empty : firebaseUser.toUser;
+      return firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
     });
   }
 
@@ -51,7 +50,7 @@ class AuthenticationRepository {
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
   Future<void> signUp(
-    User userData, {
+    UserModel userData, {
     @required String email,
     @required String password,
   }) async {
@@ -107,7 +106,7 @@ class AuthenticationRepository {
   }
 
   /// Signs out the current user which will emit
-  /// [User.empty] from the [user] Stream.
+  /// [UserModel.empty] from the [user] Stream.
   ///
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {
@@ -123,8 +122,8 @@ class AuthenticationRepository {
 }
 
 extension on FirebaseUser {
-  User get toUser {
-    return User(
+  UserModel get toUser {
+    return UserModel(
       // id: uid,
       name: displayName,
       email: email,
