@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:authentication_repository/src/firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 
 import 'models/models.dart';
@@ -13,7 +15,7 @@ class SignUpFailure implements Exception {}
 class LogInWithEmailAndPasswordFailure implements Exception {}
 
 /// Thrown during the sign in with google process if a failure occurs.
-class LogInWithGoogleFailure implements Exception {}
+// class LogInWithGoogleFailure implements Exception {}
 
 /// Thrown during the logout process if a failure occurs.
 class LogOutFailure implements Exception {}
@@ -25,27 +27,30 @@ class AuthenticationRepository {
   /// {@macro authentication_repository}
   AuthenticationRepository({
     FirebaseAuth firebaseAuth,
-    GoogleSignIn googleSignIn,
-  })  : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
+    // GoogleSignIn googleSignIn,
+  }) : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
+  // _googleSignIn = googleSignIn ?? GoogleSignIn.standard();
 
   final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
+  final firebaseUser = FirebaseAuth.instance.currentUser();
 
-  /// Stream of [User] which will emit the current user when
+  // final GoogleSignIn _googleSignIn;
+
+  /// Stream of [UserModel] which will emit the current user when
   /// the authentication state changes.
   ///
-  /// Emits [User.empty] if the user is not authenticated.
-  Stream<User> get user {
+  /// Emits [UserModel.empty] if the user is not authenticated.
+  Stream<UserModel> get user {
     return _firebaseAuth.onAuthStateChanged.map((firebaseUser) {
-      return firebaseUser == null ? User.empty : firebaseUser.toUser;
+      return firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
     });
   }
 
   /// Creates a new user with the provided [email] and [password].
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
-  Future<void> signUp({
+  Future<void> signUp(
+    UserModel userData, {
     @required String email,
     @required String password,
   }) async {
@@ -55,6 +60,11 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
+      FirebaseService firebaseService = FirebaseService();
+      firebaseService.userSetupCreateFirestore(
+          'users', userData.toEntity().toDocument());
+      // userCollection.add(user.toEntity().toDocument());
+      // userCollection.document(user.id).
     } on Exception {
       throw SignUpFailure();
     }
@@ -63,19 +73,19 @@ class AuthenticationRepository {
   /// Starts the Sign In with Google Flow.
   ///
   /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
-  Future<void> logInWithGoogle() async {
-    try {
-      final googleUser = await _googleSignIn.signIn();
-      final googleAuth = await googleUser.authentication;
-      final credential = GoogleAuthProvider.getCredential(
-        accessToken: googleAuth.accessToken,
-        idToken: googleAuth.idToken,
-      );
-      await _firebaseAuth.signInWithCredential(credential);
-    } on Exception {
-      throw LogInWithGoogleFailure();
-    }
-  }
+  // Future<void> logInWithGoogle() async {
+  //   try {
+  //     final googleUser = await _googleSignIn.signIn();
+  //     final googleAuth = await googleUser.authentication;
+  //     final credential = GoogleAuthProvider.getCredential(
+  //       accessToken: googleAuth.accessToken,
+  //       idToken: googleAuth.idToken,
+  //     );
+  //     await _firebaseAuth.signInWithCredential(credential);
+  //   } on Exception {
+  //     throw LogInWithGoogleFailure();
+  //   }
+  // }
 
   /// Signs in with the provided [email] and [password].
   ///
@@ -96,14 +106,14 @@ class AuthenticationRepository {
   }
 
   /// Signs out the current user which will emit
-  /// [User.empty] from the [user] Stream.
+  /// [UserModel.empty] from the [user] Stream.
   ///
   /// Throws a [LogOutFailure] if an exception occurs.
   Future<void> logOut() async {
     try {
       await Future.wait([
         _firebaseAuth.signOut(),
-        _googleSignIn.signOut(),
+        // _googleSignIn.signOut(),
       ]);
     } on Exception {
       throw LogOutFailure();
@@ -112,7 +122,11 @@ class AuthenticationRepository {
 }
 
 extension on FirebaseUser {
-  User get toUser {
-    return User(id: uid, email: email, firstName: displayName,);
+  UserModel get toUser {
+    return UserModel(
+      // id: uid,
+      name: displayName,
+      email: email,
+    );
   }
 }

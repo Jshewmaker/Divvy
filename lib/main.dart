@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
@@ -16,7 +14,7 @@ void main() {
   EquatableConfig.stringify = kDebugMode;
   Bloc.observer = SimpleBlocObserver();
 
-  final CheckHandleRepository checkHandleRepository = CheckHandleRepository(
+  final SilaRepository checkHandleRepository = SilaRepository(
     silaApiClient: SilaApiClient(
       httpClient: http.Client(),
     ),
@@ -24,6 +22,6 @@ void main() {
 
   runApp(App(
     authenticationRepository: AuthenticationRepository(),
-    checkHandleRepository: checkHandleRepository,
+    silaRepository: checkHandleRepository,
   ));
 }
