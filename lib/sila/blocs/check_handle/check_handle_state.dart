@@ -15,7 +15,7 @@ class CheckHandleInitial extends CheckHandleState {}
 class CheckHandleLoadInProgress extends CheckHandleState {}
 
 class CheckHandleLoadSuccess extends CheckHandleState {
-  final CheckHandle checkHandle;
+  final Handle checkHandle;
 
   const CheckHandleLoadSuccess({@required this.checkHandle}) : assert(checkHandle != null);
 

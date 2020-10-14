@@ -1,12 +1,13 @@
 import 'package:equatable/equatable.dart';
 
-class CheckHandle extends Equatable {
+class Handle extends Equatable {
   final bool success;
   final String message;
   final String reference;
   final String status;
+  final String verificationUUID;
 
-  const CheckHandle({this.success, this.message, this.reference, this.status});
+  const Handle({this.success, this.message, this.reference, this.status, this.verificationUUID});
 
   @override
   List<Object> get props => [
@@ -14,15 +15,16 @@ class CheckHandle extends Equatable {
         message,
         reference,
         status,
+        verificationUUID,
       ];
 
-  static CheckHandle fromJson(dynamic json) {
-    return CheckHandle(
+  static Handle fromJson(dynamic json) {
+    return Handle(
       success: json['success'],
       message: json['message'],
       reference: json['reference'],
       status: json['status'],
+      verificationUUID: json['verification_uuid'],
     );
   }
-
 }
