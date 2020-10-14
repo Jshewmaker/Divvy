@@ -29,7 +29,7 @@ class SilaRepository {
   Future<Handle> requestKYC() async {
     UserModel user = await _firebaseService.getUserData();
 
-    final Handle requestKYC = await silaApiClient.requestKYC(user.silaHandle, user.privateKey, user.wallet);
+    final Handle requestKYC = await silaApiClient.requestKYC(user.silaHandle, user.privateKey);
     return requestKYC;
   }
 }

@@ -66,8 +66,8 @@ class SilaApiClient {
     var privateKey =
         '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
 
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
-    var address = await eth.createAddress(handle);
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    String address = await eth.createEthWallet();
 
     Map body = {
       "header": {
@@ -132,24 +132,24 @@ class SilaApiClient {
     return Handle.fromJson(silaHandleResponse);
   }
 
-  Future<Handle> requestKYC(String handle, String signature, String wallet) async {
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
-    var privateKey =
+  Future<Handle> requestKYC(String handle, String userPrivateKey) async {
+    var divvyPrivateKey =
         '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy",
-        "user_handle": handle,
+        "auth_handle": "divvy.silamoney.eth",
+        "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
-      },
-      "message": "header_msg",
+      }
+     
     };
-    String authSignature = await eth.signing(body, privateKey);
-    String userSignature = await eth.signing( body, signature);
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
