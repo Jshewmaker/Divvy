@@ -16,7 +16,7 @@ class RequestKYCInitial extends RequestKYCState {}
 class RequestKYCLoadInProgress extends RequestKYCState {}
 
 class RequestKYCLoadSuccess extends RequestKYCState {
-  final Handle handle;
+  final RegisterResponse handle;
 
   const RequestKYCLoadSuccess({@required this.handle}) : assert(handle != null);
 

@@ -19,7 +19,7 @@ class SilaApiClient {
   /// Check if a SILA hande is avaible
   ///
   /// This does not regiester the handle, just makes sure it is avaible
-  Future<Handle> checkHandle(String handle) async {
+  Future<RegisterResponse> checkHandle(String handle) async {
     var privateKey =
         '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
     var utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -52,14 +52,14 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return Handle.fromJson(silaHandleResponse);
+    return RegisterResponse.fromJson(silaHandleResponse);
   }
 
   /// Registers Handle is SILA ecosystem
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
-  Future<Handle> register(
+  Future<RegisterResponse> register(
     String handle,
     UserModel user,
   ) async {
@@ -129,10 +129,10 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return Handle.fromJson(silaHandleResponse);
+    return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  Future<Handle> requestKYC(String handle, String userPrivateKey) async {
+  Future<RegisterResponse> requestKYC(String handle, String userPrivateKey) async {
     var divvyPrivateKey =
         '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -146,7 +146,6 @@ class SilaApiClient {
         "crypto": "ETH",
         "reference": "ref"
       }
-     
     };
     String authSignature = await eth.signing(body, divvyPrivateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
@@ -165,10 +164,50 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /check_handle');
+      throw Exception('error connecting to SILA /request_handle');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return Handle.fromJson(silaHandleResponse);
+    return RegisterResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<CheckKycResponse> checkKYC(String handle, String userPrivateKey) async {
+    var divvyPrivateKey =
+        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": "divvy.silamoney.eth",
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "header_msg"
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/check_kyc';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /check_KYC');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return CheckKycResponse.fromJson(silaHandleResponse);
   }
 }
