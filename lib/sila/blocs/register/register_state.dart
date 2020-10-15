@@ -16,7 +16,7 @@ class RegisterInitial extends RegisterState {}
 class RegisterLoadInProgress extends RegisterState {}
 
 class RegisterLoadSuccess extends RegisterState {
-  final Handle handle;
+  final RegisterResponse handle;
 
   const RegisterLoadSuccess({@required this.handle}) : assert(handle != null);
 

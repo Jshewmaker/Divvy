@@ -12,24 +12,31 @@ class SilaRepository {
     assert(silaApiClient != null);
   }
 
-  Future<Handle> checkHandle(String handle) async {
-    final Handle checkHandle = await silaApiClient.checkHandle(handle);
+  Future<RegisterResponse> checkHandle(String handle) async {
+    final RegisterResponse checkHandle = await silaApiClient.checkHandle(handle);
     return checkHandle;
   }
 
 
 
-  Future<Handle> register(String handle) async {
+  Future<RegisterResponse> register(String handle) async {
     UserModel user = await _firebaseService.getUserData();
 
-    final Handle registerHandle = await silaApiClient.register(handle, user);
+    final RegisterResponse registerHandle = await silaApiClient.register(handle, user);
     return registerHandle;
   }
 
-  Future<Handle> requestKYC() async {
+  Future<RegisterResponse> requestKYC() async {
     UserModel user = await _firebaseService.getUserData();
 
-    final Handle requestKYC = await silaApiClient.requestKYC(user.silaHandle, user.privateKey);
+    final RegisterResponse requestKYC = await silaApiClient.requestKYC(user.silaHandle, user.privateKey);
     return requestKYC;
+  }
+
+  Future<CheckKycResponse> checkKYC() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final CheckKycResponse checkKyc = await silaApiClient.checkKYC(user.silaHandle, user.privateKey);
+    return checkKyc;
   }
 }
