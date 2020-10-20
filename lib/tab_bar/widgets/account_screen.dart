@@ -1,6 +1,7 @@
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
+import 'package:divvy/tab_bar/screens/request_kyc_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -34,6 +35,12 @@ class AccountScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(apiResponse.message),
+                    RaisedButton(
+                      child: Text('Check KYC Status'),
+                      onPressed: () => Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (contest) => RequestKYCScreen())),
+                    ),
                   ],
                 );
               }

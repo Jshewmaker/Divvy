@@ -48,4 +48,20 @@ class SilaRepository {
         user.silaHandle, user.privateKey, plaidPublicToken);
     return response;
   }
+
+  Future<IssueSilaResponse> issueSila() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final IssueSilaResponse response =
+        await silaApiClient.issueSila(user.silaHandle, user.privateKey);
+    return response;
+  }
+
+  Future<GetSilaBalanceResponse> getSilaBalance() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final GetSilaBalanceResponse response =
+        await silaApiClient.getSilaBalance(user.wallet);
+    return response;
+  }
 }

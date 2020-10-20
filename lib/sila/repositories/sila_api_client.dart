@@ -209,7 +209,6 @@ class SilaApiClient {
   Future<LinkAccountResponse> linkAccount(
       String handle, String userPrivateKey, String plaidPublicToken) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
-    // plaidPublicToken = plaidPublicToken.substring( 7);
     Map body = {
       "header": {
         "created": utcTime,
@@ -245,5 +244,70 @@ class SilaApiClient {
 
     final response = jsonDecode(silaResponse.body);
     return LinkAccountResponse.fromJson(response);
+  }
+
+  Future<IssueSilaResponse> issueSila(
+      String handle, String userPrivateKey) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": "divvy.silamoney.eth",
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "issue_msg",
+      "amount": 100420,
+      "account_name": "$handle plaid account",
+      "descriptor": "optional transaction descriptor",
+      "processing_type": "STANDARD_ACH"
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/issue_sila';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /issue_sila');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return IssueSilaResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetSilaBalanceResponse> getSilaBalance(String address) async {
+    Map body = {"address": address};
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+    };
+
+    final silaURL = '$baseUrl/0.2/get_sila_balance';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_sila_balance');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetSilaBalanceResponse.fromJson(silaHandleResponse);
   }
 }
