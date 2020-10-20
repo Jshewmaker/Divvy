@@ -8,7 +8,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class InvoiceScreen extends StatelessWidget {
-  final FirebaseService _firebaseService = FirebaseService();
   final String collection = "users";
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));

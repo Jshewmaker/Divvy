@@ -21,3 +21,4 @@ class PlaidPublicTokenExchangeResponseModel {
         return data;
     }
 }
+
