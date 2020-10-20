@@ -1,4 +1,5 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
+import 'package:divvy/tab_bar/widgets/home_screen.dart';
 import 'package:divvy/tab_bar/widgets/invoices.dart';
 import 'package:divvy/tab_bar/widgets/project_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,7 @@ class TabBarContainer extends StatelessWidget {
   }
 
   Widget activeTabFunction(activeTab) {
-    if (activeTab == AppTab.home) return ProjectScreen();
+    if (activeTab == AppTab.home) return PlaidLinkSplashScreen();
     if (activeTab == AppTab.project) return ProjectScreen();
     if (activeTab == AppTab.invoices) return InvoiceScreen();
     if (activeTab == AppTab.account) return AccountScreen();

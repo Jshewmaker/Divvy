@@ -10,6 +10,8 @@ class SilaApiClient {
   static const baseUrl = 'https://sandbox.silamoney.com';
   final http.Client httpClient;
   EthereumService eth = EthereumService();
+  final String divvyPrivateKey =
+      '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({
@@ -20,8 +22,6 @@ class SilaApiClient {
   ///
   /// This does not regiester the handle, just makes sure it is avaible
   Future<RegisterResponse> checkHandle(String handle) async {
-    var privateKey =
-        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
@@ -34,7 +34,7 @@ class SilaApiClient {
         "reference": "ref"
       },
     };
-    String authsignature = await eth.signing(body, privateKey);
+    String authsignature = await eth.signing(body, divvyPrivateKey);
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authsignature,
@@ -63,9 +63,6 @@ class SilaApiClient {
     String handle,
     UserModel user,
   ) async {
-    var privateKey =
-        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
-
     int utcTime = DateTime.now().millisecondsSinceEpoch;
     String address = await eth.createEthWallet();
 
@@ -110,7 +107,7 @@ class SilaApiClient {
       }
     };
 
-    String authSignature = await eth.signing(body, privateKey);
+    String authSignature = await eth.signing(body, divvyPrivateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
@@ -132,9 +129,8 @@ class SilaApiClient {
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  Future<RegisterResponse> requestKYC(String handle, String userPrivateKey) async {
-    var divvyPrivateKey =
-        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+  Future<RegisterResponse> requestKYC(
+      String handle, String userPrivateKey) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
@@ -171,9 +167,8 @@ class SilaApiClient {
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CheckKycResponse> checkKYC(String handle, String userPrivateKey) async {
-    var divvyPrivateKey =
-        '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+  Future<CheckKycResponse> checkKYC(
+      String handle, String userPrivateKey) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
@@ -209,5 +204,46 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return CheckKycResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<LinkAccountResponse> linkAccount(
+      String handle, String userPrivateKey, String plaidPublicToken) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    // plaidPublicToken = plaidPublicToken.substring( 7);
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": "divvy.silamoney.eth",
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "link_account_msg",
+      "public_token": plaidPublicToken,
+      "account_name": "$handle plaid account",
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/link_account';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /link_account');
+    }
+
+    final response = jsonDecode(silaResponse.body);
+    return LinkAccountResponse.fromJson(response);
   }
 }
