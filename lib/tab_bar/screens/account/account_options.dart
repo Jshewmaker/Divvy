@@ -3,6 +3,7 @@ import 'package:divvy/tab_bar/screens/account/kyc_screen.dart';
 import 'package:divvy/tab_bar/screens/account/request_kyc_screen.dart';
 import 'package:divvy/tab_bar/screens/account/update_user_info/update_address_screen.dart';
 import 'package:divvy/tab_bar/screens/account/update_user_info/update_email_screen.dart';
+import 'package:divvy/tab_bar/screens/account/update_user_info/update_entity_screen.dart';
 import 'package:divvy/tab_bar/screens/account/update_user_info/update_phone_screen.dart';
 import 'package:divvy/tab_bar/screens/account/update_user_info/update_ssn_screen_.dart';
 import 'package:divvy/tab_bar/screens/issue_sila_screen.dart';
@@ -46,8 +47,8 @@ class AccountOptionsScreen extends StatelessWidget {
             ),
             RaisedButton(
               child: Text('Update Personal Info'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => TransactionScreen())),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => UpdateEntityScreen())),
             ),
           ],
         ),

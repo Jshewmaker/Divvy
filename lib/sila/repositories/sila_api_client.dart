@@ -554,9 +554,15 @@ class SilaApiClient {
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
-  Future<UpdateUserInfo> updateEntity(String handle, String userPrivateKey,
-      String uuid, String field, String value) async {
+  ///You can only update Entity info before KYC is processed.
+  ///
+  ///Only call this if you are writing a flow where KYC hasnt been process yet
+  ///or KYC has failed
+  ///Entity Info: first_name, last_name, entity_name, birthdate
+  Future<UpdateUserInfo> updateEntity(
+      String handle, String userPrivateKey, Map<String, String> entity) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
+    var _listEntity = entity.values.toList();
 
     Map body = {
       "header": {
@@ -564,7 +570,10 @@ class SilaApiClient {
         "auth_handle": authHandle,
         "user_handle": handle
       },
-      "$field": value,
+      "first_name": _listEntity[0],
+      "last_name": _listEntity[1],
+      "entity_name": _listEntity[2],
+      "birthdate": _listEntity[3]
     };
 
     String authSignature = await eth.signing(body, divvyPrivateKey);

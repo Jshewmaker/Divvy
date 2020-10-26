@@ -129,18 +129,11 @@ class SilaRepository {
     return response;
   }
 
-  Future<UpdateUserInfo> updateEntity(String newPhone) async {
-    String field = 'birthdate';
+  Future<UpdateUserInfo> updateEntity(Map<String, String> entity) async {
     UserModel user = await _firebaseService.getUserData();
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
 
     final UpdateUserInfo response = await silaApiClient.updateEntity(
-        user.silaHandle,
-        user.privateKey,
-        entity.phones[0].uuid,
-        field,
-        newPhone);
+        user.silaHandle, user.privateKey, entity);
     return response;
   }
 }
