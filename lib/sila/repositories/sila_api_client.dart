@@ -467,6 +467,10 @@ class SilaApiClient {
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
+  ///You can only update SSN before KYC is processed.
+  ///
+  ///Only call this if you are writing a flow where KYC hasnt been process yet
+  ///or KYC has failed
   Future<UpdateUserInfo> updateIdentity(
       String handle, String userPrivateKey, String uuid, String ssn) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -507,9 +511,9 @@ class SilaApiClient {
   }
 
   Future<UpdateUserInfo> updateAddress(String handle, String userPrivateKey,
-      String uuid, String field, String value) async {
+      String uuid, Map<String, String> address) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
-
+    var _addressList = address.values.toList();
     Map body = {
       "header": {
         "created": utcTime,
@@ -517,7 +521,13 @@ class SilaApiClient {
         "user_handle": handle
       },
       "uuid": uuid,
-      "$field": value,
+      "address_alias": 'Main Address',
+      "street_address_1": _addressList[0],
+      "street_address_2": _addressList[1],
+      "city": _addressList[2],
+      "state": _addressList[3],
+      "country": _addressList[4],
+      "postal_code": _addressList[5],
     };
 
     String authSignature = await eth.signing(body, divvyPrivateKey);
@@ -529,7 +539,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/email';
+    final silaURL = '$baseUrl/0.2/update/address';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
