@@ -105,6 +105,10 @@ class SilaRepository {
     return response;
   }
 
+  ///You can only update SSN before KYC is processed.
+  ///
+  ///Only call this if you are writing a flow where KYC hasnt been process yet
+  ///or KYC has failed
   Future<UpdateUserInfo> updateIdentity(String newSSN) async {
     UserModel user = await _firebaseService.getUserData();
     GetEntityResponse entity =
@@ -115,33 +119,21 @@ class SilaRepository {
     return response;
   }
 
-  Future<UpdateUserInfo> updateAddress(String newAddress) async {
-    String field = 'city';
+  Future<UpdateUserInfo> updateAddress(Map<String, String> newAddress) async {
     UserModel user = await _firebaseService.getUserData();
     GetEntityResponse entity =
         await silaApiClient.getEntity(user.silaHandle, user.privateKey);
 
     final UpdateUserInfo response = await silaApiClient.updateAddress(
-        user.silaHandle,
-        user.privateKey,
-        entity.addresses[0].uuid,
-        field,
-        newAddress);
+        user.silaHandle, user.privateKey, entity.addresses[0].uuid, newAddress);
     return response;
   }
 
-  Future<UpdateUserInfo> updateEntity(String newPhone) async {
-    String field = 'birthdate';
+  Future<UpdateUserInfo> updateEntity(Map<String, String> entity) async {
     UserModel user = await _firebaseService.getUserData();
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
 
     final UpdateUserInfo response = await silaApiClient.updateEntity(
-        user.silaHandle,
-        user.privateKey,
-        entity.phones[0].uuid,
-        field,
-        newPhone);
+        user.silaHandle, user.privateKey, entity);
     return response;
   }
 }

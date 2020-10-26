@@ -46,7 +46,7 @@ class UserEntity extends Equatable {
     return {
       "id": id,
       "name": name,
-      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "birthdate": dateOfBirthYYYYMMDD,
       "ssn": ssn,
       "streetAddress": streetAddress,
       "city": city,
