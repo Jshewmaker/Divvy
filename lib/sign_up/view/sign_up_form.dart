@@ -5,16 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
 
+// ignore: must_be_immutable
 class SignUpForm extends StatelessWidget {
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _ssnController = TextEditingController();
-  TextEditingController _birthdayController = TextEditingController();
-  TextEditingController _streetAddressController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _stateController = TextEditingController();
-  TextEditingController _countryController = TextEditingController();
-  TextEditingController _postalCodeController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _ssnController = TextEditingController();
+  final TextEditingController _birthdayController = TextEditingController();
+  final TextEditingController _streetAddressController =
+      TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _postalCodeController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   bool _validate = false;
 

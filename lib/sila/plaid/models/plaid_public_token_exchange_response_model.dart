@@ -1,23 +1,25 @@
 class PlaidPublicTokenExchangeResponseModel {
-    String access_token;
-    String item_id;
-    String request_id;
+  String accessToken;
+  String itemID;
+  String requestID;
 
-    PlaidPublicTokenExchangeResponseModel({this.access_token, this.item_id, this.request_id});
+  PlaidPublicTokenExchangeResponseModel(
+      {this.accessToken, this.itemID, this.requestID});
 
-    factory PlaidPublicTokenExchangeResponseModel.fromJson(Map<String, dynamic> json) {
-        return PlaidPublicTokenExchangeResponseModel(
-            access_token: json['access_token'], 
-            item_id: json['item_id'], 
-            request_id: json['request_id'], 
-        );
-    }
+  factory PlaidPublicTokenExchangeResponseModel.fromJson(
+      Map<String, dynamic> json) {
+    return PlaidPublicTokenExchangeResponseModel(
+      accessToken: json['access_token'],
+      itemID: json['item_id'],
+      requestID: json['request_id'],
+    );
+  }
 
-    Map<String, dynamic> toJson() {
-        final Map<String, dynamic> data = new Map<String, dynamic>();
-        data['access_token'] = this.access_token;
-        data['item_id'] = this.item_id;
-        data['request_id'] = this.request_id;
-        return data;
-    }
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['access_token'] = this.accessToken;
+    data['item_id'] = this.itemID;
+    data['request_id'] = this.requestID;
+    return data;
+  }
 }

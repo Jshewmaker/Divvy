@@ -32,7 +32,7 @@ class App extends StatelessWidget {
           ),
           BlocProvider(
             create: (_) => CheckHandleBloc(
-              checkHandleRepository: silaRepository,
+              silaRepository: silaRepository,
             ),
           ),
         ], child: AppView()));

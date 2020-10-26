@@ -1,8 +1,6 @@
 Git Commands
 ============
 
-## Translated Versions
-- [Versão em português](READMEpt.md)
 
 ___
 

@@ -44,6 +44,7 @@ class PlaidLink {
 class _WebViewPage {
   String _url;
   Function(Result) _success;
+  // ignore: unused_field
   Configuration _config;
   BuildContext _context;
 

@@ -110,16 +110,15 @@ class _LoginButton extends StatelessWidget {
   }
 }
 
-
 class _SignUpButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    // final theme = Theme.of(context);
     return FlatButton(
       key: const Key('loginForm_createAccount_flatButton'),
       child: Text(
         'CREATE ACCOUNT',
-        style: TextStyle(color: theme.textSelectionHandleColor),
+        // style: TextStyle(color: theme.textSelectionHandleColor),
       ),
       onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
     );
