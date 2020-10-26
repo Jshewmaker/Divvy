@@ -537,7 +537,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /update_identity');
+      throw Exception('error connecting to SILA /update_address');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -574,7 +574,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /update_identity');
+      throw Exception('error connecting to SILA /update_entity');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

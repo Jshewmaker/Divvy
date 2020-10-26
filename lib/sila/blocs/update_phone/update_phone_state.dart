@@ -1,4 +1,4 @@
-part of 'updatephonebloc_bloc.dart';
+part of 'update_phone_bloc.dart';
 
 abstract class UpdatePhoneState extends Equatable {
   const UpdatePhoneState();

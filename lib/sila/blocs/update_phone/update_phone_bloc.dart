@@ -6,8 +6,8 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-part 'updatephonebloc_event.dart';
-part 'updatephonebloc_state.dart';
+part 'update_phone_event.dart';
+part 'update_phone_state.dart';
 
 class UpdatePhoneBloc extends Bloc<UpdatePhoneEvent, UpdatePhoneState> {
   final SilaRepository silaRepository;
