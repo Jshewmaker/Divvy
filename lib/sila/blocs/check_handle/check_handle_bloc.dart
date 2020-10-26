@@ -5,10 +5,10 @@ import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 
 class CheckHandleBloc extends Bloc<CheckHandleEvent, CheckHandleState> {
-  final SilaRepository checkHandleRepository;
+  final SilaRepository silaRepository;
 
-  CheckHandleBloc({@required this.checkHandleRepository})
-      : assert(checkHandleRepository != null),
+  CheckHandleBloc({@required this.silaRepository})
+      : assert(silaRepository != null),
         super(CheckHandleInitial());
 
   @override
@@ -17,7 +17,7 @@ class CheckHandleBloc extends Bloc<CheckHandleEvent, CheckHandleState> {
       yield CheckHandleLoadInProgress();
       try {
         final RegisterResponse handle =
-            await checkHandleRepository.checkHandle(event.handle);
+            await silaRepository.checkHandle(event.handle);
         yield CheckHandleLoadSuccess(checkHandle: handle);
       } catch (_) {
         yield CheckHandleLoadFailure();

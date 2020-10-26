@@ -2,7 +2,6 @@ import 'package:divvy/sila/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
-
 abstract class CheckHandleState extends Equatable {
   const CheckHandleState();
 
@@ -17,12 +16,11 @@ class CheckHandleLoadInProgress extends CheckHandleState {}
 class CheckHandleLoadSuccess extends CheckHandleState {
   final RegisterResponse checkHandle;
 
-  const CheckHandleLoadSuccess({@required this.checkHandle}) : assert(checkHandle != null);
+  const CheckHandleLoadSuccess({@required this.checkHandle})
+      : assert(checkHandle != null);
 
   @override
   List<Object> get props => [checkHandle];
 }
 
-class CheckHandleLoadFailure extends CheckHandleState {
-  
-}
+class CheckHandleLoadFailure extends CheckHandleState {}

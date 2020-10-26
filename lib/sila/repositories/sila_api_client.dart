@@ -1,8 +1,11 @@
 import 'dart:convert';
 
+import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
+import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
+import 'package:divvy/sila/models/update_user_info/update_user_info_response.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
@@ -12,6 +15,7 @@ class SilaApiClient {
   EthereumService eth = EthereumService();
   final String divvyPrivateKey =
       '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
+  String authHandle = "divvy.silamoney.eth";
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({
@@ -27,7 +31,7 @@ class SilaApiClient {
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy",
+        "auth_handle": authHandle,
         "user_handle": "divvy-$handle",
         "version": "0.2",
         "crypto": "ETH",
@@ -70,7 +74,7 @@ class SilaApiClient {
       "header": {
         "reference": '1',
         "created": utcTime,
-        "auth_handle": "divvy",
+        "auth_handle": authHandle,
         "user_handle": "divvy-$handle",
         "version": "0.2",
         "crypto": "ETH",
@@ -136,7 +140,7 @@ class SilaApiClient {
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy.silamoney.eth",
+        "auth_handle": authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -174,7 +178,7 @@ class SilaApiClient {
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy.silamoney.eth",
+        "auth_handle": authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -212,7 +216,7 @@ class SilaApiClient {
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy.silamoney.eth",
+        "auth_handle": authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -253,14 +257,14 @@ class SilaApiClient {
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": "divvy.silamoney.eth",
+        "auth_handle": authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       },
       "message": "issue_msg",
-      "amount": 100420,
+      "amount": 420,
       "account_name": "$handle plaid account",
       "descriptor": "optional transaction descriptor",
       "processing_type": "STANDARD_ACH"
@@ -309,5 +313,271 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return GetSilaBalanceResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetTransactionsResponse> getTransactions(
+      String handle, userPrivateKey) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "get_transactions_msg",
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_transactions';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_transactions');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetTransactionsResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetEntityResponse> getEntity(
+      String handle, String userPrivateKey) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      }
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_entity';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_entity');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetEntityResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<UpdateUserInfo> updateEmail(String handle, String userPrivateKey,
+      String uuid, String newEmail) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      },
+      "uuid": uuid,
+      "email": newEmail,
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/update/email';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /update_email');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return UpdateUserInfo.fromJson(silaHandleResponse);
+  }
+
+  Future<UpdateUserInfo> updatePhone(String handle, String userPrivateKey,
+      String uuid, String newPhone) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      },
+      "uuid": uuid,
+      "phone": newPhone
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/update/phone';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /update_phone');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return UpdateUserInfo.fromJson(silaHandleResponse);
+  }
+
+  Future<UpdateUserInfo> updateIdentity(
+      String handle, String userPrivateKey, String uuid, String ssn) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      },
+      "uuid": uuid,
+      "identity_alias": "SSN",
+      "identity_value": ssn
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/update/identity';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /update_identity');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return UpdateUserInfo.fromJson(silaHandleResponse);
+  }
+
+  Future<UpdateUserInfo> updateAddress(String handle, String userPrivateKey,
+      String uuid, String field, String value) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      },
+      "uuid": uuid,
+      "$field": value,
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/update/email';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /update_identity');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return UpdateUserInfo.fromJson(silaHandleResponse);
+  }
+
+  Future<UpdateUserInfo> updateEntity(String handle, String userPrivateKey,
+      String uuid, String field, String value) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": handle
+      },
+      "$field": value,
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/update/entity';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /update_identity');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 }

@@ -4,7 +4,7 @@ class GetSilaBalanceResponse extends Equatable {
   final bool success;
   final String status;
   final String address;
-  final BigInt silaBalance;
+  final double silaBalance;
 
   const GetSilaBalanceResponse({
     this.success,

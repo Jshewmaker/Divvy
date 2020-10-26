@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/blocs/get_sila_balance/get_sila_balance.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
