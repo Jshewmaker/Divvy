@@ -5,7 +5,7 @@ class UserEntity extends Equatable {
   final String id;
   final String name;
   final String dateOfBirthYYYYMMDD;
-  final String ssn;
+  final String identityValue;
   final String streetAddress;
   final String city;
   final String state;
@@ -13,6 +13,8 @@ class UserEntity extends Equatable {
   final String postalCode;
   final String phone;
   final String email;
+  final String website;
+  final String doingBusinessAsName;
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
@@ -25,7 +27,7 @@ class UserEntity extends Equatable {
     this.id,
     this.name,
     this.dateOfBirthYYYYMMDD,
-    this.ssn,
+    this.identityValue,
     this.streetAddress,
     this.city,
     this.state,
@@ -33,6 +35,8 @@ class UserEntity extends Equatable {
     this.postalCode,
     this.phone,
     this.email,
+    this.website,
+    this.doingBusinessAsName,
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
@@ -45,16 +49,18 @@ class UserEntity extends Equatable {
   Map<String, Object> toJson() {
     return {
       "id": id,
-      "name": name,
+      "user_handle": name,
       "birthdate": dateOfBirthYYYYMMDD,
-      "ssn": ssn,
-      "streetAddress": streetAddress,
+      "identity_value": identityValue,
+      "street_address_1": streetAddress,
       "city": city,
       "state": state,
       "country": country,
-      "postalCode": postalCode,
+      "postal_code": postalCode,
       "phone": phone,
       "email": email,
+      "business_website": website,
+      "doing_business_as": doingBusinessAsName,
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
@@ -69,7 +75,7 @@ class UserEntity extends Equatable {
         id,
         name,
         dateOfBirthYYYYMMDD,
-        ssn,
+        identityValue,
         streetAddress,
         city,
         state,
@@ -77,6 +83,8 @@ class UserEntity extends Equatable {
         postalCode,
         phone,
         email,
+        website,
+        doingBusinessAsName,
         privateKey,
         silaEntityName,
         silaHandle,
@@ -91,14 +99,16 @@ class UserEntity extends Equatable {
       json["id"] as String,
       json["name"] as String,
       json["dateOfBirthYYYYMMDD"] as String,
-      json["ssn"] as String,
-      json["streetAddress"] as String,
+      json["identity_value"] as String,
+      json["street_address_1"] as String,
       json["city"] as String,
       json["state"] as String,
       json["country"] as String,
-      json["postalCode"] as String,
+      json["postal_code"] as String,
       json["phone"] as String,
       json["email"] as String,
+      json["business_website"] as String,
+      json["doing_business_as"] as String,
       json["privateKey"] as String,
       json["silaEntityName"] as String,
       json["silaHandle"] as String,
@@ -115,14 +125,16 @@ class UserEntity extends Equatable {
       snap.documentID,
       snap.data['name'],
       snap.data['dateOfBirthYYYYMMDD'],
-      snap.data['ssn'],
-      snap.data['streetAddress'],
+      snap.data['identity_value'],
+      snap.data['street_address_a'],
       snap.data['city'],
       snap.data['state'],
       snap.data['country'],
-      snap.data['postalCode'],
+      snap.data['postal_code'],
       snap.data['phone'],
       snap.data['email'],
+      snap.data["business_website"],
+      snap.data["doing_business_as"],
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
@@ -139,14 +151,16 @@ class UserEntity extends Equatable {
       "id": id,
       "name": name,
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
-      "ssn": ssn,
-      "streetAddress": streetAddress,
+      "identity_value": identityValue,
+      "street_address_1": streetAddress,
       "city": city,
       "state": state,
       "country": country,
-      "postalCode": postalCode,
+      "postal_code": postalCode,
       "phone": phone,
       "email": email,
+      "business_website": website,
+      "doing_business_as": doingBusinessAsName,
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,

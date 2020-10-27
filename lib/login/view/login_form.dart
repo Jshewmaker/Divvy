@@ -1,3 +1,4 @@
+import 'package:divvy/sign_up/view/homeowner_or_business.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:divvy/login/login.dart';
@@ -120,7 +121,8 @@ class _SignUpButton extends StatelessWidget {
         'CREATE ACCOUNT',
         // style: TextStyle(color: theme.textSelectionHandleColor),
       ),
-      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
+      onPressed: () =>
+          Navigator.of(context).push<void>(HomeownerOrBusinessScreen.route()),
     );
   }
 }

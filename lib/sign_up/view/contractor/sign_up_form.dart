@@ -6,16 +6,18 @@ import 'package:divvy/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
 
 // ignore: must_be_immutable
-class SignUpForm extends StatelessWidget {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ssnController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
+class ContractorSignUpForm extends StatelessWidget {
+  final TextEditingController _businessNameController = TextEditingController();
+  final TextEditingController _aliasController = TextEditingController();
+  final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _einController = TextEditingController();
   final TextEditingController _streetAddressController =
       TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
 
   bool _validate = false;
@@ -36,13 +38,13 @@ class SignUpForm extends StatelessWidget {
         alignment: const Alignment(0, -1 / 3),
         child: ListView(
           children: [
-            _nameInput(),
-            const SizedBox(height: 8.0),
             _EmailInput(),
             const SizedBox(height: 8.0),
-            _ssnInput(),
+            _nameInput(),
             const SizedBox(height: 8.0),
-            _birthdayInput(),
+            _websiteInput(),
+            const SizedBox(height: 8.0),
+            _einInput(),
             const SizedBox(height: 8.0),
             _streetAddressInput(),
             const SizedBox(height: 8.0),
@@ -67,39 +69,37 @@ class SignUpForm extends StatelessWidget {
 
   Widget _nameInput() {
     return TextField(
-      controller: _nameController,
+      controller: _businessNameController,
       decoration: InputDecoration(
-        hintText: "Jane Doe",
         border: UnderlineInputBorder(),
-        labelText: 'Full Name',
+        labelText: 'Business Name',
         errorText: _validate ? 'Name Required' : null,
       ),
     );
   }
 
-  Widget _ssnInput() {
+  Widget _websiteInput() {
     return TextField(
-      controller: _ssnController,
+      controller: _websiteController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        hintText: "xxx-xx-xxxx",
-        labelText: 'Social Security Number',
-        errorText: _validate ? 'SSN Required' : null,
+        labelText: 'Website',
+        errorText: _validate ? 'Website Required' : null,
       ),
-      keyboardType: TextInputType.number,
+      keyboardType: TextInputType.datetime,
     );
   }
 
-  Widget _birthdayInput() {
+  Widget _einInput() {
     return TextField(
-      controller: _birthdayController,
+      controller: _einController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        hintText: 'YYYY/MM/DD',
-        labelText: 'Birthday',
-        errorText: _validate ? 'Birtday Required' : null,
+        labelText: 'EIN',
+        hintText: '12-1234567',
+        errorText: _validate ? 'EIN Required' : null,
       ),
-      keyboardType: TextInputType.datetime,
+      keyboardType: TextInputType.number,
     );
   }
 
@@ -109,10 +109,8 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Street Address',
-        hintText: '111 River Lane',
-        errorText: _validate ? 'Street Required' : null,
+        errorText: _validate ? 'Street Address Required' : null,
       ),
-      keyboardType: TextInputType.streetAddress,
     );
   }
 
@@ -122,7 +120,6 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'City',
-        hintText: 'Dallas',
         errorText: _validate ? 'City Required' : null,
       ),
     );
@@ -134,7 +131,6 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'State',
-        hintText: 'TX',
         errorText: _validate ? 'State Required' : null,
       ),
     );
@@ -146,7 +142,6 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Country',
-        hintText: 'US',
         errorText: _validate ? 'Country Required' : null,
       ),
     );
@@ -158,10 +153,21 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Zip Code',
-        hintText: '75001',
         errorText: _validate ? 'Zip Code Required' : null,
       ),
       keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget _emailInput() {
+    return TextField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Email',
+        errorText: _validate ? 'Email Required' : null,
+      ),
+      keyboardType: TextInputType.emailAddress,
     );
   }
 
@@ -171,7 +177,6 @@ class SignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Phone Number',
-        hintText: '(xxx)xxx-xxxx',
         errorText: _validate ? 'Phone Number Required' : null,
       ),
       keyboardType: TextInputType.phone,
@@ -195,15 +200,17 @@ class SignUpForm extends StatelessWidget {
                     ? () => context
                         .bloc<SignUpCubit>()
                         .signUpFormSubmitted(UserModel(
-                          name: _nameController.text,
-                          dateOfBirthYYYYMMDD: _birthdayController.text,
-                          ssn: _ssnController.text,
+                          name: _businessNameController.text,
+                          website: _websiteController.text,
+                          identityValue: _einController.text,
+                          doingBusinessAsName: _aliasController.text,
                           streetAddress: _streetAddressController.text,
                           city: _cityController.text,
                           state: _stateController.text,
                           country: _countryController.text,
                           postalCode: _postalCodeController.text,
                           phone: _phoneNumberController.text,
+                          email: _emailController.text,
                         ))
                     : null,
               );
@@ -246,7 +253,7 @@ class _PasswordInput extends StatelessWidget {
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
         return TextField(
-          key: const Key('signUpForm_passwordInput_textField'),
+          key: const Key('contractor_signUpForm_passwordInput_textField'),
           onChanged: (password) =>
               context.bloc<SignUpCubit>().passwordChanged(password),
           obscureText: true,

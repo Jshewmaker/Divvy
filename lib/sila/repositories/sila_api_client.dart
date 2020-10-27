@@ -32,7 +32,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
@@ -75,7 +75,7 @@ class SilaApiClient {
         "reference": '1',
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
       },
@@ -90,7 +90,7 @@ class SilaApiClient {
       },
       "identity": {
         "identity_alias": "SSN",
-        "identity_value": user.ssn.replaceAll(r'-', '')
+        "identity_value": user.identityValue.replaceAll(r'-', '')
       },
       "contact": {
         "phone": user.phone,

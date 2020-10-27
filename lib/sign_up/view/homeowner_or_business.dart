@@ -1,0 +1,47 @@
+import 'package:divvy/sign_up/view/contractor/sign_up_page.dart';
+import 'package:divvy/sign_up/view/homeowner/sign_up_page.dart';
+import 'package:flutter/material.dart';
+
+class HomeownerOrBusinessScreen extends StatelessWidget {
+  const HomeownerOrBusinessScreen({Key key}) : super(key: key);
+
+  static Route route() {
+    return MaterialPageRoute<void>(
+        builder: (_) => const HomeownerOrBusinessScreen());
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            RaisedButton(
+              child: Text('Contractor'),
+              shape: (RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30))),
+              color: const Color(0xFFa3c746),
+              textColor: Colors.white,
+              onPressed: () => Navigator.of(context)
+                  .push<void>(ContractorSignUpPage.route()),
+            ),
+            const SizedBox(
+              height: 8.0,
+              width: 40.0,
+            ),
+            RaisedButton(
+              child: Text('Homeowner'),
+              shape: (RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30))),
+              color: const Color(0xFF1E90FF),
+              textColor: Colors.white,
+              onPressed: () =>
+                  Navigator.of(context).push<void>(SignUpPage.route()),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}

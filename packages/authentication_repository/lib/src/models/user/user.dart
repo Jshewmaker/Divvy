@@ -1,4 +1,4 @@
-import 'package:authentication_repository/src/models/user_entity.dart';
+import 'package:authentication_repository/src/models/user/user_entity.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -13,7 +13,7 @@ class UserModel extends Equatable {
   final String id;
   final String name;
   final String dateOfBirthYYYYMMDD;
-  final String ssn;
+  final String identityValue;
   final String streetAddress;
   final String city;
   final String state;
@@ -21,6 +21,8 @@ class UserModel extends Equatable {
   final String postalCode;
   final String phone;
   final String email;
+  final String website;
+  final String doingBusinessAsName;
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
@@ -29,32 +31,35 @@ class UserModel extends Equatable {
   final String cryptoAddress;
   final String wallet;
 
-  const UserModel(
-      {@required this.name,
-      this.id,
-      this.dateOfBirthYYYYMMDD,
-      this.ssn,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.country,
-      this.postalCode,
-      this.phone,
-      this.email,
-      this.privateKey,
-      this.silaEntityName,
-      this.silaHandle,
-      this.silaAuthSignature,
-      this.silaUserSignature,
-      this.cryptoAddress,
-      this.wallet,});
+  const UserModel({
+    @required this.name,
+    this.id,
+    this.dateOfBirthYYYYMMDD,
+    this.identityValue,
+    this.streetAddress,
+    this.city,
+    this.state,
+    this.country,
+    this.postalCode,
+    this.phone,
+    this.email,
+    this.doingBusinessAsName,
+    this.website,
+    this.privateKey,
+    this.silaEntityName,
+    this.silaHandle,
+    this.silaAuthSignature,
+    this.silaUserSignature,
+    this.cryptoAddress,
+    this.wallet,
+  });
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
     id: '',
     name: null,
     dateOfBirthYYYYMMDD: null,
-    ssn: null,
+    identityValue: null,
     streetAddress: null,
     city: null,
     state: null,
@@ -62,6 +67,8 @@ class UserModel extends Equatable {
     postalCode: null,
     phone: null,
     email: '',
+    website: null,
+    doingBusinessAsName: null,
     privateKey: null,
     silaEntityName: null,
     silaHandle: null,
@@ -76,7 +83,7 @@ class UserModel extends Equatable {
         id,
         name,
         dateOfBirthYYYYMMDD,
-        ssn,
+        identityValue,
         streetAddress,
         city,
         state,
@@ -84,6 +91,8 @@ class UserModel extends Equatable {
         postalCode,
         phone,
         email,
+        website,
+        doingBusinessAsName,
         privateKey,
         silaEntityName,
         silaHandle,
@@ -98,7 +107,7 @@ class UserModel extends Equatable {
       id: entity.id,
       name: entity.name,
       dateOfBirthYYYYMMDD: entity.dateOfBirthYYYYMMDD,
-      ssn: entity.ssn,
+      identityValue: entity.identityValue,
       streetAddress: entity.streetAddress,
       city: entity.city,
       state: entity.state,
@@ -106,6 +115,8 @@ class UserModel extends Equatable {
       postalCode: entity.postalCode,
       phone: entity.phone,
       email: entity.email,
+      website: entity.website,
+      doingBusinessAsName: entity.doingBusinessAsName,
       privateKey: entity.privateKey,
       silaHandle: entity.silaHandle,
       silaEntityName: entity.silaEntityName,
@@ -121,7 +132,7 @@ class UserModel extends Equatable {
       id,
       name,
       dateOfBirthYYYYMMDD,
-      ssn,
+      identityValue,
       streetAddress,
       city,
       state,
@@ -129,6 +140,8 @@ class UserModel extends Equatable {
       postalCode,
       phone,
       email,
+      website,
+      doingBusinessAsName,
       privateKey,
       silaEntityName,
       silaHandle,
