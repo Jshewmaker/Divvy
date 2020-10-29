@@ -1,3 +1,4 @@
+import 'package:divvy/sign_up/view/contractor/select_business_type_screen.dart';
 import 'package:divvy/sign_up/view/contractor/sign_up_page.dart';
 import 'package:divvy/sign_up/view/homeowner/sign_up_page.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +25,7 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
               color: const Color(0xFFa3c746),
               textColor: Colors.white,
               onPressed: () => Navigator.of(context)
-                  .push<void>(ContractorSignUpPage.route()),
+                  .push<void>(SelectBusinessTypeScreen.route()),
             ),
             const SizedBox(
               height: 8.0,

@@ -42,6 +42,8 @@ class ContractorSignUpForm extends StatelessWidget {
             const SizedBox(height: 8.0),
             _nameInput(),
             const SizedBox(height: 8.0),
+            _doingBusinessAsInput(),
+            const SizedBox(height: 8.0),
             _websiteInput(),
             const SizedBox(height: 8.0),
             _einInput(),
@@ -73,6 +75,17 @@ class ContractorSignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Business Name',
+        errorText: _validate ? 'Name Required' : null,
+      ),
+    );
+  }
+
+  Widget _doingBusinessAsInput() {
+    return TextField(
+      controller: _aliasController,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Doing Business As Name',
         errorText: _validate ? 'Name Required' : null,
       ),
     );
@@ -159,18 +172,6 @@ class ContractorSignUpForm extends StatelessWidget {
     );
   }
 
-  Widget _emailInput() {
-    return TextField(
-      controller: _emailController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'Email',
-        errorText: _validate ? 'Email Required' : null,
-      ),
-      keyboardType: TextInputType.emailAddress,
-    );
-  }
-
   Widget _phoneNumberInput() {
     return TextField(
       controller: _phoneNumberController,
@@ -183,6 +184,13 @@ class ContractorSignUpForm extends StatelessWidget {
     );
   }
 
+  // Widget _signUpButton(context){
+  //   return RaisedButton(
+  //     child: const Text('CONTINUE'),
+  //     onPressed: () => Navigator.of(context).push(route),
+  //   )
+  // }
+
   Widget _signUpButton() {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) => previous.status != current.status,
@@ -191,7 +199,7 @@ class ContractorSignUpForm extends StatelessWidget {
             ? const CircularProgressIndicator()
             : RaisedButton(
                 key: const Key('signUpForm_continue_raisedButton'),
-                child: const Text('SIGN UP'),
+                child: const Text('CONTINUE'),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0),
                 ),
@@ -228,7 +236,6 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) {
-            // email1 = email;
             context.bloc<SignUpCubit>().emailChanged(email);
           },
           keyboardType: TextInputType.emailAddress,
@@ -242,8 +249,6 @@ class _EmailInput extends StatelessWidget {
       },
     );
   }
-
-  // get email => email1;
 }
 
 class _PasswordInput extends StatelessWidget {

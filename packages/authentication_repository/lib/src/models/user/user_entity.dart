@@ -2,7 +2,6 @@ import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class UserEntity extends Equatable {
-  final String id;
   final String name;
   final String dateOfBirthYYYYMMDD;
   final String identityValue;
@@ -24,7 +23,6 @@ class UserEntity extends Equatable {
   final String wallet;
 
   const UserEntity(
-    this.id,
     this.name,
     this.dateOfBirthYYYYMMDD,
     this.identityValue,
@@ -48,7 +46,6 @@ class UserEntity extends Equatable {
 
   Map<String, Object> toJson() {
     return {
-      "id": id,
       "user_handle": name,
       "birthdate": dateOfBirthYYYYMMDD,
       "identity_value": identityValue,
@@ -72,7 +69,6 @@ class UserEntity extends Equatable {
   }
 
   List<Object> get props => [
-        id,
         name,
         dateOfBirthYYYYMMDD,
         identityValue,
@@ -96,7 +92,6 @@ class UserEntity extends Equatable {
 
   static UserEntity fromJson(Map<String, Object> json) {
     return UserEntity(
-      json["id"] as String,
       json["name"] as String,
       json["dateOfBirthYYYYMMDD"] as String,
       json["identity_value"] as String,
@@ -122,7 +117,6 @@ class UserEntity extends Equatable {
   //Specific to Firestore
   static UserEntity fromSnapshot(DocumentSnapshot snap) {
     return UserEntity(
-      snap.documentID,
       snap.data['name'],
       snap.data['dateOfBirthYYYYMMDD'],
       snap.data['identity_value'],
@@ -148,7 +142,6 @@ class UserEntity extends Equatable {
   //Specific to Firestore
   Map<String, Object> toDocument() {
     return {
-      "id": id,
       "name": name,
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
       "identity_value": identityValue,
