@@ -1,5 +1,6 @@
 import 'package:divvy/tab_bar/screens/account/account_options.dart';
 import 'package:divvy/tab_bar/screens/account/check_handle_screen.dart';
+import 'package:divvy/tab_bar/screens/bank_account_balance_screen.dart';
 import 'package:divvy/tab_bar/screens/get_wallet_info_screen.dart';
 import 'package:divvy/tab_bar/screens/issue_sila_screen.dart';
 import 'package:divvy/tab_bar/screens/transaction_screen.dart';
@@ -26,6 +27,11 @@ class AccountScreen extends StatelessWidget {
               child: Text('get balance'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => GetWalletInfoScreen())),
+            ),
+            RaisedButton(
+              child: Text('Check Bank Account Balance'),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => BankAccountInfoScreen())),
             ),
             RaisedButton(
               child: Text('Issue Sila'),

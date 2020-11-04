@@ -2,6 +2,7 @@ import 'package:divvy/sila/blocs/kyb_blocs/get_business_types/get_business_types
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
+import 'package:divvy/tab_bar/screens/naics_categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +10,7 @@ import 'package:http/http.dart' as http;
 class SelectBusinessTypeScreen extends StatelessWidget {
   SelectBusinessTypeScreen({Key key}) : super(key: key);
 
-  SilaBusinessRepository _silaBusinessRepository = SilaBusinessRepository(
+  final SilaBusinessRepository _silaBusinessRepository = SilaBusinessRepository(
       silaApiClient: SilaApiClient(httpClient: http.Client()));
 
   static Route route() {
@@ -47,10 +48,53 @@ class BusinessTypePopulated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(response.businessTypes[0].name),
+      appBar: AppBar(
+        title: Text('Select Business Type'),
+      ),
+      body: ListView.builder(
+        itemCount: response.businessTypes.length,
+        itemBuilder: (context, index) {
+          return Card(
+            elevation: 1,
+            child: ListTile(
+                title: Center(
+                    child: Text(_formatNameFromModel(
+                        response.businessTypes[index].name))),
+                onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NAICSCategoryScreen(
+                            response.businessTypes[index].name)))),
+          );
+        },
       ),
     );
+  }
+
+  String _formatNameFromModel(String name) {
+    switch (name) {
+      case 'corporation':
+        return 'Corporation';
+      case 'llc':
+        return 'LLC';
+      case 'llp':
+        return 'LLP';
+      case 'lp':
+        return 'LP';
+      case 'non_profit':
+        return 'Non-Profit';
+      case 'partnership':
+        return 'Partnership';
+      case 'public_corporation':
+        return 'Public Corporation';
+      case 'sole_proprietorship':
+        return 'Sole Proprietorship';
+      case 'trust':
+        return 'Trust';
+      case 'unincorporated_association':
+        return 'Unincorporated Association';
+    }
+    return " help";
   }
 }
 

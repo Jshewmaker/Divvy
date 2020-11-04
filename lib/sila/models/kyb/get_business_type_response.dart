@@ -3,7 +3,7 @@ import 'package:equatable/equatable.dart';
 class GetBusinessTypeResponse extends Equatable {
   final bool success;
   final String status;
-  final List<BusinessTypes> businessTypes;
+  final List<dynamic> businessTypes;
 
   GetBusinessTypeResponse({this.success, this.status, this.businessTypes});
 

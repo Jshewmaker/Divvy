@@ -1,8 +1,10 @@
 import 'dart:convert';
 
+import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
+import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
@@ -60,7 +62,8 @@ class SilaApiClient {
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  /// Registers user Handle is SILA ecosystem
+  /// Registers user Handle and creates and stores wallet addres in firebase
+  /// is SILA ecosystem
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
@@ -278,6 +281,45 @@ class SilaApiClient {
     return CheckKycResponse.fromJson(silaHandleResponse);
   }
 
+  Future<BankAccountBalanceResponse> getBankAccountBalance(
+      String handle, String userPrivateKey) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "account_name": "$handle plaid account"
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_account_balance';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_account_balance');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+  }
+
   Future<LinkAccountResponse> linkAccount(
       String handle, String userPrivateKey, String plaidPublicToken) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -332,9 +374,9 @@ class SilaApiClient {
         "reference": "ref"
       },
       "message": "issue_msg",
-      "amount": 420,
+      "amount": 100,
       "account_name": "$handle plaid account",
-      "descriptor": "optional transaction descriptor",
+      "descriptor": "showing that transactions are not working",
       "processing_type": "STANDARD_ACH"
     };
     String authSignature = await eth.signing(body, divvyPrivateKey);
@@ -685,7 +727,7 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/get_business_types';
+    final silaURL = '$baseUrl/0.2/get_business_types';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -698,5 +740,34 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return GetBusinessTypeResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetNaicsCategoriesResponse> getNaicsCategories() async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {"created": utcTime, "auth_handle": authHandle}
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_naics_categories';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_naics_categories');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetNaicsCategoriesResponse.fromJson(silaHandleResponse);
   }
 }

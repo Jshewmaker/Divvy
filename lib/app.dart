@@ -54,6 +54,7 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       theme: theme,
       navigatorKey: _navigatorKey,
+      debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
           listener: (context, state) {

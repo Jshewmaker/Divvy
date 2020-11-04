@@ -29,8 +29,10 @@ class FirebaseService {
   /// Return user data in a UserModel
   Future<UserModel> getUserData() async {
     FirebaseUser user = await firebaseAuth.currentUser();
-    DocumentSnapshot _documentSnapshot =
-        await Firestore.instance.collection(collection).document(user.uid).get();
+    DocumentSnapshot _documentSnapshot = await Firestore.instance
+        .collection(collection)
+        .document(user.uid)
+        .get();
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 

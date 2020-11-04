@@ -16,46 +16,44 @@ class IssueSilaScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => IssueSilaBloc(silaRepository: silaRepository),
       child: Scaffold(
-        body: Column(
-          children: [
-            Center(
-              child: BlocBuilder<IssueSilaBloc, IssueSilaState>(
-                builder: (context, state) {
-                  if (state is IssueSilaInitial) {
-                    BlocProvider.of<IssueSilaBloc>(context)
-                        .add(IssueSilaRequest());
-                    return Container();
-                  }
-                  if (state is IssueSilaLoadInProgress) {
-                    return Center(child: CircularProgressIndicator());
-                  }
-                  if (state is IssueSilaLoadSuccess) {
-                    final apiResponse = state.response;
-                    return Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(apiResponse.message),
-                        RaisedButton(
-                          child: Text('Check KYC Status'),
-                          onPressed: () => Navigator.of(context).push(
-                              MaterialPageRoute(
-                                  builder: (contest) => GetWalletInfoScreen())),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Center(
+                child: BlocBuilder<IssueSilaBloc, IssueSilaState>(
+                  builder: (context, state) {
+                    if (state is IssueSilaInitial) {
+                      BlocProvider.of<IssueSilaBloc>(context)
+                          .add(IssueSilaRequest());
+                      return Container();
+                    }
+                    if (state is IssueSilaLoadInProgress) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (state is IssueSilaLoadSuccess) {
+                      final apiResponse = state.response;
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(apiResponse.message),
+                          ],
                         ),
-                      ],
-                    );
-                  }
-                  if (state is IssueSilaLoadFailure) {
-                    return Text(
-                      'Something went wrong with issue_sila!',
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
-                  return Container();
-                },
+                      );
+                    }
+                    if (state is IssueSilaLoadFailure) {
+                      return Text(
+                        'Something went wrong with issue_sila!',
+                        style: TextStyle(color: Colors.red),
+                      );
+                    }
+                    return Container();
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
