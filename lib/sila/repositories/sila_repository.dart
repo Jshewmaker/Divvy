@@ -1,3 +1,4 @@
+import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -15,11 +16,13 @@ class SilaRepository {
     assert(silaApiClient != null);
   }
 
+  /// Check if user handle is avaible in SILA ecosystem
   Future<RegisterResponse> checkHandle(String handle) async {
     final RegisterResponse response = await silaApiClient.checkHandle(handle);
     return response;
   }
 
+  ///Register user in SILA ecosystem
   Future<RegisterResponse> register(String handle) async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -28,6 +31,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Rquest KYC for registered SILA user
   Future<RegisterResponse> requestKYC() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -36,6 +40,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Check Status of KYC in SILA ecosystem
   Future<CheckKycResponse> checkKYC() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -44,6 +49,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Link bank account to user's SILA Account
   Future<LinkAccountResponse> linkAccount(String plaidPublicToken) async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -52,6 +58,17 @@ class SilaRepository {
     return response;
   }
 
+  Future<BankAccountBalanceResponse> getBankAccountBalance() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final BankAccountBalanceResponse response = await silaApiClient
+        .getBankAccountBalance(user.silaHandle, user.privateKey);
+    return response;
+  }
+
+  ///Transfer money from user's bank account to SILA account.
+  ///
+  ///Dollars to SILA is 0.01 = 1 SILA. $784.98 = 78498 SILA
   Future<IssueSilaResponse> issueSila() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -60,6 +77,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Get SILA wallet balance
   Future<GetSilaBalanceResponse> getSilaBalance() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -68,6 +86,10 @@ class SilaRepository {
     return response;
   }
 
+  ///Get transactions from SILA wallet
+  ///
+  ///This will return any transaction that deal with: Adding money to the wallet,
+  ///removing money from the wallet, and transfering money from wallet to wallet
   Future<GetTransactionsResponse> getTransactions() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -76,6 +98,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Return User info that is stored in SILA ecosystem
   Future<GetEntityResponse> getEntity() async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -84,6 +107,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Update email  in SILA ecosystem
   Future<UpdateUserInfo> updateEmail(String newEmail) async {
     UserModel user = await _firebaseService.getUserData();
     GetEntityResponse entity =
@@ -94,6 +118,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Update phone number in SILA ecosystem
   Future<UpdateUserInfo> updatePhone(String newPhone) async {
     UserModel user = await _firebaseService.getUserData();
 
@@ -119,6 +144,7 @@ class SilaRepository {
     return response;
   }
 
+  ///Update address in SILA ecosystem
   Future<UpdateUserInfo> updateAddress(Map<String, String> newAddress) async {
     UserModel user = await _firebaseService.getUserData();
     GetEntityResponse entity =
@@ -129,6 +155,9 @@ class SilaRepository {
     return response;
   }
 
+  ///You can only update this info before KYC is processed
+  ///
+  ///Update user's first name, last name, or birthday.
   Future<UpdateUserInfo> updateEntity(Map<String, String> entity) async {
     UserModel user = await _firebaseService.getUserData();
 

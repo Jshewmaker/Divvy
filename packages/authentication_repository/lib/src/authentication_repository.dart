@@ -54,18 +54,27 @@ class AuthenticationRepository {
     @required String email,
     @required String password,
   }) async {
+    var value;
     assert(email != null && password != null);
     try {
       await _firebaseAuth.createUserWithEmailAndPassword(
         email: email,
         password: password,
       );
+
       FirebaseService firebaseService = FirebaseService();
       firebaseService.userSetupCreateFirestore(
           'users', userData.toEntity().toDocument());
       // userCollection.add(user.toEntity().toDocument());
       // userCollection.document(user.id).
-    } on Exception {
+    }
+    //This is the way to get the error if the email is already taken
+    // catch (_) {
+    //   print(_);
+    // }
+    //We need to make this throw the above error
+    on Exception {
+      print(value);
       throw SignUpFailure();
     }
   }

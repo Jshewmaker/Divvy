@@ -1,7 +1,11 @@
 import 'dart:convert';
 
+import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
+import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
+import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
+import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
@@ -10,8 +14,8 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class SilaApiClient {
-  static const baseUrl = 'https://sandbox.silamoney.com';
-  final http.Client httpClient;
+  String baseUrl = 'https://sandbox.silamoney.com';
+  http.Client httpClient;
   EthereumService eth = EthereumService();
   final String divvyPrivateKey =
       '4fe8271eb3ee4b89d2f8c9da42ba3229672adad2fd9a9245dbf1181a3f7451cd';
@@ -32,7 +36,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
@@ -59,7 +63,8 @@ class SilaApiClient {
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  /// Registers Handle is SILA ecosystem
+  /// Registers user Handle and creates and stores wallet addres in firebase
+  /// is SILA ecosystem
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
@@ -75,7 +80,7 @@ class SilaApiClient {
         "reference": '1',
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
       },
@@ -90,7 +95,7 @@ class SilaApiClient {
       },
       "identity": {
         "identity_alias": "SSN",
-        "identity_value": user.ssn.replaceAll(r'-', '')
+        "identity_value": user.identityValue.replaceAll(r'-', '')
       },
       "contact": {
         "phone": user.phone,
@@ -210,6 +215,45 @@ class SilaApiClient {
     return CheckKycResponse.fromJson(silaHandleResponse);
   }
 
+  Future<BankAccountBalanceResponse> getBankAccountBalance(
+      String handle, String userPrivateKey) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "account_name": "$handle plaid account"
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_account_balance';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_account_balance');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+  }
+
   Future<LinkAccountResponse> linkAccount(
       String handle, String userPrivateKey, String plaidPublicToken) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -264,9 +308,9 @@ class SilaApiClient {
         "reference": "ref"
       },
       "message": "issue_msg",
-      "amount": 420,
+      "amount": 100,
       "account_name": "$handle plaid account",
-      "descriptor": "optional transaction descriptor",
+      "descriptor": "showing that transactions are not working",
       "processing_type": "STANDARD_ACH"
     };
     String authSignature = await eth.signing(body, divvyPrivateKey);
@@ -598,5 +642,136 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
+  }
+
+  Future<GetBusinessTypeResponse> getBusinessTypes() async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+      }
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_business_types';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_business_types');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetBusinessTypeResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetNaicsCategoriesResponse> getNaicsCategories() async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {"created": utcTime, "auth_handle": authHandle}
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_naics_categories';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_naics_categories');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetNaicsCategoriesResponse.fromJson(silaHandleResponse);
+  }
+
+  /// Registers Business in SILA and creates and stores wallet address in firebase
+  ///
+  /// Requires the user handle and the UserModel to fill out body
+  ///
+  Future<KYBRegisterResponse> registerBusiness(
+    String handle,
+    UserModel user,
+  ) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    String address = await eth.createEthWallet();
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "reference": "ref",
+        "crypto": "ETH",
+        "version": "0.2"
+      },
+      "message": "entity_msg",
+      "identity": {
+        "identity_alias": "EIN",
+        "identity_value": user.identityValue
+      },
+      "address": {
+        "address_alias": "Office",
+        "street_address_1": user.streetAddress,
+        "city": user.city,
+        "state": user.state,
+        "country": user.country,
+        "postal_code": user.postalCode,
+      },
+      "contact": {"phone": user.phone, "email": user.email},
+      "entity": {
+        "type": "business",
+        "entity_name": user.name,
+        "business_type": user.businessType,
+        "business_website": user.website,
+        "doing_business_as": user.doingBusinessAsName,
+        "naics_code": user.naicsCode
+      },
+      "crypto_entry": {
+        "crypto_code": "ETH",
+        "crypto_address": address,
+      }
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/register';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /register business');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return KYBRegisterResponse.fromJson(silaHandleResponse);
   }
 }

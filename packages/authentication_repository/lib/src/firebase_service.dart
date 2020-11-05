@@ -17,7 +17,11 @@ class FirebaseService {
     Firestore.instance.collection(collection).document(user.uid).setData(data);
   }
 
-  void addDataToFirestoreDocument(String collection, data) async {
+  ///Add new line of data to an existing document.
+  ///
+  ///data field should be a map in the format [Field, value]
+  void addDataToFirestoreDocument(
+      String collection, Map<String, dynamic> data) async {
     firebaseAuth.currentUser().then((value) {
       Firestore.instance
           .collection(collection)
@@ -29,8 +33,10 @@ class FirebaseService {
   /// Return user data in a UserModel
   Future<UserModel> getUserData() async {
     FirebaseUser user = await firebaseAuth.currentUser();
-    DocumentSnapshot _documentSnapshot =
-        await Firestore.instance.collection(collection).document(user.uid).get();
+    DocumentSnapshot _documentSnapshot = await Firestore.instance
+        .collection(collection)
+        .document(user.uid)
+        .get();
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 

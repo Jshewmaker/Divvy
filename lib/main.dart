@@ -1,4 +1,3 @@
-
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/repositories/repositories.dart';

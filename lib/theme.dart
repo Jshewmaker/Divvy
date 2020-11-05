@@ -9,7 +9,6 @@ final theme = ThemeData(
   accentColor: Colors.redAccent,
   scaffoldBackgroundColor: Colors.white,
   textSelectionHandleColor: Colors.black,
-  
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(8),
