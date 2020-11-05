@@ -14,6 +14,8 @@ class UserEntity extends Equatable {
   final String email;
   final String website;
   final String doingBusinessAsName;
+  final String businessType;
+  final int naicsCode;
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
@@ -35,6 +37,8 @@ class UserEntity extends Equatable {
     this.email,
     this.website,
     this.doingBusinessAsName,
+    this.businessType,
+    this.naicsCode,
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
@@ -58,6 +62,8 @@ class UserEntity extends Equatable {
       "email": email,
       "business_website": website,
       "doing_business_as": doingBusinessAsName,
+      "business_type": businessType,
+      "naics_code": naicsCode,
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
@@ -81,6 +87,8 @@ class UserEntity extends Equatable {
         email,
         website,
         doingBusinessAsName,
+        businessType,
+        naicsCode,
         privateKey,
         silaEntityName,
         silaHandle,
@@ -104,6 +112,8 @@ class UserEntity extends Equatable {
       json["email"] as String,
       json["business_website"] as String,
       json["doing_business_as"] as String,
+      json["business_type"] as String,
+      json["naics_code"] as int,
       json["privateKey"] as String,
       json["silaEntityName"] as String,
       json["silaHandle"] as String,
@@ -129,6 +139,8 @@ class UserEntity extends Equatable {
       snap.data['email'],
       snap.data["business_website"],
       snap.data["doing_business_as"],
+      snap.data["business_type"],
+      snap.data["naics_code"],
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
@@ -154,6 +166,8 @@ class UserEntity extends Equatable {
       "email": email,
       "business_website": website,
       "doing_business_as": doingBusinessAsName,
+      "business_type": businessType,
+      "naics_code": naicsCode,
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,

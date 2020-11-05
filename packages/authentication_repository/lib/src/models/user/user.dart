@@ -23,6 +23,8 @@ class UserModel extends Equatable {
   final String email;
   final String website;
   final String doingBusinessAsName;
+  final String businessType;
+  final int naicsCode;
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
@@ -44,6 +46,8 @@ class UserModel extends Equatable {
     this.phone,
     this.email,
     this.doingBusinessAsName,
+    this.businessType,
+    this.naicsCode,
     this.website,
     this.privateKey,
     this.silaEntityName,
@@ -69,6 +73,8 @@ class UserModel extends Equatable {
     email: '',
     website: null,
     doingBusinessAsName: null,
+    businessType: null,
+    naicsCode: null,
     privateKey: null,
     silaEntityName: null,
     silaHandle: null,
@@ -93,6 +99,8 @@ class UserModel extends Equatable {
         email,
         website,
         doingBusinessAsName,
+        businessType,
+        naicsCode,
         privateKey,
         silaEntityName,
         silaHandle,
@@ -116,6 +124,8 @@ class UserModel extends Equatable {
       email: entity.email,
       website: entity.website,
       doingBusinessAsName: entity.doingBusinessAsName,
+      businessType: entity.businessType,
+      naicsCode: entity.naicsCode,
       privateKey: entity.privateKey,
       silaHandle: entity.silaHandle,
       silaEntityName: entity.silaEntityName,
@@ -140,6 +150,8 @@ class UserModel extends Equatable {
       email,
       website,
       doingBusinessAsName,
+      businessType,
+      naicsCode,
       privateKey,
       silaEntityName,
       silaHandle,

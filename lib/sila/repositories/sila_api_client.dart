@@ -5,6 +5,7 @@ import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
+import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
@@ -113,73 +114,6 @@ class SilaApiClient {
         "last_name": user.name.split(" ")[1],
         "relationship": "user"
       }
-    };
-
-    String authSignature = await eth.signing(body, divvyPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final silaURL = '$baseUrl/0.2/register';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
-          headers: header,
-          body: json.encode(body),
-        );
-
-    if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /register');
-    }
-
-    final silaHandleResponse = jsonDecode(silaResponse.body);
-    return RegisterResponse.fromJson(silaHandleResponse);
-  }
-
-  /// Registers Business Handle in SILA ecosystem
-  ///
-  /// Requires the user handle and the UserModel to fill out body
-  ///
-  Future<RegisterResponse> registerBusiness(
-    String handle,
-    UserModel user,
-  ) async {
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
-    String address = await eth.createEthWallet();
-
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": authHandle,
-        "user_handle": handle,
-        "reference": "ref",
-        "crypto": "ETH",
-        "version": "0.2"
-      },
-      "message": "entity_msg",
-      "identity": {
-        "identity_alias": "EIN",
-        "identity_value": user.identityValue
-      },
-      "address": {
-        "address_alias": "Office",
-        "street_address_1": user.streetAddress,
-        "city": user.city,
-        "state": user.state,
-        "country": user.country,
-        "postal_code": user.postalCode
-      },
-      "contact": {"phone": user.phone, "email": user.email},
-      "entity": {
-        "type": "business",
-        "entity_name": user.name,
-        "business_type": "corporation",
-        "business_website": user.website,
-        "doing_business_as": user.doingBusinessAsName,
-        "naics_code": 721
-      },
-      "crypto_entry": {"crypto_code": "ETH", "crypto_address": address}
     };
 
     String authSignature = await eth.signing(body, divvyPrivateKey);
@@ -769,5 +703,75 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return GetNaicsCategoriesResponse.fromJson(silaHandleResponse);
+  }
+
+  /// Registers Business in SILA and creates and stores wallet address in firebase
+  ///
+  /// Requires the user handle and the UserModel to fill out body
+  ///
+  Future<KYBRegisterResponse> registerBusiness(
+    String handle,
+    UserModel user,
+  ) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    String address = await eth.createEthWallet();
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "reference": "ref",
+        "crypto": "ETH",
+        "version": "0.2"
+      },
+      "message": "entity_msg",
+      "identity": {
+        "identity_alias": "EIN",
+        "identity_value": user.identityValue
+      },
+      "address": {
+        "address_alias": "Office",
+        "street_address_1": user.streetAddress,
+        "city": user.city,
+        "state": user.state,
+        "country": user.country,
+        "postal_code": user.postalCode,
+      },
+      "contact": {"phone": user.phone, "email": user.email},
+      "entity": {
+        "type": "business",
+        "entity_name": user.name,
+        "business_type": user.businessType,
+        "business_website": user.website,
+        "doing_business_as": user.doingBusinessAsName,
+        "naics_code": user.naicsCode
+      },
+      "crypto_entry": {
+        "crypto_code": "ETH",
+        "crypto_address": address,
+      }
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/register';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /register business');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return KYBRegisterResponse.fromJson(silaHandleResponse);
   }
 }

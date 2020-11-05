@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-
 import 'package:bip39/bip39.dart' as bip39;
 
 import 'package:web3dart/web3dart.dart';
@@ -13,6 +12,9 @@ class EthereumService {
     this._firebaseService = FirebaseService();
   }
 
+  ///Signs any Map you pass it with a private string.
+  ///
+  ///Returns signature.
   Future<String> signing(Map message, String privateKey) async {
     var encodedMessage = jsonEncode(message);
 
@@ -25,6 +27,10 @@ class EthereumService {
     return signing;
   }
 
+  ///Creates new Eth Wallet address
+  ///
+  ///When address is created the wallet address is added to the user's firebase
+  ///and the address is returned from this function
   Future<String> createEthWallet() async {
     String collection = "users";
     Map<String, String> firebaseData;
