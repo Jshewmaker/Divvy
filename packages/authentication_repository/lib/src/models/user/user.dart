@@ -32,6 +32,7 @@ class UserModel extends Equatable {
   final String silaUserSignature;
   final String cryptoAddress;
   final String wallet;
+  final String businessAdminDocumentID;
 
   const UserModel({
     @required this.name,
@@ -56,6 +57,7 @@ class UserModel extends Equatable {
     this.silaUserSignature,
     this.cryptoAddress,
     this.wallet,
+    this.businessAdminDocumentID,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -82,6 +84,7 @@ class UserModel extends Equatable {
     silaUserSignature: null,
     cryptoAddress: null,
     wallet: null,
+    businessAdminDocumentID: null,
   );
 
   @override
@@ -108,6 +111,7 @@ class UserModel extends Equatable {
         silaUserSignature,
         cryptoAddress,
         wallet,
+        businessAdminDocumentID,
       ];
 
   static UserModel fromEntity(UserEntity entity) {
@@ -133,6 +137,7 @@ class UserModel extends Equatable {
       silaUserSignature: entity.silaUserSignature,
       cryptoAddress: entity.cryptoAddress,
       wallet: entity.wallet,
+      businessAdminDocumentID: entity.businessAdminDocumentID,
     );
   }
 
@@ -159,6 +164,7 @@ class UserModel extends Equatable {
       silaUserSignature,
       cryptoAddress,
       wallet,
+      businessAdminDocumentID,
     );
   }
 }

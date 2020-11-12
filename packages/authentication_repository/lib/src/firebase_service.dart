@@ -17,6 +17,17 @@ class FirebaseService {
     Firestore.instance.collection(collection).document(user.uid).setData(data);
   }
 
+  void createBusinessAdminInFirestore(String collection, data) async {
+    var user = await firebaseAuth.currentUser();
+    var documentID = user.uid + '-divvyBusinessUser';
+    var businessAdminDocumentID = {'businessAdminDocumentID': documentID};
+    addDataToFirestoreDocument(collection, businessAdminDocumentID);
+    Firestore.instance
+        .collection(collection)
+        .document(documentID)
+        .setData(data);
+  }
+
   ///Add new line of data to an existing document.
   ///
   ///data field should be a map in the format [Field, value]
@@ -36,6 +47,22 @@ class FirebaseService {
     DocumentSnapshot _documentSnapshot = await Firestore.instance
         .collection(collection)
         .document(user.uid)
+        .get();
+    return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+  }
+
+  Future<UserModel> getBusinessUser() async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    DocumentSnapshot _documentSnapshot = await Firestore.instance
+        .collection(collection)
+        .document(user.uid)
+        .get();
+    UserModel userData =
+        UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+
+    _documentSnapshot = await Firestore.instance
+        .collection(collection)
+        .document(userData.businessAdminDocumentID)
         .get();
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }

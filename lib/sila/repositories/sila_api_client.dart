@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
+import 'package:divvy/sila/models/kyb/get_business_roles_response/get_business_roles_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
@@ -80,7 +81,7 @@ class SilaApiClient {
         "reference": '1',
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": handle,
+        "user_handle": handle.split(" ")[0],
         "version": "0.2",
         "crypto": "ETH",
       },
@@ -169,7 +170,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /request_handle');
+      throw Exception('error connecting to SILA /request_kyc');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -773,5 +774,34 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return KYBRegisterResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<GetBusinessRolesResponse> getBusinessRoles() async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {"created": utcTime, "auth_handle": authHandle}
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/get_business_roles';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_business_roles');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return GetBusinessRolesResponse.fromJson(silaHandleResponse);
   }
 }
