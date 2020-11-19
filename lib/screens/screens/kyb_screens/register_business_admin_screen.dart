@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/screens/account/request_kyc_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/get_business_roles_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/register_business_role.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
@@ -63,8 +65,15 @@ class RegisterBusinessRolePopulated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(response.message),
+      body: Column(
+        children: [
+          Text(response.message),
+          RaisedButton(
+            child: Text('Check KYC'),
+            onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(builder: (contest) => RequestKYCScreen())),
+          )
+        ],
       ),
     );
   }
@@ -134,6 +143,8 @@ class RegisterBusinessRoleEmpty extends StatelessWidget {
                         email: _emailController.text,
                       ));
                 }
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (contest) => GetBusinessRolesScreen()));
               },
             )
           ],

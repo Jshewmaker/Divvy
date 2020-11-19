@@ -41,6 +41,22 @@ class FirebaseService {
     });
   }
 
+  void addDataToBusinessUserDocument(
+      String collection, Map<String, dynamic> data) async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    DocumentSnapshot _documentSnapshot = await Firestore.instance
+        .collection(collection)
+        .document(user.uid)
+        .get();
+    UserModel userData =
+        UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+
+    Firestore.instance
+        .collection(collection)
+        .document(userData.businessAdminDocumentID)
+        .updateData(data);
+  }
+
   /// Return user data in a UserModel
   Future<UserModel> getUserData() async {
     FirebaseUser user = await firebaseAuth.currentUser();

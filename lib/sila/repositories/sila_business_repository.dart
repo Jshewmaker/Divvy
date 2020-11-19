@@ -1,6 +1,10 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
+import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
+import 'package:divvy/sila/models/kyb/check_kyb_response/check_kyb_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_roles_response/get_business_roles_response.dart';
 import 'package:divvy/sila/models/kyb/kyb.dart';
+import 'package:divvy/sila/models/kyb/link_business_member_response.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -36,7 +40,7 @@ class SilaBusinessRepository {
     UserModel user = await _firebaseService.getUserData();
 
     final KYBRegisterResponse response =
-        await silaApiClient.registerBusiness(user.silaHandle, user);
+        await silaApiClient.registerBusiness(user);
     return response;
   }
 
@@ -47,6 +51,57 @@ class SilaBusinessRepository {
 
   Future<RegisterResponse> registerBusinessRole(UserModel user) async {
     UserModel user = await _firebaseService.getBusinessUser();
-    return await silaApiClient.register(user.name, user);
+    return await silaApiClient.register(user.name, user, isbusinessUser: true);
+  }
+
+  Future<List<LinkBusinessMemberResponse>> linkBusinessMember() async {
+    UserModel businessUser = await _firebaseService.getUserData();
+    UserModel user = await _firebaseService.getBusinessUser();
+    List<LinkBusinessMemberResponse> responses = [];
+    LinkBusinessMemberResponse response = await silaApiClient
+        .linkBusinessMember("controlling_officer", businessUser, user);
+    responses.add(response);
+    response = await silaApiClient.linkBusinessMember(
+        "beneficial_owner", businessUser, user,
+        ownershipStake: 100);
+    responses.add(response);
+    response = await silaApiClient.linkBusinessMember(
+        "administrator", businessUser, user);
+    responses.add(response);
+    return responses;
+  }
+
+  ///Request Know Your BUSINESS in SILA ecosystem
+  Future<RegisterResponse> requestKYB() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    return await silaApiClient.requestKYB(user.name, user.privateKey);
+  }
+
+  ///Check Status of Know Your BUSINESS in SILA ecosystem
+  Future<CheckKybResponse> checkKYB() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final CheckKybResponse response =
+        await silaApiClient.checkKYB(user.name, user.privateKey);
+    return response;
+  }
+
+  Future<GetEntityResponse> getEntity() async {
+    UserModel user = await _firebaseService.getBusinessUser();
+    return silaApiClient.getEntity(user.name, user.privateKey);
+  }
+
+  Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(
+      String token) async {
+    UserModel user = await _firebaseService.getBusinessUser();
+    UserModel businessUser = await _firebaseService.getUserData();
+    return silaApiClient.certifyBusinessOwner(user, businessUser, token);
+  }
+
+  Future<CertifyBusinessOwnerResponse> certifyBusiness() async {
+    UserModel user = await _firebaseService.getBusinessUser();
+    UserModel businessUser = await _firebaseService.getUserData();
+    return silaApiClient.certifyBusiness(user, businessUser);
   }
 }

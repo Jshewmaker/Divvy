@@ -4,8 +4,12 @@ import 'package:divvy/screens/screens/account/update_user_info/update_address_sc
 import 'package:divvy/screens/screens/account/update_user_info/update_email_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_entity_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_phone_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/check_kyb_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/get_entity_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/link_business_member_screen.dart';
 import 'package:divvy/screens/screens/kyb_screens/register_business_admin_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/register_kyb_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/register_business_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/request_kyb_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountOptionsScreen extends StatelessWidget {
@@ -29,7 +33,7 @@ class AccountOptionsScreen extends StatelessWidget {
                   .push(MaterialPageRoute(builder: (contest) => KycScreen())),
             ),
             RaisedButton(
-              child: Text('Request KYB'),
+              child: Text('Register Business'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (contest) => RegisterKYBScreen())),
             ),
@@ -37,6 +41,26 @@ class AccountOptionsScreen extends StatelessWidget {
               child: Text('Register User for KYB'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => RegisterBusinessAdminScreen())),
+            ),
+            RaisedButton(
+              child: Text('Link Business Member'),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => LinkBusinessMemberScreen())),
+            ),
+            RaisedButton(
+              child: Text('Request KYB'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (contest) => RequestKYBScreen())),
+            ),
+            RaisedButton(
+              child: Text('Check KYB'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (contest) => CheckKYBScreen())),
+            ),
+            RaisedButton(
+              child: Text('Get Entity'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (contest) => GetEntityScreen())),
             ),
             RaisedButton(
               child: Text('Update Email'),

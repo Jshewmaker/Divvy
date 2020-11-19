@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/screens/kyb_screens/register_business_admin_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/register_business_cubit.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
@@ -48,17 +49,16 @@ class RegisterBusinessPopulated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
       body: Center(
         child: Column(
           children: [
             Text(response.message),
             RaisedButton(
-                child: Text('Register Business Member'), onPressed: () => ''
-                // Navigator.of(context).push(
-                //             MaterialPageRoute(
-                //                 builder: (contest) => RegisterHandleScreenState(
-                //                     handle: _textController.text))),
-                )
+              child: Text('Register Business Member'),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => RegisterBusinessAdminScreen())),
+            )
           ],
         ),
       ),

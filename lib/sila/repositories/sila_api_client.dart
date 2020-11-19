@@ -3,8 +3,11 @@ import 'dart:convert';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
+import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
+import 'package:divvy/sila/models/kyb/check_kyb_response/check_kyb_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_roles_response/get_business_roles_response.dart';
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
+import 'package:divvy/sila/models/kyb/link_business_member_response.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -69,12 +72,10 @@ class SilaApiClient {
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
-  Future<RegisterResponse> register(
-    String handle,
-    UserModel user,
-  ) async {
+  Future<RegisterResponse> register(String handle, UserModel user,
+      {bool isbusinessUser}) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
-    String address = await eth.createEthWallet();
+    String address = await eth.createEthWallet(isBusinessUser: isbusinessUser);
 
     Map body = {
       "header": {
@@ -175,6 +176,80 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return RegisterResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<RegisterResponse> requestKYB(
+      String handle, String userPrivateKey) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      }
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/request_kyc';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /request_kyb');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return RegisterResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<CheckKybResponse> checkKYB(
+      String handle, String userPrivateKey) async {
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      }
+    };
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/check_kyc';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /check_kyb');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return CheckKybResponse.fromJson(silaHandleResponse);
   }
 
   Future<CheckKycResponse> checkKYC(
@@ -408,7 +483,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": handle
+        "user_handle": handle.split(" ")[0]
       }
     };
 
@@ -711,17 +786,16 @@ class SilaApiClient {
   /// Requires the user handle and the UserModel to fill out body
   ///
   Future<KYBRegisterResponse> registerBusiness(
-    String handle,
     UserModel user,
   ) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
-    String address = await eth.createEthWallet();
+    String address = await eth.createEthWallet(isBusinessUser: false);
 
     Map body = {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "$handle.silamoney.eth",
+        "user_handle": user.name + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
         "version": "0.2"
@@ -803,5 +877,140 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return GetBusinessRolesResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<LinkBusinessMemberResponse> linkBusinessMember(
+      String role, UserModel businessUser, UserModel user,
+      {double ownershipStake}) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+    Map body;
+
+    if (ownershipStake != null) {
+      body = {
+        "header": {
+          "created": utcTime,
+          "auth_handle": authHandle,
+          "user_handle": user.name.split(" ")[0],
+          "business_handle": businessUser.name
+        },
+        "role": role,
+        "ownership_stake": 66.7
+      };
+    } else {
+      body = {
+        "header": {
+          "created": utcTime,
+          "auth_handle": authHandle,
+          "user_handle": user.name.split(" ")[0],
+          "business_handle": businessUser.name
+        },
+        "role": role,
+      };
+    }
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, user.privateKey);
+    String businessSignature = await eth.signing(body, businessUser.privateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+      "businesssignature": businessSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/link_business_member';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /link_business_member');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return LinkBusinessMemberResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(
+      UserModel user, UserModel businessUser, String token) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": user.name.split(" ")[0],
+        "business_handle": businessUser.name
+      },
+      "member_handle": user.name.split(" ")[0],
+      "certification_token": token,
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, user.privateKey);
+    String businessSignature = await eth.signing(body, businessUser.privateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+      "businesssignature": businessSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/certify_beneficial_owner';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /certify_beneficial_owner');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<CertifyBusinessOwnerResponse> certifyBusiness(
+      UserModel user, UserModel businessUser) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": user.name.split(" ")[0],
+        "business_handle": businessUser.name,
+      }
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, user.privateKey);
+    String businessSignature = await eth.signing(body, businessUser.privateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+      "businesssignature": businessSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/certify_business';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /certify_business');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
   }
 }

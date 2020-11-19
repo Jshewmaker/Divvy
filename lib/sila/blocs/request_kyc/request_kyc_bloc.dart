@@ -13,13 +13,11 @@ class RequestKYCBloc extends Bloc<RequestKYCEvent, RequestKYCState> {
         super(RequestKYCInitial());
 
   @override
-  Stream<RequestKYCState> mapEventToState(
-      RequestKYCEvent event) async* {
+  Stream<RequestKYCState> mapEventToState(RequestKYCEvent event) async* {
     if (event is RequestKYCRequest) {
       yield RequestKYCLoadInProgress();
       try {
-        final RegisterResponse handle =
-            await silaRepository.requestKYC();
+        final RegisterResponse handle = await silaRepository.requestKYC();
         yield RequestKYCLoadSuccess(handle: handle);
       } catch (_) {
         yield RequestKYCLoadFailure();
