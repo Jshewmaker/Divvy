@@ -7,11 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class GetWalletInfoScreen extends StatelessWidget {
-
-  final String collection = "users";
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
-
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +28,7 @@ class GetWalletInfoScreen extends StatelessWidget {
               }
               if (state is GetSilaBalanceLoadSuccess) {
                 final apiResponse = state.response;
-                
+
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

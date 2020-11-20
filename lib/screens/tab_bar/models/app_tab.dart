@@ -1,1 +1,1 @@
-enum AppTab{home, project, invoices, account}
+enum AppTab { project, invoices, wallet, account }

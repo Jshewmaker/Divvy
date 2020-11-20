@@ -23,6 +23,7 @@ class UserEntity extends Equatable {
   final String silaUserSignature;
   final String cryptoAddress;
   final String wallet;
+  final String businessAdminDocumentID;
 
   const UserEntity(
     this.name,
@@ -46,6 +47,7 @@ class UserEntity extends Equatable {
     this.silaUserSignature,
     this.cryptoAddress,
     this.wallet,
+    this.businessAdminDocumentID,
   );
 
   Map<String, Object> toJson() {
@@ -71,6 +73,7 @@ class UserEntity extends Equatable {
       "silaUserSignature": silaUserSignature,
       "cryptoAddress": cryptoAddress,
       "wallet": wallet,
+      "businessAdminDocumentID": businessAdminDocumentID,
     };
   }
 
@@ -96,6 +99,7 @@ class UserEntity extends Equatable {
         silaUserSignature,
         cryptoAddress,
         wallet,
+        businessAdminDocumentID,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -121,6 +125,7 @@ class UserEntity extends Equatable {
       json["silaUserSignature"] as String,
       json["cryptoAddress"] as String,
       json["wallet"] as String,
+      json["businessAdminDocumentID"] as String,
     );
   }
 
@@ -130,7 +135,7 @@ class UserEntity extends Equatable {
       snap.data['name'],
       snap.data['dateOfBirthYYYYMMDD'],
       snap.data['identity_value'],
-      snap.data['street_address_a'],
+      snap.data['street_address_1'],
       snap.data['city'],
       snap.data['state'],
       snap.data['country'],
@@ -148,6 +153,7 @@ class UserEntity extends Equatable {
       snap.data['silaUserSignature'],
       snap.data['cryptoAddress'],
       snap.data['wallet'],
+      snap.data['businessAdminDocumentID'],
     );
   }
 
@@ -175,6 +181,7 @@ class UserEntity extends Equatable {
       "silaUserSignature": silaUserSignature,
       "cryptoAddress": cryptoAddress,
       "wallet": wallet,
+      "businessAdminDocumentID": businessAdminDocumentID,
     };
   }
 }

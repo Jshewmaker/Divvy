@@ -31,7 +31,7 @@ class EthereumService {
   ///
   ///When address is created the wallet address is added to the user's firebase
   ///and the address is returned from this function
-  Future<String> createEthWallet() async {
+  Future<String> createEthWallet({bool isBusinessUser}) async {
     String collection = "users";
     Map<String, String> firebaseData;
 
@@ -44,14 +44,24 @@ class EthereumService {
 
     firebaseData = {"privateKey": privateKey};
 
-    _firebaseService.addDataToFirestoreDocument('users', firebaseData);
+    if (isBusinessUser) {
+      _firebaseService.addDataToBusinessUserDocument(collection, firebaseData);
+    } else {
+      _firebaseService.addDataToFirestoreDocument(collection, firebaseData);
+    }
 
     Credentials credentials = EthPrivateKey.fromHex(privateKey);
 
     var wallet =
         await credentials.extractAddress().then((value) => value.toString());
     firebaseData = {"wallet": wallet};
-    _firebaseService.addDataToFirestoreDocument(collection, firebaseData);
+
+    if (isBusinessUser) {
+      _firebaseService.addDataToBusinessUserDocument(collection, firebaseData);
+    } else {
+      _firebaseService.addDataToFirestoreDocument(collection, firebaseData);
+    }
+
     return wallet;
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
-class PlaidLinkSplashScreen extends StatelessWidget {
+class PlaidLinkScreen extends StatelessWidget {
   final PlaidLink plaidLink = PlaidLink();
   static const Color blueHighlight = const Color(0xFF3665FF);
   final PlaidRepository plaidRepository = PlaidRepository(
