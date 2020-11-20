@@ -1,4 +1,5 @@
 import 'package:divvy/tab_bar/screens/account/check_handle_screen.dart';
+import 'package:divvy/tab_bar/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/tab_bar/screens/account/kyc_screen.dart';
 import 'package:divvy/tab_bar/screens/account/request_kyc_screen.dart';
 import 'package:divvy/tab_bar/screens/account/update_user_info/update_address_screen.dart';
@@ -20,6 +21,11 @@ class AccountOptionsScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
+            RaisedButton(
+              child: Text('Create Sila User'),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => CreateSilaUserScreen())),
+            ),
             RaisedButton(
               child: Text('Register Handle'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(

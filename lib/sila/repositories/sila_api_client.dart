@@ -32,7 +32,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
@@ -75,7 +75,7 @@ class SilaApiClient {
         "reference": '1',
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "divvy-$handle",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
       },
@@ -164,7 +164,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /request_handle');
+      throw Exception('error connecting to SILA / request_kyc');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

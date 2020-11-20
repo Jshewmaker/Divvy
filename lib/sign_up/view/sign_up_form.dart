@@ -10,7 +10,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 class SignUpForm extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
-      MaskedTextController(mask: '000-00-0000');
+      MaskedTextController(mask: '000000000');
   final MaskedTextController _birthdayController =
       MaskedTextController(mask: '0000-00-00');
   final TextEditingController _streetAddressController =
