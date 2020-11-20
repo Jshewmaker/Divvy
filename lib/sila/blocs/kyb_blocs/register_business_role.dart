@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/models/register_response.dart';
@@ -33,10 +35,25 @@ class RegisterBusinessRoleCubit extends Cubit<RegisterBusinessRoleState> {
       _firebaseService.createBusinessAdminInFirestore(
           'users', user.toEntity().toDocument());
 
+      user = await _firebaseService.getBusinessUser();
+      String username = formatUsername(user);
+      Map<String, String> data = {"silaHandle": username};
+      _firebaseService.addDataToBusinessUserDocument('users', data);
+
       final response = await _silaBusinessRepository.registerBusinessRole(user);
       emit(RegisterBusinessRoleLoadSuccess(response));
     } catch (_) {
       emit(RegisterBusinessRoleLoadFailure());
     }
+  }
+
+  String formatUsername(UserModel user) {
+    Random random = Random();
+    String handle = user.name;
+    handle = "divvy-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
+    for (int i = 0; i < 5; i++) {
+      handle += random.nextInt(10).toString();
+    }
+    return handle;
   }
 }

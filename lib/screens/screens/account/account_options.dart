@@ -1,5 +1,6 @@
 import 'package:divvy/screens/screens/account/check_handle_screen.dart';
 import 'package:divvy/screens/screens/account/kyc_screen.dart';
+import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_address_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_email_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_entity_screen.dart';
@@ -61,6 +62,11 @@ class AccountOptionsScreen extends StatelessWidget {
               child: Text('Get Entity'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (contest) => GetEntityScreen())),
+            ),
+            RaisedButton(
+              child: Text('Link Plaid'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
             ),
             RaisedButton(
               child: Text('Update Email'),

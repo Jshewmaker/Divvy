@@ -131,7 +131,7 @@ class RegisterBusinessRoleEmpty extends StatelessWidget {
                   context
                       .bloc<RegisterBusinessRoleCubit>()
                       .registerBusinessRole(UserModel(
-                        name: "divvy-" + _nameController.text,
+                        name: _nameController.text,
                         dateOfBirthYYYYMMDD: _birthdayController.text,
                         identityValue: _ssnController.text,
                         streetAddress: _streetAddressController.text,

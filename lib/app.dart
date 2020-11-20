@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
+import 'package:divvy/screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';

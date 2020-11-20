@@ -30,24 +30,24 @@ class TabSelector extends StatelessWidget {
   }
 
   String label(tab) {
-    if (tab == AppTab.home)
-      return 'home';
-    else if (tab == AppTab.project)
+    if (tab == AppTab.project)
       return 'project';
     else if (tab == AppTab.invoices)
       return 'invoices';
+    else if (tab == AppTab.wallet)
+      return 'wallet';
     else if (tab == AppTab.account) return 'account';
     return "";
   }
 
   Widget icon(tab) {
-    if (tab == AppTab.home)
-      return Icon(Icons.home);
-    else if (tab == AppTab.project)
+    if (tab == AppTab.project)
       return Icon(Icons.list);
     else if (tab == AppTab.invoices)
       return Icon(Icons.attach_money);
-    else if (tab == AppTab.account) return Icon(Icons.person);
+    else if (tab == AppTab.wallet)
+      return Icon(Icons.account_balance_wallet_outlined);
+    else if (tab == AppTab.account) return Icon(Icons.person_outlined);
     return Icon(Icons.ac_unit);
   }
 }

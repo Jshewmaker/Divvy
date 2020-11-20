@@ -7,9 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
 class RegisterHandleScreenState extends StatelessWidget {
-  final FirebaseService _firebaseService = FirebaseService();
   final String handle;
-  final String collection = "users";
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
@@ -33,8 +31,6 @@ class RegisterHandleScreenState extends StatelessWidget {
               }
               if (state is RegisterLoadSuccess) {
                 final apiResponse = state.handle;
-                Map<String, String> data = {"silaHandle": "divvy-$handle"};
-                _firebaseService.addDataToFirestoreDocument(collection, data);
 
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,

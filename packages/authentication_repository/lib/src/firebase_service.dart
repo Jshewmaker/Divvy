@@ -67,6 +67,7 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
+//Gets individual that is link to a business
   Future<UserModel> getBusinessUser() async {
     FirebaseUser user = await firebaseAuth.currentUser();
     DocumentSnapshot _documentSnapshot = await Firestore.instance

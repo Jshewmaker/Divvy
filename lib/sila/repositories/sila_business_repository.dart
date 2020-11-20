@@ -75,7 +75,7 @@ class SilaBusinessRepository {
   Future<RegisterResponse> requestKYB() async {
     UserModel user = await _firebaseService.getUserData();
 
-    return await silaApiClient.requestKYB(user.name, user.privateKey);
+    return await silaApiClient.requestKYB(user.silaHandle, user.privateKey);
   }
 
   ///Check Status of Know Your BUSINESS in SILA ecosystem
@@ -83,13 +83,13 @@ class SilaBusinessRepository {
     UserModel user = await _firebaseService.getUserData();
 
     final CheckKybResponse response =
-        await silaApiClient.checkKYB(user.name, user.privateKey);
+        await silaApiClient.checkKYB(user.silaHandle, user.privateKey);
     return response;
   }
 
   Future<GetEntityResponse> getEntity() async {
     UserModel user = await _firebaseService.getBusinessUser();
-    return silaApiClient.getEntity(user.name, user.privateKey);
+    return silaApiClient.getEntity(user.silaHandle, user.privateKey);
   }
 
   Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(

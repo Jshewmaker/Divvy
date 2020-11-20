@@ -82,7 +82,7 @@ class SilaApiClient {
         "reference": '1',
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": handle.split(" ")[0],
+        "user_handle": user.silaHandle,
         "version": "0.2",
         "crypto": "ETH",
       },
@@ -186,7 +186,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": "$handle.silamoney.eth",
+        "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
@@ -795,7 +795,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": user.name + ".silamoney.eth",
+        "user_handle": user.silaHandle + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
         "version": "0.2"
@@ -890,8 +890,8 @@ class SilaApiClient {
         "header": {
           "created": utcTime,
           "auth_handle": authHandle,
-          "user_handle": user.name.split(" ")[0],
-          "business_handle": businessUser.name
+          "user_handle": user.silaHandle,
+          "business_handle": businessUser.silaHandle
         },
         "role": role,
         "ownership_stake": 66.7
@@ -901,8 +901,8 @@ class SilaApiClient {
         "header": {
           "created": utcTime,
           "auth_handle": authHandle,
-          "user_handle": user.name.split(" ")[0],
-          "business_handle": businessUser.name
+          "user_handle": user.silaHandle,
+          "business_handle": businessUser.silaHandle
         },
         "role": role,
       };
@@ -942,10 +942,10 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": user.name.split(" ")[0],
-        "business_handle": businessUser.name
+        "user_handle": user.silaHandle,
+        "business_handle": businessUser.silaHandle
       },
-      "member_handle": user.name.split(" ")[0],
+      "member_handle": user.silaHandle,
       "certification_token": token,
     };
 
@@ -983,8 +983,8 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": authHandle,
-        "user_handle": user.name.split(" ")[0],
-        "business_handle": businessUser.name,
+        "user_handle": user.silaHandle,
+        "business_handle": businessUser.silaHandle,
       }
     };
 

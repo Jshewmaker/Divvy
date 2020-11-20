@@ -2,6 +2,10 @@ import 'package:divvy/screens/screens/line_item_info_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProjectScreen extends StatelessWidget {
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => ProjectScreen());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

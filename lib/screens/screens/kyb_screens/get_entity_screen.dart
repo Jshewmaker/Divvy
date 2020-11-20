@@ -51,7 +51,7 @@ class GetEntityPopulated extends StatelessWidget {
           children: [
             Text(token),
             RaisedButton(
-              child: Text('Register Business Member'),
+              child: Text('Certify Business Owner'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => CertifyBuisnessOwnerScreen(token))),
             )

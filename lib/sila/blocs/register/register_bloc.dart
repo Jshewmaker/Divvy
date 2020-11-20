@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/models/register_response.dart';
@@ -12,13 +13,15 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         super(RegisterInitial());
 
   @override
-  Stream<RegisterState> mapEventToState(
-      RegisterEvent event) async* {
+  Stream<RegisterState> mapEventToState(RegisterEvent event) async* {
+    final FirebaseService _firebaseService = FirebaseService();
     if (event is RegisterRequest) {
       yield RegisterLoadInProgress();
       try {
         final RegisterResponse handle =
-            await silaRepository.register(event.handle );
+            await silaRepository.register(event.handle);
+        Map<String, String> data = {"silaHandle": "divvy-$handle"};
+        _firebaseService.addDataToFirestoreDocument('users', data);
         yield RegisterLoadSuccess(handle: handle);
       } catch (_) {
         yield RegisterLoadFailure();

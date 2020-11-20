@@ -35,14 +35,17 @@ class CheckKybResponse extends Equatable {
       verificationStatus: json['verification_status'],
       verificationHistory: json['verification_history'] != null
           ? json['verification_history']
-              .map((v) => new VerificationHistory.fromJson(v))
+              .map<VerificationHistory>(
+                  (v) => new VerificationHistory.fromJson(v))
               .toList()
           : null,
       validKycLevels: json['valid_kyc_levels'].cast<String>(),
       certificationStatus: json['certification_status'],
       certificationHistory: json['certification_history'],
       members: json['members'] != null
-          ? json['members'].map((v) => new Members.fromJson(v)).toList()
+          ? json['members']
+              .map<Members>((v) => new Members.fromJson(v))
+              .toList()
           : null,
     );
   }

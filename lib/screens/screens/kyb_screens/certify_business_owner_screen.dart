@@ -52,7 +52,7 @@ class ResponsePopulated extends StatelessWidget {
           children: [
             Text(response.message),
             RaisedButton(
-              child: Text('Register Business Member'),
+              child: Text('Certify Business'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => CertifyBuisnessScreen())),
             )
