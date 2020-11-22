@@ -54,14 +54,6 @@ class _AppViewState extends State<AppView> {
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
-  void initState() {
-    super.initState();
-    _firebaseService.getUserData().then((value) => setState(() {
-          user = value;
-        }));
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: theme,
