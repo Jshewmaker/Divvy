@@ -47,7 +47,6 @@ class AppView extends StatefulWidget {
 
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  final FirebaseService _firebaseService = FirebaseService();
 
   UserModel user;
 
@@ -64,15 +63,15 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                if (user.businessAdminDocumentID == null) {
-                  _navigator.pushAndRemoveUntil(
-                      SignUpBusinessAdminPage.route(), (route) => false);
-                } else {
-                  _navigator.pushAndRemoveUntil<void>(
-                    HomeScreen.route(),
-                    (route) => false,
-                  );
-                }
+                // if (user.businessAdminDocumentID == null) {
+                //   _navigator.pushAndRemoveUntil(
+                //       SignUpBusinessAdminPage.route(), (route) => false);
+                // } else {
+                _navigator.pushAndRemoveUntil<void>(
+                  HomeScreen.route(),
+                  (route) => false,
+                );
+                // }
 
                 break;
               case AuthenticationStatus.unauthenticated:
