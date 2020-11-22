@@ -67,7 +67,7 @@ class WalletScreenPopulated extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              'Account Balance',
+              'Account Balance: Phase 2',
               style: TextStyle(
                   color: Colors.teal,
                   fontSize: 18,
@@ -82,7 +82,7 @@ class WalletScreenPopulated extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
                 ),
                 Text(
-                  "Balance Breakdown",
+                  "Project Breakdown By Phase",
                   textAlign: TextAlign.left,
                   style: TextStyle(color: Colors.teal, fontSize: 18),
                 ),
@@ -96,33 +96,29 @@ class WalletScreenPopulated extends StatelessWidget {
                 shrinkWrap: true,
                 children: [
                   _CardWidget(
-                      title: 'Dig Hole for Pool',
-                      date: 'November 20, 2020',
-                      price: '\$1000'),
+                    title: 'Phase 1',
+                    date: 'November 20, 2020',
+                    price: '\$5000',
+                    color: 100,
+                  ),
                   _CardWidget(
-                      title: 'Install Rebar',
-                      date: 'November 23, 2020',
-                      price: '\$1500'),
+                    title: 'Phase 2',
+                    date: 'November 23, 2020',
+                    price: '\$3000',
+                    color: 100,
+                  ),
                   _CardWidget(
-                      title: 'Plumbing & Electrical',
-                      date: 'November 24, 2020',
-                      price: '\$750'),
+                    title: 'Phase 3',
+                    date: 'November 24, 2020',
+                    price: '\$3750',
+                    color: 400,
+                  ),
                   _CardWidget(
-                      title: 'Pour Concrete',
-                      date: 'November 28, 2020',
-                      price: '\$3000'),
-                  _CardWidget(
-                      title: 'Tile & Decking',
-                      date: 'December 10, 2020',
-                      price: '\$1700'),
-                  _CardWidget(
-                      title: 'Interior Finishing',
-                      date: 'December 13, 2020',
-                      price: '\$1000'),
-                  _CardWidget(
-                      title: 'Pool Start-Up',
-                      date: 'November 17, 2020',
-                      price: '\$800'),
+                    title: 'Phase 4',
+                    date: 'November 28, 2020',
+                    price: '\$3000',
+                    color: 400,
+                  ),
                 ],
               ),
             )
@@ -137,17 +133,19 @@ class _CardWidget extends StatelessWidget {
   final String title;
   final String price;
   final String date;
+  final int color;
 
-  _CardWidget({Key key, this.title, this.date, this.price}) : super(key: key);
+  _CardWidget({Key key, this.title, this.date, this.price, this.color})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-      height: 103,
+      height: 133,
       width: double.maxFinite,
       child: Card(
-        color: Colors.teal[200],
+        color: Colors.teal[color],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 5,
         child: InkWell(
@@ -182,11 +180,23 @@ class _CardWidget extends StatelessWidget {
                                 ],
                               ),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
                                     date,
                                     style: TextStyle(color: Colors.grey[100]),
                                   ),
+                                  if (color == 400)
+                                    FlatButton(
+                                      height: 20,
+                                      child: Text(
+                                        'Add Funds',
+                                        style: TextStyle(
+                                            fontSize: 12, color: Colors.white),
+                                      ),
+                                      onPressed: () => "",
+                                    ),
                                 ],
                               ),
                               SizedBox(

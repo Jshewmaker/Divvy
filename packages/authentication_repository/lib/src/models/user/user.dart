@@ -28,9 +28,7 @@ class UserModel extends Equatable {
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
-  final String silaAuthSignature;
-  final String silaUserSignature;
-  final String cryptoAddress;
+  final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
 
@@ -53,9 +51,7 @@ class UserModel extends Equatable {
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
-    this.silaAuthSignature,
-    this.silaUserSignature,
-    this.cryptoAddress,
+    this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
   });
@@ -80,9 +76,7 @@ class UserModel extends Equatable {
     privateKey: null,
     silaEntityName: null,
     silaHandle: null,
-    silaAuthSignature: null,
-    silaUserSignature: null,
-    cryptoAddress: null,
+    isHomeowner: null,
     wallet: null,
     businessAdminDocumentID: null,
   );
@@ -107,9 +101,7 @@ class UserModel extends Equatable {
         privateKey,
         silaEntityName,
         silaHandle,
-        silaAuthSignature,
-        silaUserSignature,
-        cryptoAddress,
+        isHomeowner,
         wallet,
         businessAdminDocumentID,
       ];
@@ -133,9 +125,7 @@ class UserModel extends Equatable {
       privateKey: entity.privateKey,
       silaHandle: entity.silaHandle,
       silaEntityName: entity.silaEntityName,
-      silaAuthSignature: entity.silaAuthSignature,
-      silaUserSignature: entity.silaUserSignature,
-      cryptoAddress: entity.cryptoAddress,
+      isHomeowner: entity.isHomeowner,
       wallet: entity.wallet,
       businessAdminDocumentID: entity.businessAdminDocumentID,
     );
@@ -160,9 +150,7 @@ class UserModel extends Equatable {
       privateKey,
       silaEntityName,
       silaHandle,
-      silaAuthSignature,
-      silaUserSignature,
-      cryptoAddress,
+      isHomeowner,
       wallet,
       businessAdminDocumentID,
     );

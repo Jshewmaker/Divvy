@@ -41,7 +41,6 @@ class NaicsCategoryPopulated extends StatelessWidget {
   NaicsCategoryPopulated(this._response, this._businessType);
 
   final GetNaicsCategoriesResponse _response;
-  FirebaseService _firebaseService;
   final String _businessType;
 
   @override

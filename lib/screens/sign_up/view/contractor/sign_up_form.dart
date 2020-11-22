@@ -188,13 +188,6 @@ class ContractorSignUpForm extends StatelessWidget {
     );
   }
 
-  // Widget _signUpButton(context){
-  //   return RaisedButton(
-  //     child: const Text('CONTINUE'),
-  //     onPressed: () => Navigator.of(context).push(route),
-  //   )
-  // }
-
   Widget _signUpButton() {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) => previous.status != current.status,

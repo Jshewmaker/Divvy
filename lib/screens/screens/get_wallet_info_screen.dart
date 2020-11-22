@@ -28,7 +28,6 @@ class GetWalletInfoScreen extends StatelessWidget {
               }
               if (state is GetSilaBalanceLoadSuccess) {
                 final apiResponse = state.response;
-
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
