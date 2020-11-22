@@ -24,27 +24,24 @@ class CreateSilaUserScreen extends StatelessWidget {
           title: Text('Divvy'),
         ),
         body: Center(
-          child: Column(
-            children: [
-              CircularProgressIndicator(),
-              BlocListener<CreateSilaUserBloc, CreateSilaUserState>(
-                listener: (context, state) {
-                  if (state is CreateSilaUserSuccess) {
-                    Navigator.of(context).pushReplacement(
-                        MaterialPageRoute(builder: (contest) => HomeScreen()));
-                  }
-                },
-                child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
-                    builder: (context, state) {
-                  if (state is CreateSilaUserInitial || state is HandleTaken) {
-                    BlocProvider.of<CreateSilaUserBloc>(context).add(
-                        CreateSilaUserRequest(handle: _textController.text));
-                  }
+          child: BlocListener<CreateSilaUserBloc, CreateSilaUserState>(
+            listener: (context, state) {
+              if (state is CreateSilaUserSuccess) {
+                Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(builder: (contest) => HomeScreen()));
+              }
+            },
+            child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
+                builder: (context, state) {
+              if (state is CreateSilaUserInitial || state is HandleTaken) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(CreateSilaUserRequest(handle: _textController.text));
+              }
+              /*
                   if (state is CheckHandleLoadInProgress) {
                     //return Center(child: CircularProgressIndicator());
                   }
 
-                  /*
                   if (state is CheckHandleSuccess) {
                     return Text(
                       'Valid Handle!',
@@ -71,15 +68,15 @@ class CreateSilaUserScreen extends StatelessWidget {
                   }
                   */
 
-                  if (state is CheckHandleLoadFailure ||
-                      state is RegisterLoadFailure) {
-                    return Text(
-                      state.message,
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
+              if (state is CheckHandleLoadFailure ||
+                  state is RegisterLoadFailure) {
+                return Text(
+                  state.message,
+                  style: TextStyle(color: Colors.red),
+                );
+              }
 
-                  /*
+              /*
                   if (state is RegisterLoadInProgress) {
                     return Text(
                       "Registering your account",
@@ -88,7 +85,7 @@ class CreateSilaUserScreen extends StatelessWidget {
                   }
                   */
 
-                  /*
+              /*
                   if (state is CheckKycPending) {
                     return Text(
                       "KYC Pending",
@@ -97,17 +94,15 @@ class CreateSilaUserScreen extends StatelessWidget {
                   }
                   */
 
-                  if (state is CheckKycLoadFailure) {
-                    return Text(
-                      "KYC Failure",
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
+              if (state is CheckKycLoadFailure) {
+                return Text(
+                  "KYC Failure",
+                  style: TextStyle(color: Colors.red),
+                );
+              }
 
-                  return Container();
-                }),
-              ),
-            ],
+              return Center(child: CircularProgressIndicator());
+            }),
           ),
         ),
       ),
