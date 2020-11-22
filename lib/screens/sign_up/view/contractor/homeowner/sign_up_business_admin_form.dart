@@ -55,7 +55,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
 
   Widget _emailInput() {
     return TextField(
-      controller: _nameController,
+      controller: _emailController,
       decoration: InputDecoration(
         hintText: "info@FrequencyPay.com",
         border: UnderlineInputBorder(),
@@ -179,7 +179,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
   }
 
   Widget _signUpButton(BuildContext context) {
-    FirebaseService _firebaseService;
+    FirebaseService _firebaseService = FirebaseService();
 
     return RaisedButton(
         child: const Text('CONTINUE'),

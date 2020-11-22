@@ -29,6 +29,9 @@ class AuthenticationBloc
     AuthenticationEvent event,
   ) async* {
     if (event is AuthenticationUserChanged) {
+      // FirebaseService _firebaseService = FirebaseService();
+
+      // var user = await _firebaseService.getUserData();
       yield _mapAuthenticationUserChangedToState(event);
     } else if (event is AuthenticationLogoutRequested) {
       unawaited(_authenticationRepository.logOut());
@@ -44,8 +47,10 @@ class AuthenticationBloc
   AuthenticationState _mapAuthenticationUserChangedToState(
     AuthenticationUserChanged event,
   ) {
-    return event.user != UserModel.empty
-        ? AuthenticationState.authenticated(event.user)
-        : const AuthenticationState.unauthenticated();
+    if (event.user != UserModel.empty) {
+      return AuthenticationState.authenticated(event.user);
+    } else {
+      return AuthenticationState.unauthenticated();
+    }
   }
 }

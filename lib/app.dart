@@ -63,15 +63,16 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                // if (user.businessAdminDocumentID == null) {
-                //   _navigator.pushAndRemoveUntil(
-                //       SignUpBusinessAdminPage.route(), (route) => false);
-                // } else {
-                _navigator.pushAndRemoveUntil<void>(
-                  HomeScreen.route(),
-                  (route) => false,
-                );
-                // }
+                UserModel user = state.user;
+                if (user.businessAdminDocumentID == null) {
+                  _navigator.pushAndRemoveUntil(
+                      SignUpBusinessAdminPage.route(), (route) => false);
+                } else {
+                  _navigator.pushAndRemoveUntil<void>(
+                    HomeScreen.route(),
+                    (route) => false,
+                  );
+                }
 
                 break;
               case AuthenticationStatus.unauthenticated:

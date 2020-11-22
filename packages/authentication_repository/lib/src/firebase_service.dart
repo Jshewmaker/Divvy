@@ -67,15 +67,6 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
-  /// preload user data in a UserModel
-  Stream<UserModel> preLoadUserDataFromFirebase(String userID) {
-    return Firestore.instance
-        .collection(collection)
-        .document(userID)
-        .snapshots()
-        .map((event) => UserModel.fromEntity(UserEntity.fromSnapshot(event)));
-  }
-
 //Gets individual that is link to a business
   Future<UserModel> getBusinessUser() async {
     FirebaseUser user = await firebaseAuth.currentUser();
