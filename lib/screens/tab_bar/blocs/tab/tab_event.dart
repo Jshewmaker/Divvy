@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:divvy/tab_bar/models/models.dart';
+import 'package:divvy/screens/tab_bar/models/models.dart';
 
 abstract class TabEvent extends Equatable {
   const TabEvent();

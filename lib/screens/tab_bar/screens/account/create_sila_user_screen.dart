@@ -1,7 +1,7 @@
-import 'package:divvy/tab_bar/screens/account/account_options.dart';
+import 'package:divvy/screens/tab_bar/screens/account/account_options.dart';
 import 'package:divvy/sila/blocs/create_sila_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
-import 'package:divvy/tab_bar/screens/tab_bar_container.dart';
+import 'package:divvy/screens/tab_bar/screens/tab_bar_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;

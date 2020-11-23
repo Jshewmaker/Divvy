@@ -1,11 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
-import 'package:divvy/tab_bar/screens/account/create_sila_user_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/account/create_sila_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
-import 'package:divvy/tab_bar/screens/tab_bar_container.dart';
+import 'package:divvy/screens/tab_bar/screens/tab_bar_container.dart';
 import 'package:divvy/login/login.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';

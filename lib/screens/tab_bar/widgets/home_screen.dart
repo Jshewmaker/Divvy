@@ -1,7 +1,7 @@
 import 'package:divvy/sila/plaid/plaid_bloc/plaid_bloc.dart';
 import 'package:divvy/sila/plaid/plaid_link/newplaidlink.dart';
 import 'package:divvy/sila/plaid/plaid_network/plaid_network.dart';
-import 'package:divvy/tab_bar/screens/link_account_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/link_account_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;

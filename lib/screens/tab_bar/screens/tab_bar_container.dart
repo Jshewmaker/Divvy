@@ -1,12 +1,12 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
-import 'package:divvy/tab_bar/widgets/home_screen.dart';
-import 'package:divvy/tab_bar/widgets/invoices.dart';
-import 'package:divvy/tab_bar/widgets/project_screen.dart';
+import 'package:divvy/screens/tab_bar/widgets/home_screen.dart';
+import 'package:divvy/screens/tab_bar/widgets/invoices.dart';
+import 'package:divvy/screens/tab_bar/widgets/project_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:divvy/tab_bar/blocs/blocs.dart';
-import 'package:divvy/tab_bar/widgets/widgets.dart';
-import 'package:divvy/tab_bar/models/models.dart';
+import 'package:divvy/screens/tab_bar/blocs/blocs.dart';
+import 'package:divvy/screens/tab_bar/widgets/widgets.dart';
+import 'package:divvy/screens/tab_bar/models/models.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {

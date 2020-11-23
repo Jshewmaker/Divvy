@@ -1,8 +1,8 @@
-import 'package:divvy/tab_bar/screens/account/account_options.dart';
-import 'package:divvy/tab_bar/screens/account/check_handle_screen.dart';
-import 'package:divvy/tab_bar/screens/get_wallet_info_screen.dart';
-import 'package:divvy/tab_bar/screens/issue_sila_screen.dart';
-import 'package:divvy/tab_bar/screens/transaction_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/account/account_options.dart';
+import 'package:divvy/screens/tab_bar/screens/account/check_handle_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/get_wallet_info_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/issue_sila_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/transaction_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {

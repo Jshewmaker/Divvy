@@ -1,5 +1,5 @@
 import 'package:divvy/sila/blocs/check_handle/check_handle.dart';
-import 'package:divvy/tab_bar/screens/account/register_handle_screen.dart';
+import 'package:divvy/screens/tab_bar/screens/account/register_handle_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
