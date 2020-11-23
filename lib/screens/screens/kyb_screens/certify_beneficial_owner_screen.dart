@@ -1,5 +1,5 @@
 import 'package:divvy/screens/screens/kyb_screens/certify_business_screen.dart';
-import 'package:divvy/sila/blocs/kyb_blocs/certify_business_owner_cubit.dart';
+import 'package:divvy/sila/blocs/kyb_blocs/certify_beneficial_owner_cubit.dart';
 import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
@@ -17,17 +17,18 @@ class CertifyBuisnessOwnerScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CertifyBusinessOwnerCubit(_silaBusinessRepository),
-      child: BlocBuilder<CertifyBusinessOwnerCubit, CertifyBusinessOwnerState>(
+      create: (context) => CertifyBeneficialOwnerCubit(_silaBusinessRepository),
+      child:
+          BlocBuilder<CertifyBeneficialOwnerCubit, CertifyBeneficialOwnerState>(
         builder: (context, state) {
-          if (state is CertifyBusinessOwnerInitial) {
+          if (state is CertifyBeneficialOwnerInitial) {
             context
-                .bloc<CertifyBusinessOwnerCubit>()
-                .certifyBusinessOwners(token);
+                .bloc<CertifyBeneficialOwnerCubit>()
+                .certifyBeneficialOwners(token);
             return const ResponseEmpty();
-          } else if (state is CertifyBusinessOwnerLoadInProgress) {
+          } else if (state is CertifyBeneficialOwnerLoadInProgress) {
             return const ResponseLoading();
-          } else if (state is CertifyBusinessOwnerLoadSuccess) {
+          } else if (state is CertifyBeneficialOwnerLoadSuccess) {
             return ResponsePopulated(response: state.response);
           } else {
             return const ResponseError();
@@ -41,7 +42,7 @@ class CertifyBuisnessOwnerScreen extends StatelessWidget {
 class ResponsePopulated extends StatelessWidget {
   ResponsePopulated({Key key, @required this.response}) : super(key: key);
 
-  final CertifyBusinessOwnerResponse response;
+  final CertifyBeneficialOwnerResponse response;
 
   @override
   Widget build(BuildContext context) {

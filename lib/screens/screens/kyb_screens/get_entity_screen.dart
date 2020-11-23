@@ -1,4 +1,4 @@
-import 'package:divvy/screens/screens/kyb_screens/certify_business_owner_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/certify_beneficial_owner_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/get_entity_cubit.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/request_kyb_cubit.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';

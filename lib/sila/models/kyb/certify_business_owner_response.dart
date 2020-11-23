@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
-class CertifyBusinessOwnerResponse extends Equatable {
+class CertifyBeneficialOwnerResponse extends Equatable {
   final bool success;
   final String status;
   final String message;
 
-  const CertifyBusinessOwnerResponse({
+  const CertifyBeneficialOwnerResponse({
     this.success,
     this.status,
     this.message,
@@ -18,8 +18,8 @@ class CertifyBusinessOwnerResponse extends Equatable {
         message,
       ];
 
-  static CertifyBusinessOwnerResponse fromJson(dynamic json) {
-    return CertifyBusinessOwnerResponse(
+  static CertifyBeneficialOwnerResponse fromJson(dynamic json) {
+    return CertifyBeneficialOwnerResponse(
       success: json['success'],
       status: json['status'],
       message: json['message'],

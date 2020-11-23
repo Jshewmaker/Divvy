@@ -92,14 +92,14 @@ class SilaBusinessRepository {
     return silaApiClient.getEntity(user.silaHandle, user.privateKey);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(
+  Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(
       String token) async {
     UserModel user = await _firebaseService.getBusinessUser();
     UserModel businessUser = await _firebaseService.getUserData();
-    return silaApiClient.certifyBusinessOwner(user, businessUser, token);
+    return silaApiClient.certifyBeneficialOwner(user, businessUser, token);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusiness() async {
+  Future<CertifyBeneficialOwnerResponse> certifyBusiness() async {
     UserModel user = await _firebaseService.getBusinessUser();
     UserModel businessUser = await _firebaseService.getUserData();
     return silaApiClient.certifyBusiness(user, businessUser);

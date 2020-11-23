@@ -936,7 +936,7 @@ class SilaApiClient {
     return LinkBusinessMemberResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(
+  Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(
       UserModel user, UserModel businessUser, String token) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
@@ -974,10 +974,10 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
+    return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusiness(
+  Future<CertifyBeneficialOwnerResponse> certifyBusiness(
       UserModel user, UserModel businessUser) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
@@ -1013,6 +1013,6 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
+    return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 }
