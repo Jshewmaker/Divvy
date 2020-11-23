@@ -1,7 +1,8 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
+import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
-import 'package:divvy/screens/sign_up/view/contractor/homeowner/sign_up_business_admin_page.dart';
+import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_page.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
@@ -64,9 +65,12 @@ class _AppViewState extends State<AppView> {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
                 UserModel user = state.user;
-                if (user.businessAdminDocumentID == null) {
+                if (!user.isHomeowner && user.businessAdminDocumentID == null) {
                   _navigator.pushAndRemoveUntil(
                       SignUpBusinessAdminPage.route(), (route) => false);
+                } else if (user.silaHandle == null) {
+                  _navigator.pushAndRemoveUntil(
+                      CreateSilaUserScreen.route(), (route) => false);
                 } else {
                   _navigator.pushAndRemoveUntil<void>(
                     HomeScreen.route(),

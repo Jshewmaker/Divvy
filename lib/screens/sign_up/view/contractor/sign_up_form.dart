@@ -218,6 +218,7 @@ class ContractorSignUpForm extends StatelessWidget {
                           email: _emailController.text,
                           businessType: _businessType,
                           naicsCode: _naicsCode,
+                          isHomeowner: false,
                         ))
                     : null,
               );

@@ -4,19 +4,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/Screens/sign_up/sign_up.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 // ignore: must_be_immutable
 class SignUpForm extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ssnController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
+  final MaskedTextController _ssnController =
+      MaskedTextController(mask: '000000000');
+  final MaskedTextController _birthdayController =
+      MaskedTextController(mask: '0000-00-00');
   final TextEditingController _streetAddressController =
       TextEditingController();
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _stateController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
   final TextEditingController _postalCodeController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final MaskedTextController _phoneNumberController =
+      MaskedTextController(mask: '000-000-0000');
 
   bool _validate = false;
 
@@ -195,7 +199,7 @@ class SignUpForm extends StatelessWidget {
                     ? () => context
                         .bloc<SignUpCubit>()
                         .signUpFormSubmitted(UserModel(
-                          name: "divvy-" + _nameController.text,
+                          name: _nameController.text,
                           dateOfBirthYYYYMMDD: _birthdayController.text,
                           identityValue: _ssnController.text,
                           streetAddress: _streetAddressController.text,
@@ -204,6 +208,7 @@ class SignUpForm extends StatelessWidget {
                           country: _countryController.text,
                           postalCode: _postalCodeController.text,
                           phone: _phoneNumberController.text,
+                          isHomeowner: true,
                         ))
                     : null,
               );

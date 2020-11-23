@@ -1,4 +1,4 @@
-import 'package:divvy/screens/sign_up/view/contractor/homeowner/sign_up_business_admin_form.dart';
+import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_form.dart';
 import 'package:flutter/material.dart';
 
 class SignUpBusinessAdminPage extends StatelessWidget {

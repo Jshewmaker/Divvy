@@ -201,7 +201,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
                 country: _countryController.text,
                 postalCode: _postalCodeController.text,
                 phone: _phoneNumberController.text,
-                isHomeowner: true,
+                isHomeowner: false,
               ).toEntity().toDocument());
           Navigator.of(context)
               .pushAndRemoveUntil(HomeScreen.route(), (route) => false);
