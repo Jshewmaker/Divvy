@@ -1,7 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
-import 'package:divvy/screens/tab_bar/widgets/widgets.dart';
+import 'package:divvy/screens/sign_up/view/contractor/homeowner/sign_up_business_admin_page.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
@@ -48,6 +48,8 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
+  UserModel user;
+
   NavigatorState get _navigator => _navigatorKey.currentState;
 
   @override
@@ -61,10 +63,17 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  HomeScreen.route(),
-                  (route) => false,
-                );
+                UserModel user = state.user;
+                if (user.businessAdminDocumentID == null) {
+                  _navigator.pushAndRemoveUntil(
+                      SignUpBusinessAdminPage.route(), (route) => false);
+                } else {
+                  _navigator.pushAndRemoveUntil<void>(
+                    HomeScreen.route(),
+                    (route) => false,
+                  );
+                }
+
                 break;
               case AuthenticationStatus.unauthenticated:
                 _navigator.pushAndRemoveUntil<void>(

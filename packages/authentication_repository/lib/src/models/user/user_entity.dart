@@ -19,9 +19,7 @@ class UserEntity extends Equatable {
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
-  final String silaAuthSignature;
-  final String silaUserSignature;
-  final String cryptoAddress;
+  final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
 
@@ -43,9 +41,7 @@ class UserEntity extends Equatable {
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
-    this.silaAuthSignature,
-    this.silaUserSignature,
-    this.cryptoAddress,
+    this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
   );
@@ -69,9 +65,7 @@ class UserEntity extends Equatable {
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
-      "silaAuthSignature": silaAuthSignature,
-      "silaUserSignature": silaUserSignature,
-      "cryptoAddress": cryptoAddress,
+      "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
     };
@@ -95,9 +89,7 @@ class UserEntity extends Equatable {
         privateKey,
         silaEntityName,
         silaHandle,
-        silaAuthSignature,
-        silaUserSignature,
-        cryptoAddress,
+        isHomeowner,
         wallet,
         businessAdminDocumentID,
       ];
@@ -121,9 +113,7 @@ class UserEntity extends Equatable {
       json["privateKey"] as String,
       json["silaEntityName"] as String,
       json["silaHandle"] as String,
-      json["silaAuthSignature"] as String,
-      json["silaUserSignature"] as String,
-      json["cryptoAddress"] as String,
+      json["isHomeowner"] as bool,
       json["wallet"] as String,
       json["businessAdminDocumentID"] as String,
     );
@@ -149,9 +139,7 @@ class UserEntity extends Equatable {
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
-      snap.data['silaAuthSignature'],
-      snap.data['silaUserSignature'],
-      snap.data['cryptoAddress'],
+      snap.data['isHomeowner'],
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
     );
@@ -177,9 +165,7 @@ class UserEntity extends Equatable {
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
-      "silaAuthsiganture": silaAuthSignature,
-      "silaUserSignature": silaUserSignature,
-      "cryptoAddress": cryptoAddress,
+      "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
     };

@@ -11,9 +11,9 @@ class CheckKYBInitial extends CheckKYBState {}
 class CheckKYBLoadInProgress extends CheckKYBState {}
 
 class CheckKYBLoadSuccess extends CheckKYBState {
-  CheckKYBLoadSuccess(this.CheckKYB);
+  CheckKYBLoadSuccess(this.checkKYB);
 
-  final CheckKybResponse CheckKYB;
+  final CheckKybResponse checkKYB;
 }
 
 class CheckKYBLoadFailure extends CheckKYBState {}

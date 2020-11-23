@@ -28,7 +28,7 @@ class CheckKYBScreen extends StatelessWidget {
           } else if (state is CheckKYBLoadInProgress) {
             return const CheckKYBLoading();
           } else if (state is CheckKYBLoadSuccess) {
-            return CheckKYBPopulated(response: state.CheckKYB);
+            return CheckKYBPopulated(response: state.checkKYB);
           } else {
             return const CheckKYBError();
           }

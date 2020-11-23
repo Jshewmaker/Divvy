@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:authentication_repository/src/firebase_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
@@ -41,8 +42,19 @@ class AuthenticationRepository {
   ///
   /// Emits [UserModel.empty] if the user is not authenticated.
   Stream<UserModel> get user {
-    return _firebaseAuth.onAuthStateChanged.map((firebaseUser) {
-      return firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
+    return _firebaseAuth.onAuthStateChanged.asyncMap((event) {
+      if (event == null) {
+        return UserModel.empty;
+      } else {
+        FirebaseService foo = FirebaseService();
+        return foo.getUserData();
+        // DocumentSnapshot _documentSnapshot =
+        //     Firestore.instance.collection("users").document(event.uid).get();
+        // return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+      }
+      // return _firebaseAuth.onAuthStateChanged.map((firebaseUser) {
+      //   return firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
+      // });
     });
   }
 
