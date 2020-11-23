@@ -73,8 +73,9 @@ class SilaApiClient {
   /// Requires the user handle and the UserModel to fill out body
   ///
   Future<RegisterResponse> register(String handle, UserModel user,
-      {bool isbusinessUser}) async {
+      {bool isbusinessUser = false}) async {
     int utcTime = DateTime.now().millisecondsSinceEpoch;
+
     String address = await eth.createEthWallet(isBusinessUser: isbusinessUser);
 
     Map body = {
