@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:formz/formz.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 // ignore: must_be_immutable
 class ContractorSignUpForm extends StatelessWidget {
@@ -12,15 +13,20 @@ class ContractorSignUpForm extends StatelessWidget {
   final TextEditingController _businessNameController = TextEditingController();
   final TextEditingController _aliasController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
-  final TextEditingController _einController = TextEditingController();
+  final MaskedTextController _einController =
+      MaskedTextController(mask: '00-0000000');
   final TextEditingController _streetAddressController =
       TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
+  final MaskedTextController _stateController =
+      MaskedTextController(mask: 'AA');
+  final MaskedTextController _countryController =
+      MaskedTextController(mask: 'AA');
+  final TextEditingController _postalCodeController =
+      MaskedTextController(mask: '00000');
   final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final MaskedTextController _phoneNumberController =
+      MaskedTextController(mask: '000-000-0000');
   String _businessType;
   int _naicsCode;
 
@@ -149,6 +155,7 @@ class ContractorSignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'State',
+        hintText: 'MI',
         errorText: _validate ? 'State Required' : null,
       ),
     );
@@ -160,6 +167,7 @@ class ContractorSignUpForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Country',
+        hintText: 'US',
         errorText: _validate ? 'Country Required' : null,
       ),
     );
@@ -212,8 +220,8 @@ class ContractorSignUpForm extends StatelessWidget {
                           doingBusinessAsName: _aliasController.text,
                           streetAddress: _streetAddressController.text,
                           city: _cityController.text,
-                          state: _stateController.text,
-                          country: _countryController.text,
+                          state: _stateController.text.toUpperCase(),
+                          country: _countryController.text.toUpperCase(),
                           postalCode: _postalCodeController.text,
                           phone: _phoneNumberController.text,
                           email: _emailController.text,

@@ -27,7 +27,11 @@ class RegisterBusinessSuccess extends CreateSilaBusinessState {
   final KYBRegisterResponse response;
 }
 
-class RegisterBusinessFailure extends CreateSilaBusinessState {}
+class RegisterBusinessFailure extends CreateSilaBusinessState {
+  RegisterBusinessFailure(this.exception);
+
+  final exception;
+}
 
 //Register business roles
 
@@ -39,7 +43,11 @@ class RegisterBusinessRoleLoadSuccess extends CreateSilaBusinessState {
   final RegisterResponse response;
 }
 
-class RegisterBusinessRoleLoadFailure extends CreateSilaBusinessState {}
+class RegisterBusinessRoleLoadFailure extends CreateSilaBusinessState {
+  RegisterBusinessRoleLoadFailure(this.exception);
+
+  final exception;
+}
 
 //Buisness role states
 class GetBusinessRolesLoadInProgress extends CreateSilaBusinessState {}
@@ -50,7 +58,11 @@ class GetBusinessRolesSuccess extends CreateSilaBusinessState {
   final GetBusinessRolesResponse response;
 }
 
-class GetBusinessRolesFailure extends CreateSilaBusinessState {}
+class GetBusinessRolesFailure extends CreateSilaBusinessState {
+  GetBusinessRolesFailure(this.exception);
+
+  final exception;
+}
 
 //link business states
 
@@ -62,7 +74,11 @@ class LinkBusinessMembersSuccess extends CreateSilaBusinessState {
   final List<LinkBusinessMemberResponse> linkBusinessMembers;
 }
 
-class LinkBusinessMembersFailure extends CreateSilaBusinessState {}
+class LinkBusinessMembersFailure extends CreateSilaBusinessState {
+  LinkBusinessMembersFailure(this.exception);
+
+  final exception;
+}
 
 //Request kyb states
 
@@ -74,7 +90,11 @@ class RequestKYBSuccess extends CreateSilaBusinessState {
   final RegisterResponse requestKYB;
 }
 
-class RequestKYBFailure extends CreateSilaBusinessState {}
+class RequestKYBFailure extends CreateSilaBusinessState {
+  RequestKYBFailure(this.exception);
+
+  final exception;
+}
 
 //Check kyb states
 
@@ -90,7 +110,17 @@ class CheckKybUnverified extends CreateSilaBusinessState {}
 
 class CheckKybPending extends CreateSilaBusinessState {}
 
-class CheckKybFailure extends CreateSilaBusinessState {}
+class CheckKybFailure extends CreateSilaBusinessState {
+  CheckKybFailure(this.exception);
+
+  final exception;
+}
+
+class CheckKybNotPassed extends CreateSilaBusinessState {
+  CheckKybNotPassed(this.response);
+
+  final String response;
+}
 
 //get entity
 
@@ -102,7 +132,11 @@ class GetEntitySuccess extends CreateSilaBusinessState {
   final GetEntityResponse getEntity;
 }
 
-class GetEntityFailure extends CreateSilaBusinessState {}
+class GetEntityFailure extends CreateSilaBusinessState {
+  GetEntityFailure(this.exception);
+
+  final exception;
+}
 
 //certify beneficial owner status
 
@@ -114,7 +148,11 @@ class CertifyBeneficialOwnerSuccess extends CreateSilaBusinessState {
   final CertifyBeneficialOwnerResponse response;
 }
 
-class CertifyBeneficialOwnerFailure extends CreateSilaBusinessState {}
+class CertifyBeneficialOwnerFailure extends CreateSilaBusinessState {
+  CertifyBeneficialOwnerFailure(this.exception);
+
+  final exception;
+}
 
 //certify business states
 class CertifyBusinessLoadInProgress extends CreateSilaBusinessState {}
@@ -125,7 +163,11 @@ class CertifyBusinessSuccess extends CreateSilaBusinessState {
   final CertifyBeneficialOwnerResponse response;
 }
 
-class CertifyBusinessFailure extends CreateSilaBusinessState {}
+class CertifyBusinessFailure extends CreateSilaBusinessState {
+  CertifyBusinessFailure(this.exception);
+
+  final exception;
+}
 
 //Failure
 class CreateSilaBusinessFailure extends CreateSilaBusinessState {}
@@ -214,34 +256,34 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
                         emit(CertifyBusinessSuccess(certifyBusinessResponse));
                         emit(CreateSilaBusinessSuccess());
                       } catch (_) {
-                        emit(CertifyBusinessFailure());
+                        emit(CertifyBusinessFailure(_));
                       }
                     } catch (_) {
-                      emit(CertifyBeneficialOwnerFailure());
+                      emit(CertifyBeneficialOwnerFailure(_));
                     }
                   } catch (_) {
-                    emit(GetEntityFailure());
+                    emit(GetEntityFailure(_));
                   }
                 } else {
-                  emit(CheckKybFailure());
+                  emit(CheckKybNotPassed(checkKYBResponse.message));
                 }
               } catch (_) {
-                emit(CheckKybFailure());
+                emit(CheckKybFailure(_));
               }
             } catch (_) {
-              emit(RequestKYBFailure());
+              emit(RequestKYBFailure(_));
             }
           } catch (_) {
-            emit(LinkBusinessMembersFailure());
+            emit(LinkBusinessMembersFailure(_));
           }
         } catch (_) {
-          emit(GetBusinessRolesFailure());
+          emit(GetBusinessRolesFailure(_));
         }
       } catch (_) {
-        emit(RegisterBusinessRoleLoadFailure());
+        emit(RegisterBusinessRoleLoadFailure(_));
       }
     } catch (_) {
-      emit(RegisterBusinessFailure());
+      emit(RegisterBusinessFailure(_));
     }
   }
 

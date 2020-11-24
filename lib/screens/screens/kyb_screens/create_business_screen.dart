@@ -40,56 +40,71 @@ class CreateSilaBusinessScreen extends StatelessWidget {
 
               if (state is CertifyBusinessFailure) {
                 return Text(
-                  "Certify Business Failure",
+                  "Certify Business Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is CertifyBeneficialOwnerFailure) {
                 return Text(
-                  "Certify Beneficial Owner Failure",
+                  "Certify Beneficial Owner Failure" +
+                      state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is GetEntityFailure) {
                 return Text(
-                  "Get Entity Failure",
+                  "Get Entity Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is CheckKybFailure) {
                 return Text(
-                  "Check Kyb Failure",
+                  "Check Kyb Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is RequestKYBFailure) {
                 return Text(
-                  "Request KYB Failure",
+                  "Request KYB Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is LinkBusinessMembersFailure) {
                 return Text(
-                  "Link Business Members Failure",
+                  "Link Business Members Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is GetBusinessRolesFailure) {
                 return Text(
-                  "Get Business Roles Failure",
+                  "Get Business Roles Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
               if (state is RegisterBusinessFailure) {
                 return Text(
-                  "Register Business Failure",
+                  "Register Business Failure" + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is RegisterBusinessRoleLoadFailure) {
+                return Text(
+                  "Register Business Role Failure" + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is CheckKybNotPassed) {
+                return Text(
+                  "Register Business Role Failure" + state.response,
                   style: TextStyle(color: Colors.red),
                 );
               }

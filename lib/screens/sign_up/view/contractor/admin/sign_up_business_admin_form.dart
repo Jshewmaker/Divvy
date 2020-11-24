@@ -14,9 +14,12 @@ class SignUpBusinessAdminForm extends StatelessWidget {
   final TextEditingController _streetAddressController =
       TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
+  final MaskedTextController _stateController =
+      MaskedTextController(mask: 'AA');
+  final MaskedTextController _countryController =
+      MaskedTextController(mask: 'AA');
+  final TextEditingController _postalCodeController =
+      MaskedTextController(mask: '00000');
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
   final TextEditingController _emailController = TextEditingController();
@@ -86,7 +89,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
       controller: _ssnController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        hintText: "xxx-xx-xxxx",
+        hintText: "xxxxxxxxx",
         labelText: 'Social Security Number',
         errorText: _validate ? 'SSN Required' : null,
       ),
@@ -175,7 +178,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Phone Number',
-        hintText: '(xxx)xxx-xxxx',
+        hintText: 'xxx-xxx-xxxx',
         errorText: _validate ? 'Phone Number Required' : null,
       ),
       keyboardType: TextInputType.phone,
@@ -201,8 +204,8 @@ class SignUpBusinessAdminForm extends StatelessWidget {
                 identityValue: _ssnController.text,
                 streetAddress: _streetAddressController.text,
                 city: _cityController.text,
-                state: _stateController.text,
-                country: _countryController.text,
+                state: _stateController.text.toUpperCase(),
+                country: _countryController.text.toUpperCase(),
                 postalCode: _postalCodeController.text,
                 phone: _phoneNumberController.text,
                 isHomeowner: false,
