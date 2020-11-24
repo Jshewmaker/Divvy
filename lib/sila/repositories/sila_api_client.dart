@@ -883,11 +883,11 @@ class SilaApiClient {
 
   Future<LinkBusinessMemberResponse> linkBusinessMember(
       String role, UserModel businessUser, UserModel user,
-      {double ownershipStake}) async {
+      {double ownershipStake = 100}) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     Map body;
 
-    if (ownershipStake != null) {
+    if (role == "beneficial_owner") {
       body = {
         "header": {
           "created": utcTime,
@@ -896,7 +896,7 @@ class SilaApiClient {
           "business_handle": businessUser.silaHandle
         },
         "role": role,
-        "ownership_stake": 66.7
+        "ownership_stake": ownershipStake
       };
     } else {
       body = {

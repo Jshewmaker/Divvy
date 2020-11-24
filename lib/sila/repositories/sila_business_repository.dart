@@ -49,25 +49,25 @@ class SilaBusinessRepository {
     return await silaApiClient.getBusinessRoles();
   }
 
-  Future<RegisterResponse> registerBusinessRole(UserModel user) async {
+  Future<RegisterResponse> registerBusinessAdmin(UserModel user) async {
     UserModel user = await _firebaseService.getBusinessUser();
-    return await silaApiClient.register(user.name, user, isbusinessUser: true);
+    return await silaApiClient.register(user.silaHandle, user,
+        isbusinessUser: true);
   }
 
-  Future<List<LinkBusinessMemberResponse>> linkBusinessMember() async {
+  Future<List<LinkBusinessMemberResponse>> linkBusinessMember(
+      GetBusinessRolesResponse getBusinessRolesResponse) async {
     UserModel businessUser = await _firebaseService.getUserData();
     UserModel user = await _firebaseService.getBusinessUser();
     List<LinkBusinessMemberResponse> responses = [];
-    LinkBusinessMemberResponse response = await silaApiClient
-        .linkBusinessMember("controlling_officer", businessUser, user);
-    responses.add(response);
-    response = await silaApiClient.linkBusinessMember(
-        "beneficial_owner", businessUser, user,
-        ownershipStake: 100);
-    responses.add(response);
-    response = await silaApiClient.linkBusinessMember(
-        "administrator", businessUser, user);
-    responses.add(response);
+    for (int i = 0; i < getBusinessRolesResponse.businessRoles.length; i++) {
+      LinkBusinessMemberResponse response =
+          await silaApiClient.linkBusinessMember(
+              getBusinessRolesResponse.businessRoles[i].name,
+              businessUser,
+              user);
+      responses.add(response);
+    }
     return responses;
   }
 

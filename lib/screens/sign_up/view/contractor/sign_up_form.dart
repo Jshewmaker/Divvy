@@ -99,11 +99,12 @@ class ContractorSignUpForm extends StatelessWidget {
     return TextField(
       controller: _websiteController,
       decoration: InputDecoration(
+        prefixText: 'https://',
         border: UnderlineInputBorder(),
         labelText: 'Website',
         errorText: _validate ? 'Website Required' : null,
       ),
-      keyboardType: TextInputType.datetime,
+      keyboardType: TextInputType.url,
     );
   }
 
@@ -206,7 +207,7 @@ class ContractorSignUpForm extends StatelessWidget {
                         .bloc<SignUpCubit>()
                         .signUpFormSubmitted(UserModel(
                           name: _businessNameController.text,
-                          website: _websiteController.text,
+                          website: "https://" + _websiteController.text,
                           identityValue: _einController.text,
                           doingBusinessAsName: _aliasController.text,
                           streetAddress: _streetAddressController.text,
