@@ -37,7 +37,7 @@ class CertifyBuisnessScreen extends StatelessWidget {
 class ResponsePopulated extends StatelessWidget {
   ResponsePopulated({Key key, @required this.response}) : super(key: key);
 
-  final CertifyBusinessOwnerResponse response;
+  final CertifyBeneficialOwnerResponse response;
 
   @override
   Widget build(BuildContext context) {

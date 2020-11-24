@@ -13,7 +13,7 @@ class CertifyBusinessLoadInProgress extends CertifyBusinessState {}
 class CertifyBusinessLoadSuccess extends CertifyBusinessState {
   CertifyBusinessLoadSuccess(this.response);
 
-  final CertifyBusinessOwnerResponse response;
+  final CertifyBeneficialOwnerResponse response;
 }
 
 class CertifyBusinessLoadFailure extends CertifyBusinessState {}

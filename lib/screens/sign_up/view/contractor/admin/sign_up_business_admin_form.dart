@@ -1,20 +1,27 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/screens/tab_bar_container.dart';
+import 'package:divvy/screens/screens/kyb_screens/create_business_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 // ignore: must_be_immutable
 class SignUpBusinessAdminForm extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _ssnController = TextEditingController();
-  final TextEditingController _birthdayController = TextEditingController();
+  final MaskedTextController _ssnController =
+      MaskedTextController(mask: '000000000');
+  final MaskedTextController _birthdayController =
+      MaskedTextController(mask: '0000-00-00');
   final TextEditingController _streetAddressController =
       TextEditingController();
   final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
-  final TextEditingController _postalCodeController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
+  final MaskedTextController _stateController =
+      MaskedTextController(mask: 'AA');
+  final MaskedTextController _countryController =
+      MaskedTextController(mask: 'AA');
+  final TextEditingController _postalCodeController =
+      MaskedTextController(mask: '00000');
+  final MaskedTextController _phoneNumberController =
+      MaskedTextController(mask: '000-000-0000');
   final TextEditingController _emailController = TextEditingController();
 
   bool _validate = false;
@@ -82,7 +89,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
       controller: _ssnController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        hintText: "xxx-xx-xxxx",
+        hintText: "xxxxxxxxx",
         labelText: 'Social Security Number',
         errorText: _validate ? 'SSN Required' : null,
       ),
@@ -171,7 +178,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Phone Number',
-        hintText: '(xxx)xxx-xxxx',
+        hintText: 'xxx-xxx-xxxx',
         errorText: _validate ? 'Phone Number Required' : null,
       ),
       keyboardType: TextInputType.phone,
@@ -197,14 +204,14 @@ class SignUpBusinessAdminForm extends StatelessWidget {
                 identityValue: _ssnController.text,
                 streetAddress: _streetAddressController.text,
                 city: _cityController.text,
-                state: _stateController.text,
-                country: _countryController.text,
+                state: _stateController.text.toUpperCase(),
+                country: _countryController.text.toUpperCase(),
                 postalCode: _postalCodeController.text,
                 phone: _phoneNumberController.text,
                 isHomeowner: false,
               ).toEntity().toDocument());
-          Navigator.of(context)
-              .pushAndRemoveUntil(HomeScreen.route(), (route) => false);
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (contest) => CreateSilaBusinessScreen()));
         });
   }
 }

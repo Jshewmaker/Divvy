@@ -883,11 +883,11 @@ class SilaApiClient {
 
   Future<LinkBusinessMemberResponse> linkBusinessMember(
       String role, UserModel businessUser, UserModel user,
-      {double ownershipStake}) async {
+      {double ownershipStake = 100}) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     Map body;
 
-    if (ownershipStake != null) {
+    if (role == "beneficial_owner") {
       body = {
         "header": {
           "created": utcTime,
@@ -896,7 +896,7 @@ class SilaApiClient {
           "business_handle": businessUser.silaHandle
         },
         "role": role,
-        "ownership_stake": 66.7
+        "ownership_stake": ownershipStake
       };
     } else {
       body = {
@@ -936,7 +936,7 @@ class SilaApiClient {
     return LinkBusinessMemberResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusinessOwner(
+  Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(
       UserModel user, UserModel businessUser, String token) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
@@ -974,10 +974,10 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
+    return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CertifyBusinessOwnerResponse> certifyBusiness(
+  Future<CertifyBeneficialOwnerResponse> certifyBusiness(
       UserModel user, UserModel businessUser) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
@@ -1013,6 +1013,6 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return CertifyBusinessOwnerResponse.fromJson(silaHandleResponse);
+    return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 }

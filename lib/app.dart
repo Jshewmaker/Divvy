@@ -68,7 +68,7 @@ class _AppViewState extends State<AppView> {
                 if (!user.isHomeowner && user.businessAdminDocumentID == null) {
                   _navigator.pushAndRemoveUntil(
                       SignUpBusinessAdminPage.route(), (route) => false);
-                } else if (user.silaHandle == null) {
+                } else if (user.isHomeowner && user.silaHandle == null) {
                   _navigator.pushAndRemoveUntil(
                       CreateSilaUserScreen.route(), (route) => false);
                 } else {

@@ -12,7 +12,7 @@ class SignUpBusinessAdminPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Homeowner Sign Up')),
+      appBar: AppBar(title: const Text('Administrator Sign Up')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: SignUpBusinessAdminForm(),

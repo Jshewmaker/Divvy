@@ -40,7 +40,8 @@ class RegisterBusinessRoleCubit extends Cubit<RegisterBusinessRoleState> {
       Map<String, String> data = {"silaHandle": username};
       _firebaseService.addDataToBusinessUserDocument('users', data);
 
-      final response = await _silaBusinessRepository.registerBusinessRole(user);
+      final response =
+          await _silaBusinessRepository.registerBusinessAdmin(user);
       emit(RegisterBusinessRoleLoadSuccess(response));
     } catch (_) {
       emit(RegisterBusinessRoleLoadFailure());
