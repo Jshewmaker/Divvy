@@ -135,7 +135,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /register');
+      throw Exception('error with /register' + silaResponse.body);
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

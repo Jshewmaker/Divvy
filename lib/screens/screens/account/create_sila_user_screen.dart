@@ -1,3 +1,4 @@
+import 'package:divvy/screens/sign_up/view/homeowner/sign_up_page.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
@@ -26,8 +27,9 @@ class CreateSilaUserScreen extends StatelessWidget {
           child: BlocListener<CreateSilaUserBloc, CreateSilaUserState>(
             listener: (context, state) {
               if (state is CreateSilaUserSuccess) {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (contest) => HomeScreen()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (contest) => HomeScreen()),
+                    (route) => false);
               }
             },
             child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
@@ -36,66 +38,18 @@ class CreateSilaUserScreen extends StatelessWidget {
                 BlocProvider.of<CreateSilaUserBloc>(context)
                     .add(CreateSilaUserRequest(handle: _textController.text));
               }
-              /*
-                  if (state is CheckHandleLoadInProgress) {
-                    //return Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state is CheckHandleSuccess) {
-                    return Text(
-                      'Valid Handle!',
-                      style: TextStyle(color: Colors.red),
-                    );
-                    //final apiResponse = state.checkHandle;
-
-                    /*
-                     return Column(
-                       mainAxisAlignment: MainAxisAlignment.center,
-                       crossAxisAlignment: CrossAxisAlignment.center,
-                       children: [
-                         Text(apiResponse.message),
-                         RaisedButton(
-                           child: Text('Continue'),
-                           onPressed: () => Navigator.of(context).push(
-                               MaterialPageRoute(
-                                   builder: (contest) => RegisterHandleScreenState(
-                                       handle: _textController.text))),
-                         ),
-                       ],
-                     );
-                     */
-                  }
-                  */
 
               if (state is CheckHandleLoadFailure ||
                   state is RegisterLoadFailure) {
                 return Text(
-                  state.message,
+                  "RegisterLoadFailure: " + state.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
-              /*
-                  if (state is RegisterLoadInProgress) {
-                    return Text(
-                      "Registering your account",
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
-                  */
-
-              /*
-                  if (state is CheckKycPending) {
-                    return Text(
-                      "KYC Pending",
-                      style: TextStyle(color: Colors.red),
-                    );
-                  }
-                  */
-
               if (state is CheckKycLoadFailure) {
                 return Text(
-                  "KYC Failure",
+                  "KYC Failure: " + state.message,
                   style: TextStyle(color: Colors.red),
                 );
               }

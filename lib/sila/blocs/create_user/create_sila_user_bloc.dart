@@ -67,17 +67,17 @@ class CreateSilaUserBloc
                 } else if (response.verificationStatus == "failed")
                   yield CheckKycVerifiationFail(checkKycResponse: response);
               } catch (_) {
-                yield CheckKycLoadFailure();
+                yield CheckKycLoadFailure(exception: _);
               }
             } catch (_) {
-              yield RequestKYCLoadFailure();
+              yield RequestKYCLoadFailure(exception: _);
             }
           } catch (_) {
-            yield RegisterLoadFailure();
+            yield RegisterLoadFailure(exception: _);
           }
         }
       } catch (_) {
-        yield CheckHandleLoadFailure();
+        yield CheckHandleLoadFailure(exception: _);
       }
     }
   }
