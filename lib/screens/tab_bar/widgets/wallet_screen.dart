@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
 import 'package:divvy/screens/screens/redeem_sila_screen.dart';
+import 'package:divvy/sila/blocs/issue_sila/issue_sila.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -17,8 +18,16 @@ class WalletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => GetSilaBalanceBloc(silaRepository: silaRepository),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) =>
+              GetSilaBalanceBloc(silaRepository: silaRepository),
+        ),
+        BlocProvider(
+          create: (context) => IssueSilaBloc(silaRepository: silaRepository),
+        )
+      ],
       child: Scaffold(
         body: Center(
           child: BlocBuilder<GetSilaBalanceBloc, GetSilaBalanceState>(
@@ -53,121 +62,124 @@ class WalletScreenPopulated extends StatelessWidget {
   WalletScreenPopulated({Key key, @required this.response}) : super(key: key);
 
   final GetSilaBalanceResponse response;
-  double amountSila;
 
   @override
   Widget build(BuildContext context) {
+    double amountSila;
     amountSila = (response.silaBalance.round()) / 100;
     var user = context.watch<UserModelProvider>();
-    print(user.user.email);
     return Scaffold(
-        bottomNavigationBar: BottomAppBar(
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Visibility(
-                visible: user.user.isHomeowner,
-                child: RaisedButton(
-                  child: Text("Add Money"),
-                  shape: (RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30))),
-                  color: const Color(0xFF1E90FF),
-                  textColor: Colors.white,
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (contest) => IssueSilaScreen())),
-                ),
-              ),
-              Visibility(
-                visible: user.user.isHomeowner == false,
-                child: RaisedButton(
-                  child: Text('Send Money to Bank'),
-                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) =>
-                          RedeemSilaScreen(amount: amountSila.round()))),
-                ),
-              ),
-            ],
-          ),
-          elevation: 0,
-        ),
         body: Center(
             child: Column(
-          children: [
-            SizedBox(
-              height: 40,
-            ),
-            Text(
-              '\$' + amountSila.toString(),
-              style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Account Balance',
-              style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30,
-            ),
+      children: [
+        SizedBox(
+          height: 40,
+        ),
+        Text(
+          '\$' + amountSila.toString(),
+          style: TextStyle(
+              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'Account Balance',
+          style: TextStyle(
+              color: Colors.teal, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 50,
+        ),
 
-            //     Text(
-            //       "Project Breakdown By Phase",
-            //       textAlign: TextAlign.left,
-            //       style: TextStyle(color: Colors.teal, fontSize: 18),
-            //     ),
-            //   ],
-            // ),
-            // SizedBox(
-            //   height: 20,
-            // ),
-            // Expanded(
-            //   child: ListView(
-            //     shrinkWrap: true,
-            //     children: [
-            //       _CardWidget(
-            //         title: 'Phase 1',
-            //         date: 'November 20, 2020',
-            //         price: '\$5000',
-            //         color: 100,
-            //       ),
-            //       _CardWidget(
-            //         title: 'Phase 2',
-            //         date: 'November 23, 2020',
-            //         price: '\$3000',
-            //         color: 100,
-            //       ),
-            //       _CardWidget(
-            //         title: 'Phase 3',
-            //         date: 'November 24, 2020',
-            //         price: '\$3750',
-            //         color: 400,
-            //       ),
-            //       _CardWidget(
-            //         title: 'Phase 4',
-            //         date: 'November 28, 2020',
-            //         price: '\$3000',
-            //         color: 400,
-            //       ),
-            //     ],
-            //   ),
-            // )
-            //   Positioned(
-            //   bottom: 0,
-            //   width: MediaQuery.of(context).size.width,
-            //   child: Center(
-            //     child: MaterialButton(
-            //       onPressed: () {},
-            //       color: Colors.red,
-            //     ),
-            //   ),
-            // ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Visibility(
+              visible: user.user.isHomeowner,
+              child: RaisedButton(
+                child: Text("Add Money"),
+                shape: (RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
+                color: const Color(0xFF1E90FF),
+                textColor: Colors.white,
+                onPressed: () async {
+                  final amount = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => IssueSilaScreen()));
+                  if (amount != null) {
+                    BlocProvider.of<IssueSilaBloc>(context)
+                        .add(IssueSilaRequest(amount: double.parse(amount)));
+                  }
+
+                  // Navigator.of(context).push(MaterialPageRoute(
+                  //     builder: (contest) => IssueSilaScreen()));
+                },
+              ),
+            ),
+            Visibility(
+              visible: user.user.isHomeowner == false,
+              child: RaisedButton(
+                child: Text('Send Money to Bank'),
+                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        RedeemSilaScreen(amount: amountSila.round()))),
+              ),
+            ),
           ],
-        )));
+        ),
+
+        //     Text(
+        //       "Project Breakdown By Phase",
+        //       textAlign: TextAlign.left,
+        //       style: TextStyle(color: Colors.teal, fontSize: 18),
+        //     ),
+        //   ],
+        // ),
+        // SizedBox(
+        //   height: 20,
+        // ),
+        // Expanded(
+        //   child: ListView(
+        //     shrinkWrap: true,
+        //     children: [
+        //       _CardWidget(
+        //         title: 'Phase 1',
+        //         date: 'November 20, 2020',
+        //         price: '\$5000',
+        //         color: 100,
+        //       ),
+        //       _CardWidget(
+        //         title: 'Phase 2',
+        //         date: 'November 23, 2020',
+        //         price: '\$3000',
+        //         color: 100,
+        //       ),
+        //       _CardWidget(
+        //         title: 'Phase 3',
+        //         date: 'November 24, 2020',
+        //         price: '\$3750',
+        //         color: 400,
+        //       ),
+        //       _CardWidget(
+        //         title: 'Phase 4',
+        //         date: 'November 28, 2020',
+        //         price: '\$3000',
+        //         color: 400,
+        //       ),
+        //     ],
+        //   ),
+        // )
+        //   Positioned(
+        //   bottom: 0,
+        //   width: MediaQuery.of(context).size.width,
+        //   child: Center(
+        //     child: MaterialButton(
+        //       onPressed: () {},
+        //       color: Colors.red,
+        //     ),
+        //   ),
+        // ),
+      ],
+    )));
   }
 }
 
