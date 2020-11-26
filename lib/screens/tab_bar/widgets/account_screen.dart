@@ -34,11 +34,11 @@ class AccountScreen extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => BankAccountInfoScreen())),
             ),
-            // RaisedButton(
-            //   child: Text('Issue Sila'),
-            //   onPressed: () => Navigator.of(context).push(
-            //       MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
-            // ),
+            RaisedButton(
+              child: Text('Issue Sila'),
+              onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
+            ),
             // RaisedButton(
             //   child: Text('Get Transactions'),
             //   onPressed: () => Navigator.of(context).push(
