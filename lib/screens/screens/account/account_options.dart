@@ -23,51 +23,51 @@ class AccountOptionsScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            RaisedButton(
-              child: Text('Register Handle'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => RegisterHandleScreen())),
-            ),
-            RaisedButton(
-              child: Text('Request KYC'),
-              onPressed: () => Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (contest) => KycScreen())),
-            ),
-            RaisedButton(
-              child: Text('Register Business'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => RegisterKYBScreen())),
-            ),
-            RaisedButton(
-              child: Text('Register User for KYB'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => RegisterBusinessAdminScreen())),
-            ),
-            RaisedButton(
-              child: Text('Link Business Member'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => LinkBusinessMemberScreen())),
-            ),
-            RaisedButton(
-              child: Text('Request KYB'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => RequestKYBScreen())),
-            ),
-            RaisedButton(
-              child: Text('Check KYB'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => CheckKYBScreen())),
-            ),
-            RaisedButton(
-              child: Text('Get Entity'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => GetEntityScreen())),
-            ),
-            RaisedButton(
-              child: Text('Link Plaid'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
-            ),
+            // RaisedButton(
+            //   child: Text('Register Handle'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => RegisterHandleScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Request KYC'),
+            //   onPressed: () => Navigator.of(context)
+            //       .push(MaterialPageRoute(builder: (contest) => KycScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Register Business'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => RegisterKYBScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Register User for KYB'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => RegisterBusinessAdminScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Link Business Member'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => LinkBusinessMemberScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Request KYB'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => RequestKYBScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Check KYB'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => CheckKYBScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Get Entity'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => GetEntityScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('Link Plaid'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
+            // ),
             RaisedButton(
               child: Text('Update Email'),
               onPressed: () => Navigator.of(context).push(

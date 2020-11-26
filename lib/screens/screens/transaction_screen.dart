@@ -1,5 +1,6 @@
 import 'package:divvy/sila/blocs/get_transactions/get_transactions.dart';
 import 'package:divvy/sila/blocs/get_transactions/get_transactions_bloc.dart';
+import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter/material.dart';
@@ -50,5 +51,25 @@ class TransactionScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class PopulatedWidget extends StatelessWidget {
+  final GetTransactionsResponse transactions;
+
+  PopulatedWidget({Key key, @required this.transactions}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: ListView.builder(
+      itemCount: transactions.transactions.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(transactions.transactions[index].status),
+          trailing:
+              Text("\$" + (transactions.transactions[index].silaAmount) / 100),
+        );
+      },
+    ));
   }
 }

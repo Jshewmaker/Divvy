@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -64,6 +65,8 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
+                var user1 = context.read<UserModelProvider>();
+                user1.add(state.user);
                 UserModel user = state.user;
                 if (!user.isHomeowner && user.businessAdminDocumentID == null) {
                   _navigator.pushAndRemoveUntil(
