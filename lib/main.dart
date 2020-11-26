@@ -7,6 +7,7 @@ import 'package:flutter/widgets.dart';
 import 'package:divvy/app.dart';
 import 'package:divvy/simple_bloc_observer.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,8 +20,10 @@ void main() {
     ),
   );
 
-  runApp(App(
-    authenticationRepository: AuthenticationRepository(),
-    silaRepository: checkHandleRepository,
-  ));
+  runApp(ChangeNotifierProvider(
+      create: (context) => UserModelProvider(),
+      child: App(
+        authenticationRepository: AuthenticationRepository(),
+        silaRepository: checkHandleRepository,
+      )));
 }

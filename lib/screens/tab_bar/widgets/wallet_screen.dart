@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -52,80 +53,79 @@ class WalletScreenPopulated extends StatelessWidget {
   final GetSilaBalanceResponse response;
   @override
   Widget build(BuildContext context) {
+    var user = context.watch<UserModelProvider>();
+    print(user.user.email);
     return Scaffold(
-      body: Center(
-        child: Column(
+        body: Center(
+            child: Column(
+      children: [
+        SizedBox(
+          height: 40,
+        ),
+        Text(
+          '\$' + response.silaBalance.toString(),
+          style: TextStyle(
+              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
+        ),
+        Text(
+          'Account Balance',
+          style: TextStyle(
+              color: Colors.teal, fontSize: 18, fontWeight: FontWeight.bold),
+        ),
+        SizedBox(
+          height: 30,
+        ),
+        Row(
           children: [
-            SizedBox(
-              height: 40,
+            Padding(
+              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
             ),
-            Text(
-              '\$' + response.silaBalance.toString(),
-              style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 48,
-                  fontWeight: FontWeight.bold),
-            ),
-            Text(
-              'Account Balance: Phase 2',
-              style: TextStyle(
-                  color: Colors.teal,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold),
-            ),
-            SizedBox(
-              height: 30,
-            ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
-                ),
-                Text(
-                  "Project Breakdown By Phase",
-                  textAlign: TextAlign.left,
-                  style: TextStyle(color: Colors.teal, fontSize: 18),
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Expanded(
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  _CardWidget(
-                    title: 'Phase 1',
-                    date: 'November 20, 2020',
-                    price: '\$5000',
-                    color: 100,
-                  ),
-                  _CardWidget(
-                    title: 'Phase 2',
-                    date: 'November 23, 2020',
-                    price: '\$3000',
-                    color: 100,
-                  ),
-                  _CardWidget(
-                    title: 'Phase 3',
-                    date: 'November 24, 2020',
-                    price: '\$3750',
-                    color: 400,
-                  ),
-                  _CardWidget(
-                    title: 'Phase 4',
-                    date: 'November 28, 2020',
-                    price: '\$3000',
-                    color: 400,
-                  ),
-                ],
-              ),
-            )
+            //     Text(
+            //       "Project Breakdown By Phase",
+            //       textAlign: TextAlign.left,
+            //       style: TextStyle(color: Colors.teal, fontSize: 18),
+            //     ),
+            //   ],
+            // ),
+            // SizedBox(
+            //   height: 20,
+            // ),
+            // Expanded(
+            //   child: ListView(
+            //     shrinkWrap: true,
+            //     children: [
+            //       _CardWidget(
+            //         title: 'Phase 1',
+            //         date: 'November 20, 2020',
+            //         price: '\$5000',
+            //         color: 100,
+            //       ),
+            //       _CardWidget(
+            //         title: 'Phase 2',
+            //         date: 'November 23, 2020',
+            //         price: '\$3000',
+            //         color: 100,
+            //       ),
+            //       _CardWidget(
+            //         title: 'Phase 3',
+            //         date: 'November 24, 2020',
+            //         price: '\$3750',
+            //         color: 400,
+            //       ),
+            //       _CardWidget(
+            //         title: 'Phase 4',
+            //         date: 'November 28, 2020',
+            //         price: '\$3000',
+            //         color: 400,
+            //       ),
+            //     ],
+            //   ),
+            // )
+            Visibility()
           ],
         ),
-      ),
-    );
+      ],
+    )));
   }
 }
 
