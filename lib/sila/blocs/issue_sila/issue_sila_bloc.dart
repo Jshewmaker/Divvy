@@ -17,7 +17,7 @@ class IssueSilaBloc extends Bloc<IssueSilaEvent, IssueSilaState> {
       yield IssueSilaLoadInProgress();
       try {
         final IssueSilaResponse response =
-            await silaRepository.issueSila();
+            await silaRepository.issueSila(event.amount);
         yield IssueSilaLoadSuccess(response: response);
       } catch (_) {
         yield IssueSilaLoadFailure();

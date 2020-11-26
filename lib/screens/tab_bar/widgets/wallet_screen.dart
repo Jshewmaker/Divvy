@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/screens/issue_sila_screen.dart';
+import 'package:divvy/screens/screens/redeem_sila_screen.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:flutter/material.dart';
 
@@ -51,35 +53,68 @@ class WalletScreenPopulated extends StatelessWidget {
   WalletScreenPopulated({Key key, @required this.response}) : super(key: key);
 
   final GetSilaBalanceResponse response;
+  double amountSila;
+
   @override
   Widget build(BuildContext context) {
+    amountSila = (response.silaBalance.round()) / 100;
     var user = context.watch<UserModelProvider>();
     print(user.user.email);
     return Scaffold(
+        bottomNavigationBar: BottomAppBar(
+          color: Colors.transparent,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Visibility(
+                visible: user.user.isHomeowner,
+                child: RaisedButton(
+                  child: Text("Add Money"),
+                  shape: (RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30))),
+                  color: const Color(0xFF1E90FF),
+                  textColor: Colors.white,
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (contest) => IssueSilaScreen())),
+                ),
+              ),
+              Visibility(
+                visible: user.user.isHomeowner == false,
+                child: RaisedButton(
+                  child: Text('Send Money to Bank'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          RedeemSilaScreen(amount: amountSila.round()))),
+                ),
+              ),
+            ],
+          ),
+          elevation: 0,
+        ),
         body: Center(
             child: Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        Text(
-          '\$' + response.silaBalance.toString(),
-          style: TextStyle(
-              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'Account Balance',
-          style: TextStyle(
-              color: Colors.teal, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 30,
-        ),
-        Row(
           children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+            SizedBox(
+              height: 40,
             ),
+            Text(
+              '\$' + amountSila.toString(),
+              style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Account Balance',
+              style: TextStyle(
+                  color: Colors.teal,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 30,
+            ),
+
             //     Text(
             //       "Project Breakdown By Phase",
             //       textAlign: TextAlign.left,
@@ -121,11 +156,18 @@ class WalletScreenPopulated extends StatelessWidget {
             //     ],
             //   ),
             // )
-            Visibility()
+            //   Positioned(
+            //   bottom: 0,
+            //   width: MediaQuery.of(context).size.width,
+            //   child: Center(
+            //     child: MaterialButton(
+            //       onPressed: () {},
+            //       color: Colors.red,
+            //     ),
+            //   ),
+            // ),
           ],
-        ),
-      ],
-    )));
+        )));
   }
 }
 
@@ -212,6 +254,27 @@ class _CardWidget extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class Alertdialog extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text("AlertDialog"),
+      content: Text(
+          "Would you like to continue learning how to use Flutter alerts?"),
+      actions: [
+        FlatButton(
+          child: Text("Cancel"),
+          onPressed: () {},
+        ),
+        FlatButton(
+          child: Text("Continue"),
+          onPressed: () {},
+        ),
+      ],
     );
   }
 }
