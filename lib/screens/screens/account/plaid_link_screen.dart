@@ -31,7 +31,7 @@ class PlaidLinkScreen extends StatelessWidget {
               children: <TextSpan>[
                 new TextSpan(text: 'Welcome To '),
                 new TextSpan(
-                    text: 'FrequencyPay!',
+                    text: 'Divvy!',
                     style: new TextStyle(
                         fontWeight: FontWeight.bold, color: blueHighlight)),
               ],
@@ -53,28 +53,43 @@ class PlaidLinkScreen extends StatelessWidget {
                                   'We use Plaid to help track your expenses and and '
                                   'get you in tune with your finances. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget posuere dolor. Mauris imperdiet ac arcu sed accumsan. Nam congue sapien a feugiat facilisis. '),
                         )),
-                    Expanded(
-                        child: Align(
-                      alignment: FractionalOffset.bottomCenter,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: <Widget>[
-                          RaisedButton(
-                            color: Colors.blue,
-                            child: Text("Launch Plaid"),
-                            textColor: Colors.white,
-                            onPressed: () =>
-                                plaidLink.launch(context, (result) {
-                              if (result.token != null) {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (contest) => LinkAccountScreen(
-                                        token: result.token)));
-                              }
-                            }),
-                          ),
-                        ],
-                      ),
-                    )),
+                    SizedBox(
+                      height: 50,
+                    ),
+                    RaisedButton(
+                      color: Colors.blue,
+                      child: Text("Launch Plaid"),
+                      textColor: Colors.white,
+                      onPressed: () => plaidLink.launch(context, (result) {
+                        if (result.token != null) {
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (contest) =>
+                                  LinkAccountScreen(token: result.token)));
+                        }
+                      }),
+                    ),
+                    // Expanded(
+                    //     child: Align(
+                    //   alignment: FractionalOffset.bottomCenter,
+                    //   child: Row(
+                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    //     children: <Widget>[
+                    //       RaisedButton(
+                    //         color: Colors.blue,
+                    //         child: Text("Launch Plaid"),
+                    //         textColor: Colors.white,
+                    //         onPressed: () =>
+                    //             plaidLink.launch(context, (result) {
+                    //           if (result.token != null) {
+                    //             Navigator.of(context).push(MaterialPageRoute(
+                    //                 builder: (contest) => LinkAccountScreen(
+                    //                     token: result.token)));
+                    //           }
+                    //         }),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )),
                     Padding(
                       padding: EdgeInsets.only(bottom: 40),
                     )
