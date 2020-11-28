@@ -66,8 +66,8 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                var user1 = context.read<UserModelProvider>();
-                user1.add(state.user);
+                var userprovider = context.repository<UserModelProvider>();
+                userprovider.add(state.user);
                 UserModel user = state.user;
 
                 if (user == null)
