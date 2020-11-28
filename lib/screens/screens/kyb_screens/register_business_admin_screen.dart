@@ -79,6 +79,7 @@ class RegisterBusinessRolePopulated extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class RegisterBusinessRoleEmpty extends StatelessWidget {
   RegisterBusinessRoleEmpty({Key key}) : super(key: key);
   UserModel user;
@@ -129,7 +130,7 @@ class RegisterBusinessRoleEmpty extends StatelessWidget {
               onPressed: () async {
                 if (_countryController.text.isNotEmpty) {
                   context
-                      .bloc<RegisterBusinessRoleCubit>()
+                      .read<RegisterBusinessRoleCubit>()
                       .registerBusinessRole(UserModel(
                         name: _nameController.text,
                         dateOfBirthYYYYMMDD: _birthdayController.text,

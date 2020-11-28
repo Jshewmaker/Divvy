@@ -1,6 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
+import 'package:divvy/screens/screens/sila_info/user_personal_info_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_page.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
@@ -68,6 +69,10 @@ class _AppViewState extends State<AppView> {
                 var user1 = context.read<UserModelProvider>();
                 user1.add(state.user);
                 UserModel user = state.user;
+
+                if (user == null)
+                  _navigator.push(MaterialPageRoute(
+                      builder: (context) => EnterSilaDataScreen()));
                 if (!user.isHomeowner && user.businessAdminDocumentID == null) {
                   _navigator.pushAndRemoveUntil(
                       SignUpBusinessAdminPage.route(), (route) => false);

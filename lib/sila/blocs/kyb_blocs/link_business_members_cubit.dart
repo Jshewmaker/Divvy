@@ -1,7 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/models/kyb/get_business_roles_response/get_business_roles_response.dart';
 import 'package:divvy/sila/models/kyb/link_business_member_response.dart';
-import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
 import 'package:flutter/foundation.dart';
 

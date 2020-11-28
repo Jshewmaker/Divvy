@@ -5,7 +5,6 @@ import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
 import 'package:divvy/sila/models/kyb/check_kyb_response/check_kyb_response.dart';
-import 'package:divvy/sila/models/kyb/get_business_roles_response/business_roles.dart';
 import 'package:divvy/sila/models/kyb/get_business_roles_response/get_business_roles_response.dart';
 import 'package:divvy/sila/models/kyb/link_business_member_response.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';

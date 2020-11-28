@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/sign_up/view/contractor/sign_up_page.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/get_naics_categories/get_naics_categories_cubit.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
@@ -22,7 +21,7 @@ class NAICSCategoryScreen extends StatelessWidget {
       child: BlocBuilder<NaicsCategoriesCubit, NaicsCategoriesState>(
         builder: (context, state) {
           if (state is NaicsCategoriesInitial) {
-            context.bloc<NaicsCategoriesCubit>().getNaicsCategories();
+            context.read<NaicsCategoriesCubit>().getNaicsCategories();
             return const NaicsCategoryEmpty();
           } else if (state is NaicsCategoriesLoadInProgress) {
             return const NaicsCategoryLoading();

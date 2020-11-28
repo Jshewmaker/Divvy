@@ -1,16 +1,7 @@
-import 'package:divvy/screens/screens/account/check_handle_screen.dart';
-import 'package:divvy/screens/screens/account/kyc_screen.dart';
-import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_address_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_email_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_entity_screen.dart';
 import 'package:divvy/screens/screens/account/update_user_info/update_phone_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/check_kyb_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/get_entity_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/link_business_member_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/register_business_admin_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/register_business_screen.dart';
-import 'package:divvy/screens/screens/kyb_screens/request_kyb_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountOptionsScreen extends StatelessWidget {

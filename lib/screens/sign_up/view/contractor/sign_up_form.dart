@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/sign_up/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,11 +36,9 @@ class ContractorSignUpForm extends StatelessWidget {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Sign Up Failure')),
-            );
+            ..showSnackBar(const SnackBar(content: Text('Sign Up Failure')));
         }
       },
       child: Align(
@@ -211,24 +208,7 @@ class ContractorSignUpForm extends StatelessWidget {
                 ),
                 color: Colors.orangeAccent,
                 onPressed: state.status.isValidated
-                    ? () => context
-                        .bloc<SignUpCubit>()
-                        .signUpFormSubmitted(UserModel(
-                          name: _businessNameController.text,
-                          website: "https://" + _websiteController.text,
-                          identityValue: _einController.text,
-                          doingBusinessAsName: _aliasController.text,
-                          streetAddress: _streetAddressController.text,
-                          city: _cityController.text,
-                          state: _stateController.text.toUpperCase(),
-                          country: _countryController.text.toUpperCase(),
-                          postalCode: _postalCodeController.text,
-                          phone: _phoneNumberController.text,
-                          email: _emailController.text,
-                          businessType: _businessType,
-                          naicsCode: _naicsCode,
-                          isHomeowner: false,
-                        ))
+                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
               );
       },
@@ -245,7 +225,7 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) {
-            context.bloc<SignUpCubit>().emailChanged(email);
+            context.read<SignUpCubit>().emailChanged(email);
           },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -269,7 +249,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('contractor_signUpForm_passwordInput_textField'),
           onChanged: (password) =>
-              context.bloc<SignUpCubit>().passwordChanged(password),
+              context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),

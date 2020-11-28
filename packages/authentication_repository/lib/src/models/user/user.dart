@@ -1,6 +1,5 @@
 import 'package:authentication_repository/src/models/user/user_entity.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 /// {@template user}
 /// User model
@@ -33,7 +32,7 @@ class UserModel extends Equatable {
   final String businessAdminDocumentID;
 
   const UserModel({
-    @required this.name,
+    this.name,
     this.id,
     this.dateOfBirthYYYYMMDD,
     this.identityValue,

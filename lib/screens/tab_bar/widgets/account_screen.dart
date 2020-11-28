@@ -1,10 +1,7 @@
 import 'package:divvy/screens/screens/account/account_options.dart';
-import 'package:divvy/screens/screens/account/check_handle_screen.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/bank_account_balance_screen.dart';
-import 'package:divvy/screens/screens/get_wallet_info_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
-import 'package:divvy/screens/screens/transaction_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {

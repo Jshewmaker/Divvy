@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
