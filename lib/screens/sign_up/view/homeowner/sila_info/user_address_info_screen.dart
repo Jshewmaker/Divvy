@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
-class SilaPageTwo extends StatefulWidget {
-  SilaPageTwo({Key key}) : super(key: key);
+class SilaInputAddressPage extends StatefulWidget {
+  SilaInputAddressPage({Key key}) : super(key: key);
 
   @override
   _SilaPageTwoState createState() => _SilaPageTwoState();
 }
 
-class _SilaPageTwoState extends State<SilaPageTwo> {
+class _SilaPageTwoState extends State<SilaInputAddressPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

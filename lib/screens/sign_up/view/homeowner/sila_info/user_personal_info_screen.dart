@@ -1,5 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/screens/sila_info/user_address_info_screen.dart';
+import 'package:divvy/screens/sign_up/view/homeowner/sila_info/user_address_info_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -159,7 +159,7 @@ class SignUpForm extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => SilaPageTwo(),
+              builder: (context) => SilaInputAddressPage(),
             ),
           );
         });
