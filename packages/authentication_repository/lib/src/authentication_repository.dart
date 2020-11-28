@@ -46,23 +46,19 @@ class AuthenticationRepository {
       if (event == null) {
         return UserModel.empty;
       } else {
-        FirebaseService foo = FirebaseService();
-        return foo.getUserData();
+        FirebaseService _firebaseService = FirebaseService();
+        return _firebaseService.getUserData();
         // DocumentSnapshot _documentSnapshot =
         //     Firestore.instance.collection("users").document(event.uid).get();
         // return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
       }
-      // return _firebaseAuth.onAuthStateChanged.map((firebaseUser) {
-      //   return firebaseUser == null ? UserModel.empty : firebaseUser.toUser;
-      // });
     });
   }
 
   /// Creates a new user with the provided [email] and [password].
   ///
   /// Throws a [SignUpFailure] if an exception occurs.
-  Future<void> signUp(
-    UserModel userData, {
+  Future<void> signUp({
     @required String email,
     @required String password,
   }) async {
@@ -74,9 +70,10 @@ class AuthenticationRepository {
         password: password,
       );
 
-      FirebaseService firebaseService = FirebaseService();
-      firebaseService.userSetupCreateFirestore(
-          'users', userData.toEntity().toDocument());
+      // FirebaseService firebaseService = FirebaseService();
+      // firebaseService.userSetupCreateFirestore(
+      //     'users', userData.toEntity().toDocument());
+      //-----------------
       // userCollection.add(user.toEntity().toDocument());
       // userCollection.document(user.id).
     }

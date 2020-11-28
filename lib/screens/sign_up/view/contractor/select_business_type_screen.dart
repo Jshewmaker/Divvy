@@ -60,10 +60,6 @@ class BusinessTypePopulated extends StatelessWidget {
             child: ListTile(
                 title: Center(child: Text(response.businessTypes[index].label)),
                 onTap: () {
-                  // Map<String, String> data = {
-                  //   "business_type": response.businessTypes[index].name
-                  // };
-                  // _firebaseService.addDataToFirestoreDocument('users', data);
                   Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -74,32 +70,6 @@ class BusinessTypePopulated extends StatelessWidget {
         },
       ),
     );
-  }
-
-  String _formatNameFromModel(String name) {
-    switch (name) {
-      case 'corporation':
-        return 'Corporation';
-      case 'llc':
-        return 'LLC';
-      case 'llp':
-        return 'LLP';
-      case 'lp':
-        return 'LP';
-      case 'non_profit':
-        return 'Non-Profit';
-      case 'partnership':
-        return 'Partnership';
-      case 'public_corporation':
-        return 'Public Corporation';
-      case 'sole_proprietorship':
-        return 'Sole Proprietorship';
-      case 'trust':
-        return 'Trust';
-      case 'unincorporated_association':
-        return 'Unincorporated Association';
-    }
-    return " help";
   }
 }
 

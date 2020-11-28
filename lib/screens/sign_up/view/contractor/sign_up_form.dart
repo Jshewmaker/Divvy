@@ -211,24 +211,7 @@ class ContractorSignUpForm extends StatelessWidget {
                 ),
                 color: Colors.orangeAccent,
                 onPressed: state.status.isValidated
-                    ? () => context
-                        .bloc<SignUpCubit>()
-                        .signUpFormSubmitted(UserModel(
-                          name: _businessNameController.text,
-                          website: "https://" + _websiteController.text,
-                          identityValue: _einController.text,
-                          doingBusinessAsName: _aliasController.text,
-                          streetAddress: _streetAddressController.text,
-                          city: _cityController.text,
-                          state: _stateController.text.toUpperCase(),
-                          country: _countryController.text.toUpperCase(),
-                          postalCode: _postalCodeController.text,
-                          phone: _phoneNumberController.text,
-                          email: _emailController.text,
-                          businessType: _businessType,
-                          naicsCode: _naicsCode,
-                          isHomeowner: false,
-                        ))
+                    ? () => context.bloc<SignUpCubit>().signUpFormSubmitted()
                     : null,
               );
       },

@@ -33,7 +33,7 @@ class UserModel extends Equatable {
   final String businessAdminDocumentID;
 
   const UserModel({
-    @required this.name,
+    this.name,
     this.id,
     this.dateOfBirthYYYYMMDD,
     this.identityValue,

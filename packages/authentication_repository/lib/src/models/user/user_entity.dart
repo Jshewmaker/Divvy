@@ -170,4 +170,24 @@ class UserEntity extends Equatable {
       "businessAdminDocumentID": businessAdminDocumentID,
     };
   }
+
+  Map<String, Object> toDocumentPersonalInfo() {
+    return {
+      "name": name,
+      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "identity_value": identityValue,
+      "phone": phone,
+      "isHomeowner": isHomeowner,
+    };
+  }
+
+  Map<String, Object> toDocumentAddresses() {
+    return {
+      "street_address_1": streetAddress,
+      "city": city,
+      "state": state,
+      "country": country,
+      "postal_code": postalCode,
+    };
+  }
 }
