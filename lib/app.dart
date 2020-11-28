@@ -1,9 +1,9 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
-import 'package:divvy/screens/screens/sila_info/user_personal_info_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_page.dart';
+import 'package:divvy/screens/sign_up/view/homeowner/sila_info/user_personal_info_screen.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';

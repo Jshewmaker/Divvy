@@ -154,7 +154,7 @@ class _SignUpFormState extends State<SignUpForm> {
 
   Widget _signUpButton(context) {
     return RaisedButton(
-        child: const Text('SIGN UP234'),
+        child: const Text('SIGN UP'),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
         ),
