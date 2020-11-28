@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:authentication_repository/src/firebase_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 // import 'package:google_sign_in/google_sign_in.dart';
@@ -136,15 +135,5 @@ class AuthenticationRepository {
     } on Exception {
       throw LogOutFailure();
     }
-  }
-}
-
-extension on FirebaseUser {
-  UserModel get toUser {
-    return UserModel(
-      // id: uid,
-      name: displayName,
-      email: email,
-    );
   }
 }

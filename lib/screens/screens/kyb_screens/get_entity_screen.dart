@@ -1,6 +1,5 @@
 import 'package:divvy/screens/screens/kyb_screens/certify_beneficial_owner_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/get_entity_cubit.dart';
-import 'package:divvy/sila/blocs/kyb_blocs/request_kyb_cubit.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
@@ -21,7 +20,7 @@ class GetEntityScreen extends StatelessWidget {
       child: BlocBuilder<GetEntityCubit, GetEntityState>(
         builder: (context, state) {
           if (state is GetEntityInitial) {
-            context.bloc<GetEntityCubit>().getGetEntity();
+            context.watch<GetEntityCubit>().getGetEntity();
             return const GetEntityEmpty();
           } else if (state is GetEntityLoadInProgress) {
             return const GetEntityLoading();

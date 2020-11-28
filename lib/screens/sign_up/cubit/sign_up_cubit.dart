@@ -37,8 +37,6 @@ class SignUpCubit extends Cubit<SignUpState> {
         email: state.email.value,
         password: state.password.value,
       );
-      FirebaseService _firebaseService = FirebaseService();
-      // _firebaseService.addUserEmailToFirebaseDocument();
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

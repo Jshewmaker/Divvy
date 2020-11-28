@@ -4,7 +4,6 @@ import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/sila_info/enter_sila_data_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_page.dart';
-import 'package:divvy/screens/sign_up/view/homeowner/sign_up_page.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';

@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/check_kyc_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:divvy/sila/blocs/blocs.dart';

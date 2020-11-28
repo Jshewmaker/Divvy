@@ -1,4 +1,3 @@
-import 'package:divvy/screens/sign_up/view/homeowner/sign_up_page.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';

@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/screens/screens/sila_info/enter_sila_data_screen%20copy.dart';
 import 'package:flutter/material.dart';
 

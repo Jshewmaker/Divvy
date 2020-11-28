@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/sign_up/sign_up.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,11 +36,9 @@ class ContractorSignUpForm extends StatelessWidget {
     return BlocListener<SignUpCubit, SignUpState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
-            ..showSnackBar(
-              const SnackBar(content: Text('Sign Up Failure')),
-            );
+            ..showSnackBar(const SnackBar(content: Text('Sign Up Failure')));
         }
       },
       child: Align(
@@ -211,7 +208,7 @@ class ContractorSignUpForm extends StatelessWidget {
                 ),
                 color: Colors.orangeAccent,
                 onPressed: state.status.isValidated
-                    ? () => context.bloc<SignUpCubit>().signUpFormSubmitted()
+                    ? () => context.watch<SignUpCubit>().signUpFormSubmitted()
                     : null,
               );
       },
@@ -228,7 +225,7 @@ class _EmailInput extends StatelessWidget {
         return TextField(
           key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) {
-            context.bloc<SignUpCubit>().emailChanged(email);
+            context.watch<SignUpCubit>().emailChanged(email);
           },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -252,7 +249,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('contractor_signUpForm_passwordInput_textField'),
           onChanged: (password) =>
-              context.bloc<SignUpCubit>().passwordChanged(password),
+              context.watch<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),

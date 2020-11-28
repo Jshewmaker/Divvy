@@ -1,15 +1,8 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
-import 'package:divvy/screens/screens/tab_bar_container.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:divvy/Screens/sign_up/sign_up.dart';
 
 import 'package:flutter/services.dart';
-import 'package:formz/formz.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class SilaPageTwo extends StatelessWidget {
   const SilaPageTwo({Key key}) : super(key: key);

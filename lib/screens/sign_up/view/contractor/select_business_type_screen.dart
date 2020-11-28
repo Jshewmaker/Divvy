@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/sign_up/view/contractor/naics_categories_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/get_business_types/get_business_types_cubit.dart';
 import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
@@ -25,7 +24,7 @@ class SelectBusinessTypeScreen extends StatelessWidget {
       child: BlocBuilder<BusinessTypeCubit, BusinessTypeState>(
         builder: (context, state) {
           if (state is BusinessTypeInitial) {
-            context.bloc<BusinessTypeCubit>().getBusinessTypes();
+            context.watch<BusinessTypeCubit>().getBusinessTypes();
             return const BusinessTypeEmpty();
           } else if (state is BusinessTypeLoadInProgress) {
             return const BusinessTypeLoading();
@@ -40,11 +39,11 @@ class SelectBusinessTypeScreen extends StatelessWidget {
   }
 }
 
+// ignore: must_be_immutable
 class BusinessTypePopulated extends StatelessWidget {
   BusinessTypePopulated({Key key, @required this.response}) : super(key: key);
 
   final GetBusinessTypeResponse response;
-  FirebaseService _firebaseService;
 
   @override
   Widget build(BuildContext context) {

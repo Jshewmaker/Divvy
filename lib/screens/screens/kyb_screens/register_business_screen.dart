@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/screens/kyb_screens/register_business_admin_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/register_business_cubit.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
@@ -25,7 +24,7 @@ class RegisterKYBScreen extends StatelessWidget {
       child: BlocBuilder<RegisterBusinessCubit, RegisterBusinessState>(
         builder: (context, state) {
           if (state is RegisterBusinessInitial) {
-            context.bloc<RegisterBusinessCubit>().registerBusinesss();
+            context.watch<RegisterBusinessCubit>().registerBusinesss();
             return const RegisterBusinessEmpty();
           } else if (state is RegisterBusinessLoadInProgress) {
             return const RegisterBusinessLoading();

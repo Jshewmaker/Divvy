@@ -1,9 +1,5 @@
-import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/screens/kyb_screens/register_business_admin_screen.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/check_kyb_cubit.dart';
-import 'package:divvy/sila/blocs/kyb_blocs/register_business_cubit.dart';
 import 'package:divvy/sila/models/kyb/check_kyb_response/check_kyb_response.dart';
-import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +19,7 @@ class CheckKYBScreen extends StatelessWidget {
       child: BlocBuilder<CheckKYBCubit, CheckKYBState>(
         builder: (context, state) {
           if (state is CheckKYBInitial) {
-            context.bloc<CheckKYBCubit>().checkKYB();
+            context.watch<CheckKYBCubit>().checkKYB();
             return const CheckKYBEmpty();
           } else if (state is CheckKYBLoadInProgress) {
             return const CheckKYBLoading();
