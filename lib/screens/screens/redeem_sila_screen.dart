@@ -19,7 +19,7 @@ class RedeemSilaScreen extends StatelessWidget {
       child: BlocBuilder<RedeemSilaCubit, RedeemSilaState>(
         builder: (context, state) {
           if (state is RedeemSilaInitial) {
-            context.watch<RedeemSilaCubit>().redeemSila(amount);
+            context.read<RedeemSilaCubit>().redeemSila(amount);
             return const EmptyWidget();
           } else if (state is RedeemSilaLoadInProgress) {
             return const LoadingWidget();

@@ -47,7 +47,7 @@ class SignUpForm extends StatelessWidget {
                 ),
                 color: Colors.orangeAccent,
                 onPressed: state.status.isValidated
-                    ? () => context.watch<SignUpCubit>().signUpFormSubmitted()
+                    ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
               );
       },
@@ -65,7 +65,7 @@ class _EmailInput extends StatelessWidget {
           key: const Key('signUpForm_emailInput_textField'),
           onChanged: (email) {
             // email1 = email;
-            context.watch<SignUpCubit>().emailChanged(email);
+            context.read<SignUpCubit>().emailChanged(email);
           },
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
@@ -91,7 +91,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('signUpForm_passwordInput_textField'),
           onChanged: (password) =>
-              context.watch<SignUpCubit>().passwordChanged(password),
+              context.read<SignUpCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),

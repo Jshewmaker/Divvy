@@ -19,7 +19,7 @@ class CheckKYBScreen extends StatelessWidget {
       child: BlocBuilder<CheckKYBCubit, CheckKYBState>(
         builder: (context, state) {
           if (state is CheckKYBInitial) {
-            context.watch<CheckKYBCubit>().checkKYB();
+            context.read<CheckKYBCubit>().checkKYB();
             return const CheckKYBEmpty();
           } else if (state is CheckKYBLoadInProgress) {
             return const CheckKYBLoading();

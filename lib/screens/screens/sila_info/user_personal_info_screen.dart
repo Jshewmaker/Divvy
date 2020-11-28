@@ -1,10 +1,11 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/screens/sila_info/enter_sila_data_screen%20copy.dart';
+import 'package:divvy/screens/screens/sila_info/user_address_info_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:intl/intl.dart';
 
 class EnterSilaDataScreen extends StatelessWidget {
   @override
@@ -25,8 +26,7 @@ class SignUpForm extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
       MaskedTextController(mask: '000000000');
-  final MaskedTextController _birthdayController =
-      MaskedTextController(mask: '0000-00-00');
+  final TextEditingController _birthdayController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
 
@@ -42,7 +42,7 @@ class SignUpForm extends StatelessWidget {
           const SizedBox(height: 8.0),
           _ssnInput(),
           const SizedBox(height: 8.0),
-          _birthdayInput(),
+          _birthdayInput(context),
           const SizedBox(height: 8.0),
           _phoneNumberInput(),
           const SizedBox(height: 8.0),
@@ -79,8 +79,9 @@ class SignUpForm extends StatelessWidget {
     );
   }
 
-  Widget _birthdayInput() {
+  Widget _birthdayInput(context) {
     return TextField(
+      onTap: () => _selectDate(context),
       controller: _birthdayController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
@@ -90,6 +91,38 @@ class SignUpForm extends StatelessWidget {
       ),
       keyboardType: TextInputType.datetime,
     );
+  }
+
+  _selectDate(BuildContext context) async {
+    DateTime _selectedDate;
+    DateTime newSelectedDate = await showDatePicker(
+        context: context,
+        initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+        firstDate: DateTime(2000),
+        lastDate: DateTime(2040),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.light().copyWith(
+              colorScheme: ColorScheme.light(
+                primary: Colors.teal[200],
+                onPrimary: Colors.white,
+                surface: Colors.teal[200],
+                onSurface: Colors.black,
+              ),
+              // dialogBackgroundColor: Colors.teal[500],
+            ),
+            child: child,
+          );
+        });
+
+    if (newSelectedDate != null) {
+      _selectedDate = newSelectedDate;
+      _birthdayController
+        ..text = DateFormat("yyyy-MM-dd").format(_selectedDate)
+        ..selection = TextSelection.fromPosition(TextPosition(
+            offset: _birthdayController.text.length,
+            affinity: TextAffinity.upstream));
+    }
   }
 
   Widget _phoneNumberInput() {

@@ -24,7 +24,7 @@ class BankAccountInfoScreen extends StatelessWidget {
       child: BlocBuilder<BankAccountBalanceCubit, BankAccountBalanceState>(
         builder: (context, state) {
           if (state is BankAccountBalanceInitial) {
-            context.watch<BankAccountBalanceCubit>().getBankAccountBalances();
+            context.read<BankAccountBalanceCubit>().getBankAccountBalances();
             return const BankAccountEmpty();
           } else if (state is BankAccountBalanceLoadInProgress) {
             return const BankAccountLoading();

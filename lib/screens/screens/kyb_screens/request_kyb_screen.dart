@@ -19,7 +19,7 @@ class RequestKYBScreen extends StatelessWidget {
       child: BlocBuilder<RequestKYBCubit, RequestKYBState>(
         builder: (context, state) {
           if (state is RequestKYBInitial) {
-            context.watch<RequestKYBCubit>().requestKYB();
+            context.read<RequestKYBCubit>().requestKYB();
             return const RequestKYBEmpty();
           } else if (state is RequestKYBLoadInProgress) {
             return const RequestKYBLoading();

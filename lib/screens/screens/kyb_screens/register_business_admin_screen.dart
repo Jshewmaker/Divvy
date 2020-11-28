@@ -130,7 +130,7 @@ class RegisterBusinessRoleEmpty extends StatelessWidget {
               onPressed: () async {
                 if (_countryController.text.isNotEmpty) {
                   context
-                      .watch<RegisterBusinessRoleCubit>()
+                      .read<RegisterBusinessRoleCubit>()
                       .registerBusinessRole(UserModel(
                         name: _nameController.text,
                         dateOfBirthYYYYMMDD: _birthdayController.text,

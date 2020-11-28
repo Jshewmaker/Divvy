@@ -4,9 +4,14 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
-class SilaPageTwo extends StatelessWidget {
-  const SilaPageTwo({Key key}) : super(key: key);
+class SilaPageTwo extends StatefulWidget {
+  SilaPageTwo({Key key}) : super(key: key);
 
+  @override
+  _SilaPageTwoState createState() => _SilaPageTwoState();
+}
+
+class _SilaPageTwoState extends State<SilaPageTwo> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +25,15 @@ class SilaPageTwo extends StatelessWidget {
 }
 
 // ignore: must_be_immutable
-class SignUpForm extends StatelessWidget {
+class SignUpForm extends StatefulWidget {
+  SignUpForm({Key key}) : super(key: key);
+
+  @override
+  _SignUpFormState createState() => _SignUpFormState();
+}
+
+class _SignUpFormState extends State<SignUpForm> {
+  String dropdownValue = 'AL';
   FirebaseService _firebaseService = FirebaseService();
 
   final TextEditingController _streetAddressController =
@@ -81,6 +94,29 @@ class SignUpForm extends StatelessWidget {
 
   Widget _stateInput() {
     return TextField(
+      onTap: () => DropdownButton<String>(
+        value: dropdownValue,
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        elevation: 16,
+        style: TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (String newValue) {
+          setState(() {
+            dropdownValue = newValue;
+          });
+        },
+        items: <String>['One', 'Two', 'Free', 'Four']
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(value),
+          );
+        }).toList(),
+      ),
       controller: _stateController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),

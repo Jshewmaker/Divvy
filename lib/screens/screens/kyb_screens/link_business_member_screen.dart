@@ -19,7 +19,7 @@ class LinkBusinessMemberScreen extends StatelessWidget {
       child: BlocBuilder<LinkBusinessMembersCubit, LinkBusinessMembersState>(
         builder: (context, state) {
           if (state is LinkBusinessMembersInitial) {
-            context.watch<LinkBusinessMembersCubit>().getLinkBusinessMembers();
+            context.read<LinkBusinessMembersCubit>().getLinkBusinessMembers();
             return const RegisterBusinessEmpty();
           } else if (state is LinkBusinessMembersLoadInProgress) {
             return const RegisterBusinessLoading();

@@ -20,7 +20,7 @@ class GetEntityScreen extends StatelessWidget {
       child: BlocBuilder<GetEntityCubit, GetEntityState>(
         builder: (context, state) {
           if (state is GetEntityInitial) {
-            context.watch<GetEntityCubit>().getGetEntity();
+            context.read<GetEntityCubit>().getGetEntity();
             return const GetEntityEmpty();
           } else if (state is GetEntityLoadInProgress) {
             return const GetEntityLoading();

@@ -19,7 +19,7 @@ class GetBusinessTypesScreen extends StatelessWidget {
       child: BlocBuilder<GetBusinessRolesCubit, GetBusinessRolesState>(
         builder: (context, state) {
           if (state is GetBusinessRolesInitial) {
-            context.watch<GetBusinessRolesCubit>().getBusinessRoles();
+            context.read<GetBusinessRolesCubit>().getBusinessRoles();
             return const RegisterBusinessEmpty();
           } else if (state is GetBusinessRolesLoadInProgress) {
             return const RegisterBusinessLoading();

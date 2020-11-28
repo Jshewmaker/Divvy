@@ -24,7 +24,7 @@ class RegisterKYBScreen extends StatelessWidget {
       child: BlocBuilder<RegisterBusinessCubit, RegisterBusinessState>(
         builder: (context, state) {
           if (state is RegisterBusinessInitial) {
-            context.watch<RegisterBusinessCubit>().registerBusinesss();
+            context.read<RegisterBusinessCubit>().registerBusinesss();
             return const RegisterBusinessEmpty();
           } else if (state is RegisterBusinessLoadInProgress) {
             return const RegisterBusinessLoading();
