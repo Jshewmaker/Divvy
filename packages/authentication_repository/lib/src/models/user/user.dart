@@ -31,6 +31,7 @@ class UserModel extends Equatable {
   final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
+  final String projectID;
 
   const UserModel({
     @required this.name,
@@ -54,6 +55,7 @@ class UserModel extends Equatable {
     this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
+    this.projectID,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -79,6 +81,7 @@ class UserModel extends Equatable {
     isHomeowner: null,
     wallet: null,
     businessAdminDocumentID: null,
+    projectID: null,
   );
 
   @override
@@ -104,6 +107,7 @@ class UserModel extends Equatable {
         isHomeowner,
         wallet,
         businessAdminDocumentID,
+        projectID,
       ];
 
   static UserModel fromEntity(UserEntity entity) {
@@ -128,6 +132,7 @@ class UserModel extends Equatable {
       isHomeowner: entity.isHomeowner,
       wallet: entity.wallet,
       businessAdminDocumentID: entity.businessAdminDocumentID,
+      projectID: entity.projectID,
     );
   }
 
@@ -153,6 +158,7 @@ class UserModel extends Equatable {
       isHomeowner,
       wallet,
       businessAdminDocumentID,
+      projectID,
     );
   }
 }

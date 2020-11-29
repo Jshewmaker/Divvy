@@ -22,6 +22,7 @@ class UserEntity extends Equatable {
   final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
+  final String projectID;
 
   const UserEntity(
     this.name,
@@ -44,6 +45,7 @@ class UserEntity extends Equatable {
     this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
+    this.projectID,
   );
 
   Map<String, Object> toJson() {
@@ -68,6 +70,7 @@ class UserEntity extends Equatable {
       "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
+      "project_id": projectID,
     };
   }
 
@@ -92,6 +95,7 @@ class UserEntity extends Equatable {
         isHomeowner,
         wallet,
         businessAdminDocumentID,
+        projectID,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -116,6 +120,7 @@ class UserEntity extends Equatable {
       json["isHomeowner"] as bool,
       json["wallet"] as String,
       json["businessAdminDocumentID"] as String,
+      json["project_id"] as String,
     );
   }
 
@@ -142,6 +147,7 @@ class UserEntity extends Equatable {
       snap.data['isHomeowner'],
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
+      snap.data['project_id'],
     );
   }
 
@@ -168,6 +174,7 @@ class UserEntity extends Equatable {
       "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
+      "project_id": projectID,
     };
   }
 }
