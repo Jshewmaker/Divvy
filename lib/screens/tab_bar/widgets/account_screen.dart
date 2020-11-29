@@ -1,9 +1,7 @@
 import 'package:divvy/screens/screens/account/account_options.dart';
-import 'package:divvy/screens/screens/account/check_handle_screen.dart';
+import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/bank_account_balance_screen.dart';
-import 'package:divvy/screens/screens/get_wallet_info_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
-import 'package:divvy/screens/screens/transaction_screen.dart';
 import 'package:flutter/material.dart';
 
 class AccountScreen extends StatelessWidget {
@@ -18,16 +16,16 @@ class AccountScreen extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => AccountOptionsScreen())),
             ),
-            RaisedButton(
-              child: Text('Select Username'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => RegisterHandleScreen())),
-            ),
-            RaisedButton(
-              child: Text('get balance'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => GetWalletInfoScreen())),
-            ),
+            // RaisedButton(
+            //   child: Text('Select Username'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => RegisterHandleScreen())),
+            // ),
+            // RaisedButton(
+            //   child: Text('get balance'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => GetWalletInfoScreen())),
+            // ),
             RaisedButton(
               child: Text('Check Bank Account Balance'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
@@ -38,10 +36,15 @@ class AccountScreen extends StatelessWidget {
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
             ),
+            // RaisedButton(
+            //   child: Text('Get Transactions'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => TransactionScreen())),
+            // ),
             RaisedButton(
-              child: Text('Get Transactions'),
+              child: Text('Link Plaid'),
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => TransactionScreen())),
+                  MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
             ),
           ],
         ),

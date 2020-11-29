@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -6,6 +5,7 @@ import 'package:equatable/equatable.dart';
 abstract class CreateSilaUserState extends Equatable {
   const CreateSilaUserState();
   final String message = "";
+
   @override
   List<Object> get props => [];
 }
@@ -37,7 +37,13 @@ class HandleTaken extends CreateSilaUserState {
 }
 
 class CheckHandleLoadFailure extends CreateSilaUserState {
-  String message = "Check Handle Failure";
+  final dynamic exception;
+
+  const CheckHandleLoadFailure({@required this.exception})
+      : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
 }
 
 //END CHECK HANDLE
@@ -57,7 +63,13 @@ class RegisterLoadSuccess extends CreateSilaUserState {
 }
 
 class RegisterLoadFailure extends CreateSilaUserState {
-  final String message = "Registration Failure";
+  final dynamic exception;
+
+  const RegisterLoadFailure({@required this.exception})
+      : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
 }
 
 //END REGISTER
@@ -76,7 +88,15 @@ class RequestKYCLoadSuccess extends CreateSilaUserState {
   List<Object> get props => [requestKycResponse];
 }
 
-class RequestKYCLoadFailure extends CreateSilaUserState {}
+class RequestKYCLoadFailure extends CreateSilaUserState {
+  final dynamic exception;
+
+  const RequestKYCLoadFailure({@required this.exception})
+      : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
+}
 
 //END REQUEST KYC
 
@@ -106,7 +126,15 @@ class CheckKycVerifiationFail extends CreateSilaUserState {
   List<Object> get props => [checkKycResponse];
 }
 
-class CheckKycLoadFailure extends CreateSilaUserState {}
+class CheckKycLoadFailure extends CreateSilaUserState {
+  final dynamic exception;
+
+  const CheckKycLoadFailure({@required this.exception})
+      : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
+}
 
 //END CHECK KYC
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class BankAccountInfoScreen extends StatelessWidget {
   BankAccountInfoScreen({Key key}) : super(key: key);
 
@@ -23,7 +24,7 @@ class BankAccountInfoScreen extends StatelessWidget {
       child: BlocBuilder<BankAccountBalanceCubit, BankAccountBalanceState>(
         builder: (context, state) {
           if (state is BankAccountBalanceInitial) {
-            context.bloc<BankAccountBalanceCubit>().getBankAccountBalances();
+            context.read<BankAccountBalanceCubit>().getBankAccountBalances();
             return const BankAccountEmpty();
           } else if (state is BankAccountBalanceLoadInProgress) {
             return const BankAccountLoading();

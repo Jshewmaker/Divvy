@@ -13,6 +13,7 @@ import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
+import 'package:divvy/sila/models/redeem_sila_model.dart';
 import 'package:divvy/sila/models/update_user_info/update_user_info_response.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -135,7 +136,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /register');
+      throw Exception('error with /register' + silaResponse.body);
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -373,7 +374,7 @@ class SilaApiClient {
   }
 
   Future<IssueSilaResponse> issueSila(
-      String handle, String userPrivateKey) async {
+      String handle, String userPrivateKey, double amount) async {
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
@@ -386,7 +387,7 @@ class SilaApiClient {
         "reference": "ref"
       },
       "message": "issue_msg",
-      "amount": 100,
+      "amount": amount,
       "account_name": "$handle plaid account",
       "descriptor": "showing that transactions are not working",
       "processing_type": "STANDARD_ACH"
@@ -1014,5 +1015,48 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<RedeemSilaModel> redeemSila(UserModel user, int amount) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": user.silaHandle,
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "redeem_msg",
+      "amount": amount,
+      "account_name": user.silaHandle + " plaid account",
+      "descriptor": "redeem sila walet",
+      "processing_type": "STANDARD_ACH"
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, user.privateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/redeem_sila';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /redeem_sila');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return RedeemSilaModel.fromJson(silaHandleResponse);
   }
 }

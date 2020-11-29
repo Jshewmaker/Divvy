@@ -36,7 +36,7 @@ class TabBarContainer extends StatelessWidget {
                 key: const Key('homePage_logout_iconButton'),
                 icon: const Icon(Icons.more_vert),
                 onPressed: () => context
-                    .bloc<AuthenticationBloc>()
+                    .read<AuthenticationBloc>()
                     .add(AuthenticationLogoutRequested()),
               ),
             ],

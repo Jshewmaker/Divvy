@@ -1,6 +1,5 @@
 import 'package:divvy/screens/sign_up/sign_up.dart';
 import 'package:divvy/screens/sign_up/view/contractor/select_business_type_screen.dart';
-import 'package:divvy/screens/sign_up/view/contractor/sign_up_page.dart';
 
 import 'package:flutter/material.dart';
 

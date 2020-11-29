@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:661751452696:android:e38b36515f2910cd0c5f6d",
         "android_client_info": {
-          "package_name": "com.example.divvy"
+          "package_name": "com.frequency.divvy"
         }
       },
       "oauth_client": [
@@ -35,7 +35,7 @@
               "client_id": "661751452696-jjsshbfo698hakam7nam4l61ujnjv3cl.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.example.divvy"
+                "bundle_id": "com.frequency.divvy"
               }
             }
           ]

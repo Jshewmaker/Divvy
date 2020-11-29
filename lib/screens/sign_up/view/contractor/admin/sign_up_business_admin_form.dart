@@ -210,7 +210,7 @@ class SignUpBusinessAdminForm extends StatelessWidget {
                 phone: _phoneNumberController.text,
                 isHomeowner: false,
               ).toEntity().toDocument());
-          Navigator.of(context).push(MaterialPageRoute(
+          Navigator.of(context).pushReplacement(MaterialPageRoute(
               builder: (contest) => CreateSilaBusinessScreen()));
         });
   }

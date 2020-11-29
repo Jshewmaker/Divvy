@@ -68,6 +68,9 @@ class FirebaseService {
         .collection(collection)
         .document(user.uid)
         .get();
+    if (!_documentSnapshot.exists) {
+      return null;
+    }
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
@@ -117,5 +120,13 @@ class FirebaseService {
       var data = {"email": value.email};
       addDataToFirestoreDocument(collection, data);
     });
+  }
+
+  Future<bool> checkIfDocumentExists() async {
+    FirebaseUser user = await firebaseAuth.currentUser();
+    final snapShot =
+        await Firestore.instance.collection("users").document(user.uid).get();
+    if (snapShot == null || !snapShot.exists) return false;
+    return true;
   }
 }

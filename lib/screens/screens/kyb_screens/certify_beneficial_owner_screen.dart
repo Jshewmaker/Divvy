@@ -23,7 +23,7 @@ class CertifyBuisnessOwnerScreen extends StatelessWidget {
         builder: (context, state) {
           if (state is CertifyBeneficialOwnerInitial) {
             context
-                .bloc<CertifyBeneficialOwnerCubit>()
+                .read<CertifyBeneficialOwnerCubit>()
                 .certifyBeneficialOwners(token);
             return const ResponseEmpty();
           } else if (state is CertifyBeneficialOwnerLoadInProgress) {

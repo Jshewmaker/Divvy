@@ -29,17 +29,14 @@ class SignUpCubit extends Cubit<SignUpState> {
     ));
   }
 
-  Future<void> signUpFormSubmitted(UserModel user) async {
+  Future<void> signUpFormSubmitted() async {
     if (!state.status.isValidated) return;
     emit(state.copyWith(status: FormzStatus.submissionInProgress));
     try {
       await _authenticationRepository.signUp(
-        user,
         email: state.email.value,
         password: state.password.value,
       );
-      FirebaseService _firebaseService = FirebaseService();
-      _firebaseService.addUserEmailToFirebaseDocument();
 
       emit(state.copyWith(status: FormzStatus.submissionSuccess));
     } on Exception {

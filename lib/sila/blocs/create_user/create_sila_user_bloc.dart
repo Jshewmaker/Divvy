@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/check_kyc_response.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 //import 'package:divvy/sila/blocs/blocs.dart';
@@ -67,17 +66,17 @@ class CreateSilaUserBloc
                 } else if (response.verificationStatus == "failed")
                   yield CheckKycVerifiationFail(checkKycResponse: response);
               } catch (_) {
-                yield CheckKycLoadFailure();
+                yield CheckKycLoadFailure(exception: _);
               }
             } catch (_) {
-              yield RequestKYCLoadFailure();
+              yield RequestKYCLoadFailure(exception: _);
             }
           } catch (_) {
-            yield RegisterLoadFailure();
+            yield RegisterLoadFailure(exception: _);
           }
         }
       } catch (_) {
-        yield CheckHandleLoadFailure();
+        yield CheckHandleLoadFailure(exception: _);
       }
     }
   }

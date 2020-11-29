@@ -19,7 +19,7 @@ class CertifyBuisnessScreen extends StatelessWidget {
       child: BlocBuilder<CertifyBusinessCubit, CertifyBusinessState>(
         builder: (context, state) {
           if (state is CertifyBusinessInitial) {
-            context.bloc<CertifyBusinessCubit>().certifyBusinesss();
+            context.read<CertifyBusinessCubit>().certifyBusinesss();
             return const ResponseEmpty();
           } else if (state is CertifyBusinessLoadInProgress) {
             return const ResponseLoading();

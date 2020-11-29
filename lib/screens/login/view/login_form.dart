@@ -10,33 +10,34 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          Scaffold.of(context)
+          ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
-              const SnackBar(content: Text('Authentication Failure')),
-            );
+                const SnackBar(content: Text('Authentication Failure')));
         }
       },
       child: Align(
         alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/divvy_logo.png',
-              height: 120,
-            ),
-            const SizedBox(height: 16.0),
-            _EmailInput(),
-            const SizedBox(height: 8.0),
-            _PasswordInput(),
-            const SizedBox(height: 8.0),
-            _LoginButton(),
-            const SizedBox(height: 8.0),
-            // _GoogleLoginButton(),
-            const SizedBox(height: 4.0),
-            _SignUpButton(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/divvy_logo.png',
+                height: 120,
+              ),
+              const SizedBox(height: 16.0),
+              _EmailInput(),
+              const SizedBox(height: 8.0),
+              _PasswordInput(),
+              const SizedBox(height: 8.0),
+              _LoginButton(),
+              const SizedBox(height: 8.0),
+              // _GoogleLoginButton(),
+              const SizedBox(height: 4.0),
+              _SignUpButton(),
+            ],
+          ),
         ),
       ),
     );
@@ -51,7 +52,7 @@ class _EmailInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('loginForm_emailInput_textField'),
-          onChanged: (email) => context.bloc<LoginCubit>().emailChanged(email),
+          onChanged: (email) => context.read<LoginCubit>().emailChanged(email),
           keyboardType: TextInputType.emailAddress,
           decoration: InputDecoration(
             labelText: 'email',
@@ -73,7 +74,7 @@ class _PasswordInput extends StatelessWidget {
         return TextField(
           key: const Key('loginForm_passwordInput_textField'),
           onChanged: (password) =>
-              context.bloc<LoginCubit>().passwordChanged(password),
+              context.read<LoginCubit>().passwordChanged(password),
           obscureText: true,
           decoration: InputDecoration(
             labelText: 'password',
@@ -102,7 +103,7 @@ class _LoginButton extends StatelessWidget {
                 ),
                 color: const Color(0xFFa3c746),
                 onPressed: state.status.isValidated
-                    ? () => context.bloc<LoginCubit>().logInWithCredentials()
+                    ? () => context.read<LoginCubit>().logInWithCredentials()
                     : null,
               );
       },
