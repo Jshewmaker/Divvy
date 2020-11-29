@@ -1,49 +1,76 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/screens/screens/line_item_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 
 class ProjectScreen extends StatelessWidget {
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => ProjectScreen());
   }
 
+  Widget projectWidget() {
+    return FutureBuilder(
+      builder: (context, projectLineItems) {
+        if (!projectLineItems.hasData) {
+          //print('project snapshot data is: ${projectSnap.data}');
+          return Container();
+        }
+        return ListView.builder(
+          itemCount: projectLineItems.data.lineItems.length,
+          itemBuilder: (context, index) {
+            LineItem lineItem = projectLineItems.data.lineItems[index];
+            return _CardWidget(
+                title: lineItem.title,
+                generalContractorApprovalDate:
+                    getDate(lineItem.generalContractorApprovalDate),
+                homeOwnerApprovalDate: getDate(lineItem.homeownerApprovalDate),
+                datePaid: getDate(lineItem.datePaid),
+                price: '\$' + lineItem.cost.toStringAsFixed(2));
+          },
+        );
+      },
+      future: getProjectLineItems(),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      children: [
-        _CardWidget(
-            title: 'Dig Hole for Pool',
-            date: 'November 20, 2020',
-            price: '\$1000'),
-        _CardWidget(
-            title: 'Install Rebar', date: 'November 23, 2020', price: '\$1500'),
-        _CardWidget(
-            title: 'Plumbing & Electrical',
-            date: 'November 24, 2020',
-            price: '\$750'),
-        _CardWidget(
-            title: 'Pour Concrete', date: 'November 28, 2020', price: '\$3000'),
-        _CardWidget(
-            title: 'Tile & Decking',
-            date: 'December 10, 2020',
-            price: '\$1700'),
-        _CardWidget(
-            title: 'Interior Finishing',
-            date: 'December 13, 2020',
-            price: '\$1000'),
-        _CardWidget(
-            title: 'Pool Start-Up', date: 'November 17, 2020', price: '\$800'),
-      ],
-    ));
+      body: projectWidget(),
+    );
+  }
+
+  Future<LineItemListModel> getProjectLineItems() {
+    FirebaseService _firebaseService = FirebaseService();
+    return _firebaseService.getPhaseLineItems(1);
+  }
+
+  String getDate(Timestamp date) {
+    String newDate = "";
+    if (date != null) {
+      newDate = Jiffy(date.toDate()).format("MMMM do");
+    }
+    return newDate;
   }
 }
 
 class _CardWidget extends StatelessWidget {
   final String title;
   final String price;
-  final String date;
+  final String generalContractorApprovalDate;
+  final String homeOwnerApprovalDate;
+  final String datePaid;
 
-  _CardWidget({Key key, this.title, this.date, this.price}) : super(key: key);
+  _CardWidget(
+      {Key key,
+      this.title,
+      this.generalContractorApprovalDate,
+      this.homeOwnerApprovalDate,
+      this.datePaid,
+      this.price})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -67,7 +94,8 @@ class _CardWidget extends StatelessWidget {
                   child: Stack(
                     children: <Widget>[
                       Padding(
-                          padding: const EdgeInsets.only(left: 10, top: 5),
+                          padding: const EdgeInsets.only(
+                              left: 10, top: 5, right: 10),
                           child: Column(
                             children: <Widget>[
                               Row(
@@ -83,7 +111,7 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    date,
+                                    generalContractorApprovalDate,
                                     style: TextStyle(color: Colors.grey[100]),
                                   ),
                                 ],
@@ -92,9 +120,15 @@ class _CardWidget extends StatelessWidget {
                                 height: 15,
                               ),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
                                     price,
+                                    style: TextStyle(color: Colors.black45),
+                                  ),
+                                  Text(
+                                    getStatus(),
                                     style: TextStyle(color: Colors.black45),
                                   ),
                                 ],
@@ -110,5 +144,22 @@ class _CardWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getStatus() {
+    String status = "";
+    if (generalContractorApprovalDate != "") {
+      if (homeOwnerApprovalDate != "") {
+        if (datePaid != "") {
+          status = "Paid";
+        } else {
+          status = "Payment Needed";
+        }
+      } else {
+        status = "Approval Needed";
+      }
+    }
+
+    return status;
   }
 }

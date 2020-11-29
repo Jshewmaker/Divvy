@@ -6,10 +6,14 @@ import 'models/models.dart';
 class FirebaseService {
   FirebaseAuth firebaseAuth;
   String collection;
+  String projectCollection;
+  String lineItemsCollection;
 
   FirebaseService() {
     this.firebaseAuth = FirebaseAuth.instance;
     this.collection = "users";
+    this.projectCollection = "projects";
+    this.lineItemsCollection = "line_items";
   }
 
   void userSetupCreateFirestore(String collection, data) async {
@@ -68,6 +72,25 @@ class FirebaseService {
       return null;
     }
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+  }
+
+  /// Return user data in a UserModel
+  ///
+  /// /*
+  Future<LineItemListModel> getPhaseLineItems(int phase) async {
+    UserModel user = await getUserData();
+
+    //FirebaseUser lineItems = await firebaseAuth.currentUser();
+    QuerySnapshot _querySnapshot = await Firestore.instance
+        .collection(projectCollection)
+        .document(user.projectID)
+        .collection(lineItemsCollection)
+        .where('phase', isEqualTo: 1)
+        .getDocuments();
+    //All the examples use get not getDocuments
+
+    return LineItemListModel.fromEntity(
+        LineItemListEntity.fromSnapshot(_querySnapshot));
   }
 
 //Gets individual that is link to a business
