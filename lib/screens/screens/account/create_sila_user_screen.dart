@@ -1,3 +1,4 @@
+import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
@@ -21,6 +22,15 @@ class CreateSilaUserScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text('Divvy'),
+          actions: [
+            IconButton(
+              key: const Key('homePage_logout_iconButton'),
+              icon: const Icon(Icons.more_vert),
+              onPressed: () => context
+                  .read<AuthenticationBloc>()
+                  .add(AuthenticationLogoutRequested()),
+            ),
+          ],
         ),
         body: Center(
           child: BlocListener<CreateSilaUserBloc, CreateSilaUserState>(

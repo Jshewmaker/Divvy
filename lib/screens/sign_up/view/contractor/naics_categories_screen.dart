@@ -21,7 +21,7 @@ class NAICSCategoryScreen extends StatelessWidget {
       child: BlocBuilder<NaicsCategoriesCubit, NaicsCategoriesState>(
         builder: (context, state) {
           if (state is NaicsCategoriesInitial) {
-            context.read<NaicsCategoriesCubit>().getNaicsCategories();
+            context.watch<NaicsCategoriesCubit>().getNaicsCategories();
             return const NaicsCategoryEmpty();
           } else if (state is NaicsCategoriesLoadInProgress) {
             return const NaicsCategoryLoading();

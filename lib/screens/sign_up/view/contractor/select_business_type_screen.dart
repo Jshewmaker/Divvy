@@ -24,7 +24,7 @@ class SelectBusinessTypeScreen extends StatelessWidget {
       child: BlocBuilder<BusinessTypeCubit, BusinessTypeState>(
         builder: (context, state) {
           if (state is BusinessTypeInitial) {
-            context.read<BusinessTypeCubit>().getBusinessTypes();
+            context.watch<BusinessTypeCubit>().getBusinessTypes();
             return const BusinessTypeEmpty();
           } else if (state is BusinessTypeLoadInProgress) {
             return const BusinessTypeLoading();
