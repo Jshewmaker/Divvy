@@ -1,22 +1,22 @@
-import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_form.dart';
-import 'package:flutter/material.dart';
+// import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_form.dart';
+// import 'package:flutter/material.dart';
 
-class SignUpBusinessAdminPage extends StatelessWidget {
-  const SignUpBusinessAdminPage({Key key}) : super(key: key);
+// class SignUpBusinessAdminPage extends StatelessWidget {
+//   const SignUpBusinessAdminPage({Key key}) : super(key: key);
 
-  static Route route() {
-    return MaterialPageRoute<void>(
-        builder: (_) => const SignUpBusinessAdminPage());
-  }
+//   static Route route() {
+//     return MaterialPageRoute<void>(
+//         builder: (_) => const SignUpBusinessAdminPage());
+//   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Administrator Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SignUpBusinessAdminForm(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Administrator Sign Up')),
+//       body: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: SignUpBusinessAdminForm(),
+//       ),
+//     );
+//   }
+// }

@@ -1,4 +1,4 @@
-import 'package:divvy/screens/sign_up/view/contractor/sign_up_page.dart';
+import 'package:divvy/screens/sign_up/view/contractor/business_signup_form_1.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/get_naics_categories/get_naics_categories_cubit.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
@@ -67,8 +67,7 @@ class NaicsCategoryPopulated extends StatelessWidget {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => ContractorSignUpPage(
-                            _businessType,
+                        builder: (context) => BusinessSignUpPage(_businessType,
                             _response.naicsCategories.construction[index].code),
                       ));
                 }),

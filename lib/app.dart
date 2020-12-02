@@ -2,8 +2,8 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
-import 'package:divvy/screens/sign_up/view/contractor/admin/sign_up_business_admin_page.dart';
-import 'package:divvy/screens/sign_up/view/homeowner/sila_info/user_personal_info_screen.dart';
+import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_1.dart';
+import 'package:divvy/screens/sign_up/view/homeowner_or_business.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
@@ -11,7 +11,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';
-import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -72,10 +71,13 @@ class _AppViewState extends State<AppView> {
 
                 if (user == null)
                   _navigator.push(MaterialPageRoute(
-                      builder: (context) => EnterSilaDataScreen()));
-                if (!user.isHomeowner && user.businessAdminDocumentID == null) {
+                      builder: (context) => HomeownerOrBusinessScreen()));
+                else if (!user.isHomeowner &&
+                    user.businessAdminDocumentID == null) {
                   _navigator.pushAndRemoveUntil(
-                      SignUpBusinessAdminPage.route(), (route) => false);
+                      MaterialPageRoute(
+                          builder: (context) => BusinessAdminSignupPage1()),
+                      (route) => false);
                 } else if (user.isHomeowner && user.silaHandle == null) {
                   _navigator.push(CreateSilaUserScreen.route());
                 } else {

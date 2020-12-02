@@ -44,8 +44,6 @@ class RegisterBusinessPopulated extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        //TODO
-
         child: Text(response.businessRoles[0].label),
       ),
     );
