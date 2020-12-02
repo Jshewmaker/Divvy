@@ -18,16 +18,31 @@ class SignUpForm extends StatelessWidget {
             ));
         }
       },
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: ListView(
-          children: [
-            _EmailInput(),
-            const SizedBox(height: 8.0),
-            _PasswordInput(),
-            const SizedBox(height: 8.0),
-            _signUpButton(),
-          ],
+      child: Form(
+        child: Align(
+          alignment: const Alignment(0, -1 / 3),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Card(
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: ListView(
+                    shrinkWrap: true,
+                    children: [
+                      _EmailInput(),
+                      const SizedBox(height: 8.0),
+                      _PasswordInput(),
+                      const SizedBox(height: 8.0),
+                      _signUpButton(),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
