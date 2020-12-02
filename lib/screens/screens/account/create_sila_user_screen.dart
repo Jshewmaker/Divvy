@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
@@ -43,6 +44,10 @@ class CreateSilaUserScreen extends StatelessWidget {
             },
             child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
                 builder: (context, state) {
+              if (state is GetUserDataForProvider) {
+                var userprovider = context.repository<UserModelProvider>();
+                userprovider.add(state.user);
+              }
               if (state is CreateSilaUserInitial || state is HandleTaken) {
                 BlocProvider.of<CreateSilaUserBloc>(context)
                     .add(CreateSilaUserRequest(handle: _textController.text));

@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
@@ -11,6 +12,14 @@ abstract class CreateSilaUserState extends Equatable {
 }
 
 class CreateSilaUserInitial extends CreateSilaUserState {}
+
+class GetUserDataForProvider extends CreateSilaUserState {
+  final UserModel user;
+
+  GetUserDataForProvider({@required this.user}) : assert(user != null);
+
+  List<Object> get props => [user];
+}
 
 //CHECK HANDLE
 

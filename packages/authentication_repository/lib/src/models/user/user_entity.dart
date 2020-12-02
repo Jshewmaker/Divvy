@@ -197,4 +197,28 @@ class UserEntity extends Equatable {
       "postal_code": postalCode,
     };
   }
+
+  Map<String, Object> toDocumentAdminInfo() {
+    return {
+      "name": name,
+      "email": email,
+      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "identity_value": identityValue,
+      "phone": phone,
+      "isHomeowner": isHomeowner,
+    };
+  }
+
+  Map<String, Object> toDocumentBusinessInfo() {
+    return {
+      "name": name,
+      "doing_business_as": doingBusinessAsName,
+      "business_website": website,
+      "identity_value": identityValue,
+      "business_type": businessType,
+      "naics_code": naicsCode,
+      "phone": phone,
+      "isHomeowner": isHomeowner,
+    };
+  }
 }

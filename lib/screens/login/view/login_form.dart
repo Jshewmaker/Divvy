@@ -1,5 +1,5 @@
 import 'package:divvy/screens/login/login.dart';
-import 'package:divvy/screens/sign_up/view/homeowner_or_business.dart';
+import 'package:divvy/screens/sign_up/view/sign_up_page.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -10,7 +10,7 @@ class LoginForm extends StatelessWidget {
     return BlocListener<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state.status.isSubmissionFailure) {
-          ScaffoldMessenger.of(context)
+          Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
                 const SnackBar(content: Text('Authentication Failure')));
@@ -121,8 +121,7 @@ class _SignUpButton extends StatelessWidget {
         'CREATE ACCOUNT',
         // style: TextStyle(color: theme.textSelectionHandleColor),
       ),
-      onPressed: () =>
-          Navigator.of(context).push<void>(HomeownerOrBusinessScreen.route()),
+      onPressed: () => Navigator.of(context).push<void>(SignUpPage.route()),
     );
   }
 }

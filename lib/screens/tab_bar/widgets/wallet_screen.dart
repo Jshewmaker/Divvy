@@ -129,24 +129,3 @@ class WalletScreenPopulated extends StatelessWidget {
     )));
   }
 }
-
-class Alertdialog extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text("AlertDialog"),
-      content: Text(
-          "Would you like to continue learning how to use Flutter alerts?"),
-      actions: [
-        FlatButton(
-          child: Text("Cancel"),
-          onPressed: () {},
-        ),
-        FlatButton(
-          child: Text("Continue"),
-          onPressed: () {},
-        ),
-      ],
-    );
-  }
-}

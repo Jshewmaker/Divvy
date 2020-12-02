@@ -31,9 +31,11 @@ class CreateSilaUserBloc
 
       try {
         UserModel user = await _firebaseService.getUserData();
+        yield GetUserDataForProvider(user: user);
         createHandle(user);
         final RegisterResponse response =
             await silaRepository.checkHandle(handle);
+
         if (response.success != true) {
           yield HandleTaken(checkHandleResponse: response);
         } else {

@@ -1,5 +1,5 @@
-import 'package:divvy/screens/sign_up/sign_up.dart';
 import 'package:divvy/screens/sign_up/view/contractor/select_business_type_screen.dart';
+import 'package:divvy/screens/sign_up/view/homeowner/sila_info/homeowner_signup_page_1.dart';
 
 import 'package:flutter/material.dart';
 
@@ -39,8 +39,8 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30))),
               color: const Color(0xFF1E90FF),
               textColor: Colors.white,
-              onPressed: () =>
-                  Navigator.of(context).push<void>(SignUpPage.route()),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => HomeownerSignupPage1())),
             )
           ],
         ),
