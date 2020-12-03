@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_bloc.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_event.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_state.dart';
@@ -27,7 +28,12 @@ class LinkAccountScreen extends StatelessWidget {
               if (state is LinkAccountLoadInProgress) {
                 return Center(child: CircularProgressIndicator());
               }
-              if (state is LinkAccountLoadSuccess) {}
+              if (state is LinkAccountLoadSuccess) {
+                FirebaseService _firebaseService = FirebaseService();
+                _firebaseService.addDataToFirestoreDocument(
+                    'users', {"bankAccountIsConnected": true});
+                Navigator.pop(context);
+              }
               if (state is LinkAccountLoadFailure) {
                 return Text(
                   'Failure: link account failure',

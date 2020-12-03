@@ -18,6 +18,7 @@ class GetUserDataForProvider extends CreateSilaUserState {
 
   GetUserDataForProvider({@required this.user}) : assert(user != null);
 
+  @override
   List<Object> get props => [user];
 }
 

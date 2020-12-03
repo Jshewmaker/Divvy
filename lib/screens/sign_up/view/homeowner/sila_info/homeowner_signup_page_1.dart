@@ -244,6 +244,7 @@ class _SignUpFormState extends State<_SignUpForm> {
                     identityValue: _ssnController.text,
                     phone: _phoneNumberController.text,
                     isHomeowner: true,
+                    bankAccountIsConnected: false,
                   ).toEntity().toDocumentPersonalInfo());
               Navigator.push(
                 context,

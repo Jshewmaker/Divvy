@@ -23,6 +23,7 @@ class UserEntity extends Equatable {
   final String wallet;
   final String businessAdminDocumentID;
   final String projectID;
+  final bool bankAccountIsConnected;
 
   const UserEntity(
     this.name,
@@ -46,6 +47,7 @@ class UserEntity extends Equatable {
     this.wallet,
     this.businessAdminDocumentID,
     this.projectID,
+    this.bankAccountIsConnected,
   );
 
   Map<String, Object> toJson() {
@@ -71,6 +73,7 @@ class UserEntity extends Equatable {
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
+      "bankAccountIsConnected": bankAccountIsConnected,
     };
   }
 
@@ -96,6 +99,7 @@ class UserEntity extends Equatable {
         wallet,
         businessAdminDocumentID,
         projectID,
+        bankAccountIsConnected,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -121,6 +125,7 @@ class UserEntity extends Equatable {
       json["wallet"] as String,
       json["businessAdminDocumentID"] as String,
       json["project_id"] as String,
+      json["bankAccountIsConnected"] as bool,
     );
   }
 
@@ -148,6 +153,7 @@ class UserEntity extends Equatable {
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
       snap.data['project_id'],
+      snap.data['bankAccountIsConnected'],
     );
   }
 
@@ -175,6 +181,7 @@ class UserEntity extends Equatable {
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
+      "bankAccountIsConnected": bankAccountIsConnected,
     };
   }
 
@@ -185,6 +192,7 @@ class UserEntity extends Equatable {
       "identity_value": identityValue,
       "phone": phone,
       "isHomeowner": isHomeowner,
+      "bankAccountIsConnected": bankAccountIsConnected,
     };
   }
 
@@ -219,6 +227,7 @@ class UserEntity extends Equatable {
       "naics_code": naicsCode,
       "phone": phone,
       "isHomeowner": isHomeowner,
+      "bankAccountIsConnected": bankAccountIsConnected,
     };
   }
 }

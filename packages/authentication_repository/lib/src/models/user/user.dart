@@ -31,31 +31,32 @@ class UserModel extends Equatable {
   final String wallet;
   final String businessAdminDocumentID;
   final String projectID;
+  final bool bankAccountIsConnected;
 
-  const UserModel({
-    this.name,
-    this.id,
-    this.dateOfBirthYYYYMMDD,
-    this.identityValue,
-    this.streetAddress,
-    this.city,
-    this.state,
-    this.country,
-    this.postalCode,
-    this.phone,
-    this.email,
-    this.doingBusinessAsName,
-    this.businessType,
-    this.naicsCode,
-    this.website,
-    this.privateKey,
-    this.silaEntityName,
-    this.silaHandle,
-    this.isHomeowner,
-    this.wallet,
-    this.businessAdminDocumentID,
-    this.projectID,
-  });
+  const UserModel(
+      {this.name,
+      this.id,
+      this.dateOfBirthYYYYMMDD,
+      this.identityValue,
+      this.streetAddress,
+      this.city,
+      this.state,
+      this.country,
+      this.postalCode,
+      this.phone,
+      this.email,
+      this.doingBusinessAsName,
+      this.businessType,
+      this.naicsCode,
+      this.website,
+      this.privateKey,
+      this.silaEntityName,
+      this.silaHandle,
+      this.isHomeowner,
+      this.wallet,
+      this.businessAdminDocumentID,
+      this.projectID,
+      this.bankAccountIsConnected});
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
@@ -81,6 +82,7 @@ class UserModel extends Equatable {
     wallet: null,
     businessAdminDocumentID: null,
     projectID: null,
+    bankAccountIsConnected: null,
   );
 
   @override
@@ -107,6 +109,7 @@ class UserModel extends Equatable {
         wallet,
         businessAdminDocumentID,
         projectID,
+        bankAccountIsConnected,
       ];
 
   static UserModel fromEntity(UserEntity entity) {
@@ -132,6 +135,7 @@ class UserModel extends Equatable {
       wallet: entity.wallet,
       businessAdminDocumentID: entity.businessAdminDocumentID,
       projectID: entity.projectID,
+      bankAccountIsConnected: entity.bankAccountIsConnected,
     );
   }
 
@@ -158,6 +162,7 @@ class UserModel extends Equatable {
       wallet,
       businessAdminDocumentID,
       projectID,
+      bankAccountIsConnected,
     );
   }
 }

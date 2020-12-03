@@ -195,7 +195,7 @@ class _SignUpFormState extends State<_SignUpForm> {
     DateTime newSelectedDate = await showDatePicker(
         context: context,
         initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-        firstDate: DateTime(2000),
+        firstDate: DateTime(1900),
         lastDate: DateTime(2040),
         builder: (BuildContext context, Widget child) {
           return Theme(
