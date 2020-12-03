@@ -102,9 +102,13 @@ class WalletScreenInitial extends StatelessWidget {
             child: Column(
       children: [
         SizedBox(
-          height: 80,
+          height: 40,
         ),
-        CircularProgressIndicator(),
+        Text(
+          NumberFormat.currency(symbol: '\$').format(0),
+          style: TextStyle(
+              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
+        ),
         Text(
           'Account Balance',
           style: TextStyle(
@@ -133,6 +137,9 @@ class WalletScreenInitial extends StatelessWidget {
             Visibility(
               visible: user.isHomeowner == false,
               child: RaisedButton(
+                olor: const Color(0xFF1E90FF),
+                shape: (RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
                 child: Text('Send Money to Bank'),
                 onPressed: () => {},
               ),
