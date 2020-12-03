@@ -205,15 +205,19 @@ class WalletScreenPopulated extends StatelessWidget {
             Visibility(
               visible: user.isHomeowner == false,
               child: RaisedButton(
-                child: Text('Send Money to Bank'),
-                shape: (RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30))),
-                color: const Color(0xFF1E90FF),
-                textColor: Colors.white,
-                onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                    builder: (context) =>
-                        RedeemSilaScreen(amount: amountSila.round()))),
-              ),
+                  child: Text('Send Money to Bank'),
+                  shape: (RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30))),
+                  color: const Color(0xFF1E90FF),
+                  textColor: Colors.white,
+                  onPressed: () => {
+                        if (amountSila == 0)
+                          {}
+                        else
+                          Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => RedeemSilaScreen(
+                                  amount: amountSila.round()))),
+                      }),
             ),
           ],
         ),

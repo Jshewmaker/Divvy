@@ -19,7 +19,7 @@ class RedeemSilaScreen extends StatelessWidget {
       child: BlocBuilder<RedeemSilaCubit, RedeemSilaState>(
         builder: (context, state) {
           if (state is RedeemSilaInitial) {
-            context.read<RedeemSilaCubit>().redeemSila(amount);
+            context.watch<RedeemSilaCubit>().redeemSila(amount);
             return const EmptyWidget();
           } else if (state is RedeemSilaLoadInProgress) {
             return const LoadingWidget();
@@ -91,19 +91,21 @@ class ErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        const Text(
-          '🙈',
-          style: TextStyle(fontSize: 64),
-        ),
-        Text(
-          'Something went wrong!',
-          style: theme.textTheme.headline5,
-        ),
-      ],
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const Text(
+            '🙈',
+            style: TextStyle(fontSize: 64),
+          ),
+          Text(
+            'Something went wrong!',
+            style: theme.textTheme.headline5,
+          ),
+        ],
+      ),
     );
   }
 }
