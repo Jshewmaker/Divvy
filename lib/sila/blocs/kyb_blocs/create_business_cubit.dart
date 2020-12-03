@@ -17,6 +17,12 @@ abstract class CreateSilaBusinessState {}
 
 class CreateSilaBusinessInitial extends CreateSilaBusinessState {}
 
+class GetUserDataForProvider extends CreateSilaBusinessState {
+  GetUserDataForProvider({@required this.user}) : assert(user != null);
+
+  final UserModel user;
+}
+
 //Registration states
 class RegisterBusinessLoadInProgress extends CreateSilaBusinessState {}
 
@@ -187,9 +193,11 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
 
     try {
       user = await _firebaseService.getUserData();
+      emit(GetUserDataForProvider(user: user));
       String username = formatUsername(user);
       Map<String, String> data = {"silaHandle": username};
       _firebaseService.addDataToFirestoreDocument('users', data);
+
       final response = await _silaBusinessRepository.registerKYB();
       emit(RegisterBusinessSuccess(response));
 

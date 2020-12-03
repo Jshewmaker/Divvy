@@ -198,6 +198,7 @@ class _SignupFormState extends State<_SignupForm> {
                     businessType: businessType,
                     naicsCode: naicsCode,
                     isHomeowner: false,
+                    bankAccountIsConnected: false,
                   ).toEntity().toDocumentBusinessInfo());
               Navigator.push(
                 context,

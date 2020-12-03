@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_1.dart';
+import 'package:divvy/screens/sign_up/view/contractor/business_admin_alert_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
@@ -235,14 +236,14 @@ class _SignUpFormState extends State<_SignUpForm> {
                   UserModel(
                     streetAddress: _streetAddressController.text,
                     city: _cityController.text,
-                    state: _stateController.text,
+                    state: stateDropdownValue,
                     country: _countryController.text,
                     postalCode: _postalCodeController.text,
                   ).toEntity().toDocumentAddresses());
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => BusinessAdminSignupPage1(),
+                  builder: (context) => BusinessAdminTrasitionScreen(),
                 ),
               );
             }

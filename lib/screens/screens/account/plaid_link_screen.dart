@@ -1,4 +1,6 @@
 import 'package:divvy/screens/screens/link_account_screen.dart';
+import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_bloc.dart';
+import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_event.dart';
 import 'package:divvy/sila/plaid/plaid_bloc/plaid_bloc.dart';
 import 'package:divvy/sila/plaid/plaid_link/newplaidlink.dart';
 import 'package:divvy/sila/plaid/plaid_network/plaid_network.dart';
@@ -57,14 +59,25 @@ class PlaidLinkScreen extends StatelessWidget {
                       height: 50,
                     ),
                     RaisedButton(
-                      color: Colors.blue,
-                      child: Text("Launch Plaid"),
+                      shape: (RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30))),
+                      color: const Color(0xFF1E90FF),
+                      child: Text(
+                        "Connect Bank Account To Divvy",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 16),
+                      ),
                       textColor: Colors.white,
                       onPressed: () => plaidLink.launch(context, (result) {
                         if (result.token != null) {
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (contest) =>
-                                  LinkAccountScreen(token: result.token)));
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (contest) =>
+                                      LinkAccountScreen(token: result.token)))
+                              .then((value) => {
+                                    BlocProvider.of<WalletScreenBloc>(context)
+                                        .add(WalletScreenCheck())
+                                  });
                         }
                       }),
                     ),

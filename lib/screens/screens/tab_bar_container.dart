@@ -7,6 +7,7 @@ import 'package:divvy/Screens/tab_bar/widgets/project_screen.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   static Route route() {
@@ -29,8 +30,11 @@ class TabBarContainer extends StatelessWidget {
       builder: (context, activeTab) {
         return Scaffold(
           appBar: AppBar(
+            elevation: 0,
             // title: Text(FlutterBlocLocalizations.of(context).appTitle),
-            title: Text("Divvy"),
+            title: Text(tabTitle(activeTab.index),
+                style: GoogleFonts.bigShouldersDisplay(
+                    textStyle: TextStyle(fontSize: 32))),
             actions: [
               IconButton(
                 key: const Key('homePage_logout_iconButton'),
@@ -50,6 +54,18 @@ class TabBarContainer extends StatelessWidget {
         );
       },
     );
+  }
+
+  String tabTitle(int activeTab) {
+    if (activeTab == 0) {
+      return 'Project';
+    } else if (activeTab == 1) {
+      return 'Invoices';
+    } else if (activeTab == 2) {
+      return 'Wallet';
+    } else if (activeTab == 3) {
+      return 'Account';
+    }
   }
 
   Widget activeTabFunction(activeTab) {

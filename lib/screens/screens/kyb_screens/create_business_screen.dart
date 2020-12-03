@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/sila/blocs/kyb_blocs/create_business_cubit.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
@@ -33,6 +34,10 @@ class CreateSilaBusinessScreen extends StatelessWidget {
             child:
                 BlocBuilder<CreateSilaBusinessCubit, CreateSilaBusinessState>(
                     builder: (context, state) {
+              if (state is GetUserDataForProvider) {
+                var userprovider = context.repository<UserModelProvider>();
+                userprovider.add(state.user);
+              }
               if (state is CreateSilaBusinessInitial) {
                 BlocProvider.of<CreateSilaBusinessCubit>(context)
                     .createBusinesss();

@@ -239,7 +239,7 @@ class _SignUpFormState extends State<_SignUpForm> {
                 UserModel(
                   streetAddress: _streetAddressController.text,
                   city: _cityController.text,
-                  state: _stateController.text,
+                  state: stateDropdownValue,
                   postalCode: _postalCodeController.text,
                   country: _countryController.text,
                 ).toEntity().toDocumentAddresses());
