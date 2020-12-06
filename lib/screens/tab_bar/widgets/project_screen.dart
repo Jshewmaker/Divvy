@@ -11,26 +11,27 @@ class ProjectScreen extends StatelessWidget {
 
   Widget projectWidget() {
     return FutureBuilder(
+      future: getProjectLineItems(),
       builder: (context, projectLineItems) {
         if (!projectLineItems.hasData) {
-          //print('project snapshot data is: ${projectSnap.data}');
-          return Container();
+          return _NoProject();
+        } else if (projectLineItems.hasData) {
+          return ListView.builder(
+            itemCount: projectLineItems.data.lineItems.length,
+            itemBuilder: (context, index) {
+              LineItem lineItem = projectLineItems.data.lineItems[index];
+              return _CardWidget(
+                  title: lineItem.title,
+                  generalContractorApprovalDate:
+                      getDate(lineItem.generalContractorApprovalDate),
+                  homeOwnerApprovalDate:
+                      getDate(lineItem.homeownerApprovalDate),
+                  datePaid: getDate(lineItem.datePaid),
+                  price: '\$' + lineItem.cost.toStringAsFixed(2));
+            },
+          );
         }
-        return ListView.builder(
-          itemCount: projectLineItems.data.lineItems.length,
-          itemBuilder: (context, index) {
-            LineItem lineItem = projectLineItems.data.lineItems[index];
-            return _CardWidget(
-                title: lineItem.title,
-                generalContractorApprovalDate:
-                    getDate(lineItem.generalContractorApprovalDate),
-                homeOwnerApprovalDate: getDate(lineItem.homeownerApprovalDate),
-                datePaid: getDate(lineItem.datePaid),
-                price: '\$' + lineItem.cost.toStringAsFixed(2));
-          },
-        );
       },
-      future: getProjectLineItems(),
     );
   }
 
@@ -52,6 +53,18 @@ class ProjectScreen extends StatelessWidget {
       newDate = Jiffy(date.toDate()).format("MMMM do");
     }
     return newDate;
+  }
+}
+
+class _NoProject extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: RaisedButton(
+        child: Text('Link Project'),
+        onPressed: () {},
+      ),
+    );
   }
 }
 

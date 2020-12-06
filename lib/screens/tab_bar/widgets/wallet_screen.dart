@@ -137,7 +137,7 @@ class WalletScreenInitial extends StatelessWidget {
             Visibility(
               visible: user.isHomeowner == false,
               child: RaisedButton(
-                olor: const Color(0xFF1E90FF),
+                color: const Color(0xFF1E90FF),
                 shape: (RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
                 child: Text('Send Money to Bank'),

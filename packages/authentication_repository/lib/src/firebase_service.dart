@@ -1,3 +1,5 @@
+import 'package:authentication_repository/src/models/project_data/project_entity.dart';
+import 'package:authentication_repository/src/models/project_data/project_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -72,6 +74,24 @@ class FirebaseService {
       return null;
     }
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+  }
+
+  Future<void> connectProjectToUsers(String projectID, Map data) async {
+    Firestore.instance
+        .collection(projectCollection)
+        .document(projectID)
+        .setData(data);
+  }
+
+  Stream<List<Project>> getProjects() {
+    return Firestore.instance
+        .collection(projectCollection)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.documents
+          .map((docs) => Project.fromEntity(ProjectEntity.fromSnapshot(docs)))
+          .toList();
+    });
   }
 
   /// Return user data in a UserModel
