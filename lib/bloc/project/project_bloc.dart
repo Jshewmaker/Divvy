@@ -15,9 +15,14 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   Stream<ProjectState> mapEventToState(ProjectEvent event) async* {
     if (event is ProjectRequested) {
       yield ProjectLoadInProgress();
-      try{
-        final Project project = firebaseService.getProjects(event.projectID);
-        yield 
+      try {
+        final Project project =
+            await firebaseService.getProjects(event.projectID, event.data);
+        yield ProjectLoadSuccess(project: project);
+        final LineItemListModel lineItem =
+            await firebaseService.getPhaseLineItems(1, event.projectID);
+      } catch (_) {
+        yield ProjectLoadFailure();
       }
     }
   }

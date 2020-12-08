@@ -83,27 +83,22 @@ class FirebaseService {
         .setData(data);
   }
 
-  Stream<List<Project>> getProjects() {
+  Future<Project> getProjects(String projectID, Map data) {
     return Firestore.instance
         .collection(projectCollection)
-        .snapshots()
-        .map((snapshot) {
-      return snapshot.documents
-          .map((docs) => Project.fromEntity(ProjectEntity.fromSnapshot(docs)))
-          .toList();
-    });
+        .document(projectID)
+        .setData(data);
   }
 
   /// Return user data in a UserModel
   ///
   /// /*
-  Future<LineItemListModel> getPhaseLineItems(int phase) async {
-    UserModel user = await getUserData();
-
+  Future<LineItemListModel> getPhaseLineItems(
+      int phase, String projectID) async {
     //FirebaseUser lineItems = await firebaseAuth.currentUser();
     QuerySnapshot _querySnapshot = await Firestore.instance
         .collection(projectCollection)
-        .document(user.projectID)
+        .document(projectID)
         .collection(lineItemsCollection)
         .where('phase', isEqualTo: 1)
         .getDocuments();

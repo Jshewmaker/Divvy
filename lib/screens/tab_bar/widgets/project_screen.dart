@@ -1,7 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:divvy/bloc/line_items/line_item_bloc.dart';
+import 'package:divvy/bloc/line_items/line_item_event.dart';
+import 'package:divvy/bloc/line_items/line_item_state.dart';
+
 import 'package:divvy/screens/screens/line_item_info_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
 class ProjectScreen extends StatelessWidget {
@@ -9,42 +14,56 @@ class ProjectScreen extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => ProjectScreen());
   }
 
-  Widget projectWidget() {
-    return FutureBuilder(
-      future: getProjectLineItems(),
-      builder: (context, projectLineItems) {
-        if (!projectLineItems.hasData) {
-          return _NoProject();
-        } else if (projectLineItems.hasData) {
-          return ListView.builder(
-            itemCount: projectLineItems.data.lineItems.length,
-            itemBuilder: (context, index) {
-              LineItem lineItem = projectLineItems.data.lineItems[index];
-              return _CardWidget(
-                  title: lineItem.title,
-                  generalContractorApprovalDate:
-                      getDate(lineItem.generalContractorApprovalDate),
-                  homeOwnerApprovalDate:
-                      getDate(lineItem.homeownerApprovalDate),
-                  datePaid: getDate(lineItem.datePaid),
-                  price: '\$' + lineItem.cost.toStringAsFixed(2));
-            },
-          );
-        }
-      },
-    );
-  }
+  final FirebaseService _firebaseService = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: projectWidget(),
+    return BlocProvider(
+      create: (context) => LineItemBloc(firebaseService: _firebaseService),
+      child: Scaffold(body: Center(
+        child:
+            BlocBuilder<LineItemBloc, LineItemState>(builder: (context, state) {
+          if (state is LineItemInitial) {
+            BlocProvider.of<LineItemBloc>(context)
+                .add(LineItemRequested('YuDDy02bn2Gq3QzK6KNG', 1));
+            return Container();
+          }
+          if (state is LineItemLoadInProgress) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (state is LineItemLoadSuccess) {
+            final lineItems = state.lineItems;
+
+            return ListView.builder(
+              itemCount: lineItems.lineItems.length,
+              itemBuilder: (context, index) {
+                LineItem lineItem = lineItems.lineItems[index];
+                return _CardWidget(
+                    title: lineItem.title,
+                    generalContractorApprovalDate:
+                        getDate(lineItem.generalContractorApprovalDate),
+                    homeOwnerApprovalDate:
+                        getDate(lineItem.homeownerApprovalDate),
+                    datePaid: getDate(lineItem.datePaid),
+                    price: '\$' + lineItem.cost.toStringAsFixed(2));
+              },
+            );
+          }
+          if (state is LineItemLoadFailure) {
+            return Text(
+              'Something went wrong!',
+              style: TextStyle(color: Colors.red),
+            );
+          }
+          return Container();
+        }),
+      )),
     );
   }
 
   Future<LineItemListModel> getProjectLineItems() {
     FirebaseService _firebaseService = FirebaseService();
-    return _firebaseService.getPhaseLineItems(1);
+    return _firebaseService.getPhaseLineItems(1, 'YuDDy02bn2Gq3QzK6KNG');
   }
 
   String getDate(Timestamp date) {

@@ -13,7 +13,7 @@ class ProjectRequested extends ProjectEvent {
   final String projectID;
   final Map data;
 
-  const ProjectRequested(this.projectID);
+  const ProjectRequested(this.projectID, this.data);
 
   @override
   List<Object> get props => [projectID, data];

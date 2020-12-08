@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:meta/meta.dart';
 
 abstract class ProjectState extends Equatable {
   const ProjectState();
@@ -13,15 +14,15 @@ class ProjectInitial extends ProjectState {}
 class ProjectLoadInProgress extends ProjectState {}
 
 class ProjectLoadSuccess extends ProjectState {
-  final List<Project> projects;
+  final Project project;
 
-  const ProjectLoadSuccess([this.projects = const []]);
-
-  @override
-  List<Object> get props => [projects];
+  const ProjectLoadSuccess({@required this.project});
 
   @override
-  String toString() => 'ProjectConnected { projects: $projects}';
+  List<Object> get props => [project];
+
+  @override
+  String toString() => 'ProjectConnected { projects: $project}';
 }
 
 class ProjectLoadFailure extends ProjectState {}
