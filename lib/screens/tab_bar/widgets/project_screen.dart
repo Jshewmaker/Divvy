@@ -72,7 +72,7 @@ class ProjectScreen extends StatelessWidget {
                     ),
                   ),
                   RaisedButton(
-                      child: Text('Confirm'),
+                      child: Text('Connect To Project'),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30.0),
                       ),
@@ -80,8 +80,8 @@ class ProjectScreen extends StatelessWidget {
                       onPressed: () async {
                         if (_textController.text.isNotEmpty) {
                           BlocProvider.of<ProjectBloc>(context).add(
-                              ProjectRequested(
-                                  _textController.text, {'data': 'test'}));
+                              ProjectRequested(_textController.text.trim(),
+                                  {'data': 'test'}));
                         }
                       })
                 ],
