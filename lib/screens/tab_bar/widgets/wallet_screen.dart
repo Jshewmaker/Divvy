@@ -112,7 +112,7 @@ class WalletScreenInitial extends StatelessWidget {
         Text(
           'Account Balance',
           style: TextStyle(
-              color: Colors.teal, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 50,
@@ -173,12 +173,12 @@ class WalletScreenPopulated extends StatelessWidget {
         Text(
           NumberFormat.currency(symbol: '\$').format(amountSila),
           style: TextStyle(
-              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
+              color: Colors.white70, fontSize: 48, fontWeight: FontWeight.bold),
         ),
         Text(
           'Account Balance',
           style: TextStyle(
-              color: Colors.teal, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 50,
