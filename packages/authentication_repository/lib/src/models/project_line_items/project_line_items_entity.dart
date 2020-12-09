@@ -24,6 +24,8 @@ class LineItemEntity extends Equatable {
   final Timestamp datePaid;
   final int phase;
   final String title;
+  final String subContractor;
+  final String comments;
 
   const LineItemEntity(
     this.generalContractorApprovalDate,
@@ -32,6 +34,8 @@ class LineItemEntity extends Equatable {
     this.datePaid,
     this.phase,
     this.title,
+    this.subContractor,
+    this.comments,
   );
 
   Map<String, Object> toJson() {
@@ -42,6 +46,8 @@ class LineItemEntity extends Equatable {
       "date_paid": datePaid,
       "phase": phase,
       "title": title,
+      "sub_contactor": subContractor,
+      "comments": comments,
     };
   }
 
@@ -52,6 +58,8 @@ class LineItemEntity extends Equatable {
         datePaid,
         phase,
         title,
+        subContractor,
+        comments,
       ];
 
   static LineItemEntity fromJson(Map<String, Object> json) {
@@ -62,6 +70,8 @@ class LineItemEntity extends Equatable {
       json["date_paid"] as Timestamp,
       json["phase"] as int,
       json["title"] as String,
+      json["sub_contactor"] as String,
+      json["comments"] as String,
     );
   }
 
@@ -74,6 +84,8 @@ class LineItemEntity extends Equatable {
       snap.data['date_paid'],
       snap.data['phase'],
       snap.data['title'],
+      snap.data['sub_contactor'],
+      snap.data['comments'],
     );
   }
 
@@ -86,6 +98,8 @@ class LineItemEntity extends Equatable {
       "date_paid": datePaid,
       "phase": phase,
       "title": title,
+      "sub_contactor": subContractor,
+      "comments": comments,
     };
   }
 }
