@@ -5,7 +5,7 @@ class ProjectEntity extends Equatable {
   final bool complete;
   final String generalContractorID;
   final String homeownerID;
-  final String projectID;
+  final int projectID;
   final String projectName;
   final double projectCost;
 
@@ -37,7 +37,7 @@ class ProjectEntity extends Equatable {
       json["complete"] as bool,
       json["general_contractor_id"] as String,
       json["homeowner_id"] as String,
-      json["project_id"] as String,
+      json["project_id"] as int,
       json["project_name"] as String,
       json["project_cost"] as double,
     );

@@ -13,6 +13,8 @@ class ProjectInitial extends ProjectState {}
 
 class ProjectLoadInProgress extends ProjectState {}
 
+class ProjectNotConnected extends ProjectState {}
+
 class ProjectLoadSuccess extends ProjectState {
   final Project project;
 

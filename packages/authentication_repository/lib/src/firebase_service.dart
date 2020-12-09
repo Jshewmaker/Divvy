@@ -76,18 +76,46 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
-  Future<void> connectProjectToUsers(String projectID, Map data) async {
-    Firestore.instance
+  Future<Project> connectProjectToUsers(
+      String projectID, UserModel user) async {
+    // Firestore.instance
+    //     .collection(projectCollection)
+    //     .document(projectID)
+    //     .setData(data);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (user.isHomeowner == true) {
+        addDataToProjectFirestoreDocument(projectID, projectCollection,
+            {"home_owner": '/users/' + value.uid});
+      } else {
+        addDataToProjectFirestoreDocument(projectID, projectCollection,
+            {"general_contractor": '/users/' + value.uid});
+      }
+      addDataToFirestoreDocument(collection, {"project_id": projectID});
+    });
+
+    DocumentSnapshot _docSnapshot = await Firestore.instance
         .collection(projectCollection)
         .document(projectID)
-        .setData(data);
+        .get();
+
+    return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
   }
 
-  Future<Project> getProjects(String projectID, Map data) {
-    return Firestore.instance
+  void addDataToProjectFirestoreDocument(
+      String projectID, String collection, Map<String, dynamic> data) async {
+    Firestore.instance.collection(collection).document(projectID).setData(data);
+  }
+
+  Future<Project> getProjects(String projectID) async {
+    DocumentSnapshot _docSnapshot = await Firestore.instance
         .collection(projectCollection)
         .document(projectID)
-        .setData(data);
+        .get();
+    if (!_docSnapshot.exists) {
+      return null;
+    } else {
+      return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
+    }
   }
 
   /// Return user data in a UserModel

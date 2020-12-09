@@ -6,7 +6,7 @@ class Project {
   final bool complete;
   final String generalContractorID;
   final String homeownerID;
-  final String projectID;
+  final int projectID;
   final String projectName;
   final double projectCost;
 

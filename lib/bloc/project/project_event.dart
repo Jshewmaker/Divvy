@@ -9,6 +9,20 @@ abstract class ProjectEvent extends Equatable {
 
 class ProjectConnectedLoadSuccess extends ProjectEvent {}
 
+class ProjectInitialEvent extends ProjectEvent {
+  const ProjectInitialEvent();
+
+  @override
+  List<Object> get props => [];
+}
+
+class ProjectCheck extends ProjectEvent {
+  const ProjectCheck();
+
+  @override
+  List<Object> get props => [];
+}
+
 class ProjectRequested extends ProjectEvent {
   final String projectID;
   final Map data;

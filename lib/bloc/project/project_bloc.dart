@@ -13,14 +13,38 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
   @override
   Stream<ProjectState> mapEventToState(ProjectEvent event) async* {
+    if (event is ProjectInitialEvent) {
+      yield ProjectLoadInProgress();
+      try {
+        UserModel user = await firebaseService.getUserData();
+        final Project project =
+            await firebaseService.getProjects(user.projectID);
+        if (project == null) {
+          yield ProjectNotConnected();
+        } else {
+          yield ProjectLoadSuccess(project: project);
+        }
+
+        // final LineItemListModel lineItem =
+        //     await firebaseService.getPhaseLineItems(1, event.projectID);
+      } catch (_) {
+        yield ProjectLoadFailure();
+      }
+    }
     if (event is ProjectRequested) {
       yield ProjectLoadInProgress();
       try {
+        UserModel user = await firebaseService.getUserData();
         final Project project =
-            await firebaseService.getProjects(event.projectID, event.data);
-        yield ProjectLoadSuccess(project: project);
-        final LineItemListModel lineItem =
-            await firebaseService.getPhaseLineItems(1, event.projectID);
+            await firebaseService.connectProjectToUsers(event.projectID, user);
+        if (project == null) {
+          yield ProjectNotConnected();
+        } else {
+          yield ProjectLoadSuccess(project: project);
+        }
+
+        // final LineItemListModel lineItem =
+        //     await firebaseService.getPhaseLineItems(1, event.projectID);
       } catch (_) {
         yield ProjectLoadFailure();
       }
