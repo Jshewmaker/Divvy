@@ -23,7 +23,6 @@ class ProjectScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var user = context.watch<UserModelProvider>();
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -38,32 +37,6 @@ class ProjectScreen extends StatelessWidget {
         if (state is ProjectInitial) {
           BlocProvider.of<ProjectBloc>(context).add(ProjectInitialEvent());
           return Container();
-          // return Column(
-          //   children: [
-          //     Expanded(
-          //       child: Padding(
-          //         padding: EdgeInsets.only(left: 10.0),
-          //         child: TextField(
-          //           controller: _textController,
-          //           decoration: InputDecoration(
-          //             border: UnderlineInputBorder(),
-          //             labelText: 'Project ID',
-          //             hintText: '1234567',
-          //           ),
-          //         ),
-          //       ),
-          //     ),
-          //     RaisedButton(
-          //         child: Text('Confirm'),
-          //         onPressed: () async {
-          //           if (_textController.text.isNotEmpty) {
-          //             BlocProvider.of<ProjectBloc>(context).add(
-          //                 ProjectRequested(
-          //                     _textController.text, {'data': 'test'}));
-          //           }
-          //         })
-          //   ],
-          // );
         }
         if (state is ProjectLoadInProgress) {
           return Center(
