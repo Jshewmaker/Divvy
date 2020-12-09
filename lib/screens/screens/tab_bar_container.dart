@@ -66,6 +66,7 @@ class TabBarContainer extends StatelessWidget {
     } else if (activeTab == 3) {
       return 'Account';
     }
+    return "";
   }
 
   Widget activeTabFunction(activeTab) {

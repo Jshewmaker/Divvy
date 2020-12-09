@@ -35,7 +35,11 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  TextButton(
+                  RaisedButton(
+                    shape: (RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30))),
+                    color: Colors.white,
+                    elevation: 3,
                     onPressed: () => Navigator.pop(context),
                     child: Text(
                       'cancel',
@@ -52,7 +56,7 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
                       style: TextStyle(
                           color: Colors.teal[300],
                           fontWeight: FontWeight.bold,
-                          fontSize: 14),
+                          fontSize: 22),
                     ),
                   ),
                 ],

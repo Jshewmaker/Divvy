@@ -1,3 +1,5 @@
+import 'package:authentication_repository/src/models/project_data/project_entity.dart';
+import 'package:authentication_repository/src/models/project_data/project_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -74,16 +76,60 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
+  Future<Project> connectProjectToUsers(
+      String projectID, UserModel user) async {
+    // Firestore.instance
+    //     .collection(projectCollection)
+    //     .document(projectID)
+    //     .setData(data);
+    FirebaseAuth.instance.currentUser().then((value) {
+      if (user.isHomeowner == true) {
+        addDataToProjectFirestoreDocument(projectID, projectCollection,
+            {"home_owner": '/users/' + value.uid});
+      } else {
+        addDataToProjectFirestoreDocument(projectID, projectCollection,
+            {"general_contractor": '/users/' + value.uid});
+      }
+      addDataToFirestoreDocument(collection, {"project_id": projectID});
+    });
+
+    DocumentSnapshot _docSnapshot = await Firestore.instance
+        .collection(projectCollection)
+        .document(projectID)
+        .get();
+
+    return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
+  }
+
+  void addDataToProjectFirestoreDocument(
+      String projectID, String collection, Map<String, dynamic> data) async {
+    Firestore.instance
+        .collection(collection)
+        .document(projectID)
+        .setData(data, merge: true);
+  }
+
+  Future<Project> getProjects(String projectID) async {
+    DocumentSnapshot _docSnapshot = await Firestore.instance
+        .collection(projectCollection)
+        .document(projectID)
+        .get();
+    if (!_docSnapshot.exists) {
+      return null;
+    } else {
+      return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
+    }
+  }
+
   /// Return user data in a UserModel
   ///
   /// /*
-  Future<LineItemListModel> getPhaseLineItems(int phase) async {
-    UserModel user = await getUserData();
-
+  Future<LineItemListModel> getPhaseLineItems(
+      int phase, String projectID) async {
     //FirebaseUser lineItems = await firebaseAuth.currentUser();
     QuerySnapshot _querySnapshot = await Firestore.instance
         .collection(projectCollection)
-        .document(user.projectID)
+        .document(projectID)
         .collection(lineItemsCollection)
         .where('phase', isEqualTo: 1)
         .getDocuments();
