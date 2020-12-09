@@ -10,14 +10,13 @@ abstract class LineItemEvent extends Equatable {
 class LineItemConnectedLoadSuccess extends LineItemEvent {}
 
 class LineItemRequested extends LineItemEvent {
-  final String projectID;
   final int phase;
 
-  const LineItemRequested(this.projectID, this.phase);
+  const LineItemRequested(this.phase);
 
   @override
-  List<Object> get props => [projectID, phase];
+  List<Object> get props => [phase];
 
   @override
-  String toString() => 'Connecting LineItem{LineItem $projectID and $phase}';
+  String toString() => 'Connecting LineItem{LineItem  $phase}';
 }

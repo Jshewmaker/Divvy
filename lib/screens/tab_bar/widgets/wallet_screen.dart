@@ -105,7 +105,7 @@ class WalletScreenInitial extends StatelessWidget {
           height: 40,
         ),
         Text(
-          NumberFormat.currency(symbol: '\$').format(0),
+          "",
           style: TextStyle(
               color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
         ),

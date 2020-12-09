@@ -16,8 +16,9 @@ class LineItemBloc extends Bloc<LineItemEvent, LineItemState> {
     if (event is LineItemRequested) {
       yield LineItemLoadInProgress();
       try {
+        UserModel user = await firebaseService.getUserData();
         final LineItemListModel lineItems = await firebaseService
-            .getPhaseLineItems(event.phase, event.projectID);
+            .getPhaseLineItems(event.phase, user.projectID);
         yield LineItemLoadSuccess(lineItems: lineItems);
       } catch (_) {
         yield LineItemLoadFailure();

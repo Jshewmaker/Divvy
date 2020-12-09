@@ -103,7 +103,10 @@ class FirebaseService {
 
   void addDataToProjectFirestoreDocument(
       String projectID, String collection, Map<String, dynamic> data) async {
-    Firestore.instance.collection(collection).document(projectID).setData(data);
+    Firestore.instance
+        .collection(collection)
+        .document(projectID)
+        .setData(data, merge: true);
   }
 
   Future<Project> getProjects(String projectID) async {

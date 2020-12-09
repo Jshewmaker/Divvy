@@ -102,8 +102,7 @@ class ProjectScreen extends StatelessWidget {
           return BlocBuilder<LineItemBloc, LineItemState>(
               builder: (context, state) {
             if (state is LineItemInitial) {
-              BlocProvider.of<LineItemBloc>(context)
-                  .add(LineItemRequested(user.user.projectID, 1));
+              BlocProvider.of<LineItemBloc>(context).add(LineItemRequested(1));
               return Container();
             }
             if (state is LineItemLoadInProgress) {

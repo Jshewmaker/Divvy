@@ -42,9 +42,6 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         } else {
           yield ProjectLoadSuccess(project: project);
         }
-
-        // final LineItemListModel lineItem =
-        //     await firebaseService.getPhaseLineItems(1, event.projectID);
       } catch (_) {
         yield ProjectLoadFailure();
       }
