@@ -28,6 +28,9 @@ class LineItem extends Equatable {
   final Timestamp datePaid;
   final int phase;
   final String title;
+  final String subContractor;
+  final String comments;
+  final String id;
 
   const LineItem({
     @required this.title,
@@ -36,6 +39,9 @@ class LineItem extends Equatable {
     this.datePaid,
     this.phase,
     this.homeownerApprovalDate,
+    this.subContractor,
+    this.comments,
+    this.id,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -46,6 +52,9 @@ class LineItem extends Equatable {
     datePaid: null,
     phase: null,
     homeownerApprovalDate: null,
+    subContractor: '',
+    comments: '',
+    id: '',
   );
 
   @override
@@ -56,6 +65,9 @@ class LineItem extends Equatable {
         datePaid,
         phase,
         title,
+        subContractor,
+        comments,
+        id,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
@@ -66,6 +78,9 @@ class LineItem extends Equatable {
       datePaid: entity.datePaid,
       phase: entity.phase,
       title: entity.title,
+      subContractor: entity.subContractor,
+      comments: entity.comments,
+      id: entity.id,
     );
   }
 
@@ -77,6 +92,9 @@ class LineItem extends Equatable {
       datePaid,
       phase,
       title,
+      subContractor,
+      comments,
+      id,
     );
   }
 }

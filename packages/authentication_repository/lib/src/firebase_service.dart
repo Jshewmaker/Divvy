@@ -47,6 +47,16 @@ class FirebaseService {
     });
   }
 
+  void addDataToProjectDocument(
+      Map<String, dynamic> data, String projectID, String lineID) async {
+    Firestore.instance
+        .collection('projects')
+        .document(projectID)
+        .collection('line_items')
+        .document(lineID)
+        .updateData(data);
+  }
+
   void addDataToBusinessUserDocument(
       String collection, Map<String, dynamic> data) async {
     FirebaseUser user = await firebaseAuth.currentUser();
