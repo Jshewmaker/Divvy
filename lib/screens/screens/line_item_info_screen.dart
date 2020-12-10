@@ -1,11 +1,34 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class LineItemInfoScreen extends StatelessWidget {
-  LineItemInfoScreen(this.title);
+  LineItemInfoScreen(this.lineItem);
 
-  final String title;
+  final LineItem lineItem;
 
   static const Color blueHighlight = const Color(0xFF3665FF);
+
+  final TextEditingController _controller = TextEditingController();
+
+  FirebaseService _firebaseService = FirebaseService();
+
+  void approve() {
+    Timestamp value = Timestamp.now();
+    Map<String, Timestamp> firebaseData;
+
+    firebaseData = {"homeowner_approval_date": value};
+
+    _firebaseService.addDataToFirestoreDocument('projects', firebaseData);
+  }
+
+  void deny() {
+    Map<String, Timestamp> firebaseData;
+    firebaseData = {
+      "general_contractor_approval_date": null,
+    };
+    _firebaseService.addDataToFirestoreDocument('projects', firebaseData);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,14 +42,15 @@ class LineItemInfoScreen extends StatelessWidget {
                 // Child text spans will inherit styles from parent
                 children: <TextSpan>[
                   new TextSpan(
-                      text: title,
+                      text: lineItem.title,
                       style: new TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.teal[400],
                         fontSize: 24,
                       )),
                   TextSpan(
-                      text: '\npool & spa services inc',
+                      text: lineItem
+                          .subContractor, // '\npool & spa services inc',
                       style: TextStyle(color: Colors.grey, fontSize: 14)),
                 ],
               ),
@@ -58,7 +82,8 @@ class LineItemInfoScreen extends StatelessWidget {
                       ),
                       Container(
                         child: TextField(
-                          minLines: 10,
+                          controller: _controller,
+                          minLines: 1,
                           maxLines: 15,
                           autocorrect: false,
                           decoration: InputDecoration(
@@ -72,6 +97,10 @@ class LineItemInfoScreen extends StatelessWidget {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10.0)),
                               borderSide: BorderSide(color: Colors.grey),
+                            ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _controller.clear(),
+                              icon: Icon(Icons.send, color: Colors.black45),
                             ),
                           ),
                         ),
@@ -88,7 +117,9 @@ class LineItemInfoScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30))),
                             color: const Color(0xFF1E90FF),
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              approve();
+                            },
                           ),
                           RaisedButton(
                             child: Text('Deny'),
@@ -96,7 +127,9 @@ class LineItemInfoScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(30))),
                             color: const Color(0xFFff0000),
                             textColor: Colors.white,
-                            onPressed: () {},
+                            onPressed: () {
+                              deny();
+                            },
                           )
                         ],
                       )
