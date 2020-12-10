@@ -81,28 +81,6 @@ class PlaidLinkScreen extends StatelessWidget {
                         }
                       }),
                     ),
-                    // Expanded(
-                    //     child: Align(
-                    //   alignment: FractionalOffset.bottomCenter,
-                    //   child: Row(
-                    //     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    //     children: <Widget>[
-                    //       RaisedButton(
-                    //         color: Colors.blue,
-                    //         child: Text("Launch Plaid"),
-                    //         textColor: Colors.white,
-                    //         onPressed: () =>
-                    //             plaidLink.launch(context, (result) {
-                    //           if (result.token != null) {
-                    //             Navigator.of(context).push(MaterialPageRoute(
-                    //                 builder: (contest) => LinkAccountScreen(
-                    //                     token: result.token)));
-                    //           }
-                    //         }),
-                    //       ),
-                    //     ],
-                    //   ),
-                    // )),
                     Padding(
                       padding: EdgeInsets.only(bottom: 40),
                     )

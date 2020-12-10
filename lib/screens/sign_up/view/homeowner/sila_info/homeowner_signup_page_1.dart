@@ -11,7 +11,10 @@ class HomeownerSignupPage1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.tealAccent[400],
+      appBar: AppBar(
+        title: Text('Homeowner Info'),
+      ),
+
       // appBar: AppBar(title: const Text('Homeowner Sign Up')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
@@ -101,7 +104,8 @@ class _SignUpFormState extends State<_SignUpForm> {
   Widget _ssnInput(BuildContext context) {
     return Row(
       children: [
-        Flexible(
+        Container(
+          width: 200,
           child: TextFormField(
             validator: (value) {
               if (value.length != 11) {
@@ -153,21 +157,31 @@ class _SignUpFormState extends State<_SignUpForm> {
   }
 
   Widget _birthdayInput(context) {
-    return TextFormField(
-      validator: (value) {
-        if (value.length != 10) {
-          return 'Please Enter Birthday as YYYY-MM-DD';
-        }
-        return null;
-      },
-      onTap: () => _selectDate(context),
-      controller: _birthdayController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        hintText: 'YYYY/MM/DD',
-        labelText: 'Birthday',
-      ),
-      keyboardType: TextInputType.datetime,
+    return Row(
+      children: [
+        Container(
+          width: 200,
+          child: TextFormField(
+            validator: (value) {
+              if (value.length != 10) {
+                return 'Please Enter Birthday as YYYY-MM-DD';
+              }
+              return null;
+            },
+            onTap: () => _selectDate(context),
+            controller: _birthdayController,
+            decoration: InputDecoration(
+              border: UnderlineInputBorder(),
+              hintText: 'YYYY/MM/DD',
+              labelText: 'Birthday',
+            ),
+            keyboardType: TextInputType.datetime,
+          ),
+        ),
+        IconButton(
+            icon: Icon(Icons.calendar_today),
+            onPressed: () => {_selectDate(context)}),
+      ],
     );
   }
 

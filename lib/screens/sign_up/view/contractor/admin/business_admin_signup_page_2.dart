@@ -17,7 +17,7 @@ class _BusinessAdminSignupPage2State extends State<BusinessAdminSignupPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Homeowner 2 Sign Up')),
+      appBar: AppBar(title: const Text('Admin Address')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _SignUpForm(),
