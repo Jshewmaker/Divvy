@@ -3,6 +3,7 @@ import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/models/redeem_sila_model.dart';
+import 'package:divvy/sila/models/transfer_sila_response.dart';
 import 'package:divvy/sila/models/update_user_info/update_user_info_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:flutter/material.dart';
@@ -170,5 +171,11 @@ class SilaRepository {
   Future<RedeemSilaModel> redeemSila(int amount) async {
     UserModel user = await _firebaseService.getUserData();
     return await silaApiClient.redeemSila(user, amount);
+  }
+
+  Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
+      String receiverHandle, String transferMessage) async {
+    return await silaApiClient.transferSila(
+        sender, amount, receiverHandle, transferMessage);
   }
 }

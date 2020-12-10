@@ -76,19 +76,18 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
-  Future<Project> connectProjectToUsers(
-      String projectID, UserModel user) async {
-    // Firestore.instance
-    //     .collection(projectCollection)
-    //     .document(projectID)
-    //     .setData(data);
+  Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
       if (user.isHomeowner == true) {
-        addDataToProjectFirestoreDocument(projectID, projectCollection,
-            {"home_owner": '/users/' + value.uid});
+        addDataToProjectFirestoreDocument(projectID, projectCollection, {
+          "home_owner_path": '/users/' + value.uid,
+          "home_owner_sila_handle": user.silaHandle,
+        });
       } else {
-        addDataToProjectFirestoreDocument(projectID, projectCollection,
-            {"general_contractor": '/users/' + value.uid});
+        addDataToProjectFirestoreDocument(projectID, projectCollection, {
+          "general_contractor_path": '/users/' + value.uid,
+          "general_contractor_sila_handle": user.silaHandle
+        });
       }
       addDataToFirestoreDocument(collection, {"project_id": projectID});
     });

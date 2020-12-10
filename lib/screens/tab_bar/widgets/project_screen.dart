@@ -79,9 +79,10 @@ class ProjectScreen extends StatelessWidget {
                       color: Colors.blue[100],
                       onPressed: () async {
                         if (_textController.text.isNotEmpty) {
-                          BlocProvider.of<ProjectBloc>(context).add(
-                              ProjectRequested(_textController.text.trim(),
-                                  {'data': 'test'}));
+                          BlocProvider.of<ProjectBloc>(context)
+                              .add(ProjectRequested(
+                            _textController.text.trim(),
+                          ));
                         }
                       })
                 ],

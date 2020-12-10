@@ -4,39 +4,54 @@ import 'package:meta/meta.dart';
 @immutable
 class Project {
   final bool complete;
-  final String generalContractorID;
-  final String homeownerID;
+  final String generalContractorPath;
+  final String homeownerPath;
+  final String generalContractorSilaHandle;
+  final String homeownerSilaHandle;
   final int projectID;
   final String projectName;
   final double projectCost;
 
   const Project(
       {@required this.complete,
-      @required this.generalContractorID,
-      @required this.homeownerID,
+      @required this.generalContractorPath,
+      @required this.homeownerPath,
+      @required this.generalContractorSilaHandle,
+      @required this.homeownerSilaHandle,
       @required this.projectID,
       @required this.projectName,
       @required this.projectCost});
 
   List<Object> get props => [
         complete,
-        generalContractorID,
-        homeownerID,
+        generalContractorPath,
+        homeownerPath,
+        generalContractorSilaHandle,
+        homeownerSilaHandle,
         projectID,
         projectName,
         projectCost
       ];
 
   ProjectEntity toEntity() {
-    return ProjectEntity(complete, generalContractorID, homeownerID, projectID,
-        projectName, projectCost);
+    return ProjectEntity(
+        complete,
+        generalContractorPath,
+        homeownerPath,
+        generalContractorSilaHandle,
+        homeownerSilaHandle,
+        projectID,
+        projectName,
+        projectCost);
   }
 
   static Project fromEntity(ProjectEntity entity) {
     return Project(
       complete: entity.complete,
-      generalContractorID: entity.generalContractorID,
-      homeownerID: entity.homeownerID,
+      generalContractorPath: entity.generalContractorPath,
+      homeownerPath: entity.homeownerPath,
+      generalContractorSilaHandle: entity.generalContractorSilaHandle,
+      homeownerSilaHandle: entity.homeownerSilaHandle,
       projectID: entity.projectID,
       projectName: entity.projectName,
       projectCost: entity.projectCost,

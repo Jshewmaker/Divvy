@@ -7,11 +7,11 @@ final theme = ThemeData(
   primaryColorLight: Colors.blue[100],
   primaryColor: Colors.blue[100],
   appBarTheme: AppBarTheme(
-      color: Colors.tealAccent[700],
+      color: Colors.teal[200],
       textTheme: TextTheme(headline6: TextStyle(color: Colors.black)),
       iconTheme: IconThemeData(color: Colors.black)),
   accentColor: Colors.redAccent,
-  scaffoldBackgroundColor: Colors.tealAccent[700],
+  scaffoldBackgroundColor: Colors.teal[200],
   textSelectionHandleColor: Colors.black,
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(

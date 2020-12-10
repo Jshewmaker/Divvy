@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
@@ -14,6 +15,7 @@ import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
 import 'package:divvy/sila/models/redeem_sila_model.dart';
+import 'package:divvy/sila/models/transfer_sila_response.dart';
 import 'package:divvy/sila/models/update_user_info/update_user_info_response.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
@@ -1058,5 +1060,49 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return RedeemSilaModel.fromJson(silaHandleResponse);
+  }
+
+  Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
+      String receiverHandle, String transferMessage) async {
+    var utcTime = DateTime.now().millisecondsSinceEpoch;
+    Random _random = Random();
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": authHandle,
+        "user_handle": sender.silaHandle,
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": _random.nextInt(10000).toString(),
+      },
+      "message": transferMessage,
+      "destination_handle": receiverHandle,
+      "amount": amount,
+      "descriptor": transferMessage,
+    };
+
+    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String userSignature = await eth.signing(body, sender.privateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '$baseUrl/0.2/transfer_sila';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /transfer_sila');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return TransferSilaResponse.fromJson(silaHandleResponse);
   }
 }
