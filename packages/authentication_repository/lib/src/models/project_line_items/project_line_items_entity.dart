@@ -26,6 +26,7 @@ class LineItemEntity extends Equatable {
   final String title;
   final String subContractor;
   final String comments;
+  final String id;
 
   const LineItemEntity(
     this.generalContractorApprovalDate,
@@ -36,6 +37,7 @@ class LineItemEntity extends Equatable {
     this.title,
     this.subContractor,
     this.comments,
+    this.id,
   );
 
   Map<String, Object> toJson() {
@@ -60,6 +62,7 @@ class LineItemEntity extends Equatable {
         title,
         subContractor,
         comments,
+        id,
       ];
 
   static LineItemEntity fromJson(Map<String, Object> json) {
@@ -72,6 +75,7 @@ class LineItemEntity extends Equatable {
       json["title"] as String,
       json["sub_contactor"] as String,
       json["comments"] as String,
+      json["id"] as String,
     );
   }
 
@@ -86,6 +90,7 @@ class LineItemEntity extends Equatable {
       snap.data['title'],
       snap.data['sub_contactor'],
       snap.data['comments'],
+      snap.documentID,
     );
   }
 

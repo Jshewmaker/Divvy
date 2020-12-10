@@ -1,4 +1,4 @@
-import 'package:authentication_repository/authentication_repository.dart';
+/*import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/screens/screens/line_item_info_screen.dart';
 import 'package:flutter/material.dart';
@@ -40,7 +40,7 @@ class ProjectScreen extends StatelessWidget {
   }
 
   Future<LineItemListModel> getProjectLineItems() {
-    return _firebaseService.getPhaseLineItems(1);
+    return _firebaseService.getPhaseLineItems(1, 'YuDDy02bn2Gq3QzK6KNG');
   }
 }
 
@@ -64,7 +64,8 @@ class _CardWidget extends StatelessWidget {
         elevation: 5,
         child: InkWell(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LineItemInfoScreen(lineItem))),
+              builder: (context) =>
+                  LineItemInfoScreen(lineItem, 'YuDDy02bn2Gq3QzK6KNG'))),
           child: Container(
             child: Padding(
               padding: EdgeInsets.all(7),
@@ -152,3 +153,4 @@ class _CardWidget extends StatelessWidget {
     return newDate;
   }
 }
+*/

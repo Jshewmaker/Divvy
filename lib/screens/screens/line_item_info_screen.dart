@@ -1,37 +1,41 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class LineItemInfoScreen extends StatelessWidget {
-  LineItemInfoScreen(this.lineItem);
+  LineItemInfoScreen(
+    this.lineItem,
+  );
 
   final LineItem lineItem;
-
   static const Color blueHighlight = const Color(0xFF3665FF);
 
   final TextEditingController _controller = TextEditingController();
 
   FirebaseService _firebaseService = FirebaseService();
 
-  void approve() {
+  void approve(String projectID, String lineID) {
     Timestamp value = Timestamp.now();
     Map<String, Timestamp> firebaseData;
 
     firebaseData = {"homeowner_approval_date": value};
 
-    _firebaseService.addDataToFirestoreDocument('projects', firebaseData);
+    _firebaseService.addDataToProjectDocument(firebaseData, projectID, lineID);
   }
 
-  void deny() {
+  void deny(String projectID, String lineID) {
     Map<String, Timestamp> firebaseData;
     firebaseData = {
       "general_contractor_approval_date": null,
     };
-    _firebaseService.addDataToFirestoreDocument('projects', firebaseData);
+    _firebaseService.addDataToProjectDocument(firebaseData, projectID, lineID);
   }
 
   @override
   Widget build(BuildContext context) {
+    var userProvider = context.watch<UserModelProvider>();
+    UserModel user = userProvider.user;
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -118,7 +122,7 @@ class LineItemInfoScreen extends StatelessWidget {
                             color: const Color(0xFF1E90FF),
                             textColor: Colors.white,
                             onPressed: () {
-                              approve();
+                              approve(user.projectID, lineItem.id);
                             },
                           ),
                           RaisedButton(
@@ -128,7 +132,7 @@ class LineItemInfoScreen extends StatelessWidget {
                             color: const Color(0xFFff0000),
                             textColor: Colors.white,
                             onPressed: () {
-                              deny();
+                              deny(user.projectID, lineItem.id);
                             },
                           )
                         ],

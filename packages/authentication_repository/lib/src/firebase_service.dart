@@ -48,8 +48,13 @@ class FirebaseService {
   }
 
   void addDataToProjectDocument(
-      String collection, Map<String, dynamic> data, String docID) async {
-    Firestore.instance.collection(collection).document(docID).updateData(data);
+      Map<String, dynamic> data, String projectID, String lineID) async {
+    Firestore.instance
+        .collection('projects')
+        .document(projectID)
+        .collection('line_items')
+        .document(lineID)
+        .updateData(data);
   }
 
   void addDataToBusinessUserDocument(

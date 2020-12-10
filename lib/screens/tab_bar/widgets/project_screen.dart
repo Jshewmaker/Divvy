@@ -14,6 +14,7 @@ import 'package:jiffy/jiffy.dart';
 
 class ProjectScreen extends StatelessWidget {
   final TextEditingController _textController = TextEditingController();
+  String projectID = 'YuDDy02bn2Gq3QzK6KNG';
 
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => ProjectScreen());
@@ -107,13 +108,8 @@ class ProjectScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   LineItem lineItem = lineItems.lineItems[index];
                   return _CardWidget(
-                      title: lineItem.title,
-                      generalContractorApprovalDate:
-                          getDate(lineItem.generalContractorApprovalDate),
-                      homeOwnerApprovalDate:
-                          getDate(lineItem.homeownerApprovalDate),
-                      datePaid: getDate(lineItem.datePaid),
-                      price: '\$' + lineItem.cost.toStringAsFixed(2));
+                    lineItem: lineItem,
+                  );
                 },
               );
             }
@@ -136,19 +132,6 @@ class ProjectScreen extends StatelessWidget {
       }))),
     );
   }
-
-  Future<LineItemListModel> getProjectLineItems() {
-    FirebaseService _firebaseService = FirebaseService();
-    return _firebaseService.getPhaseLineItems(1, 'YuDDy02bn2Gq3QzK6KNG');
-  }
-
-  String getDate(Timestamp date) {
-    String newDate = "";
-    if (date != null) {
-      newDate = Jiffy(date.toDate()).format("MMMM do");
-    }
-    return newDate;
-  }
 }
 
 class _NoProject extends StatelessWidget {
@@ -164,20 +147,9 @@ class _NoProject extends StatelessWidget {
 }
 
 class _CardWidget extends StatelessWidget {
-  final String title;
-  final String price;
-  final String generalContractorApprovalDate;
-  final String homeOwnerApprovalDate;
-  final String datePaid;
+  final LineItem lineItem;
 
-  _CardWidget(
-      {Key key,
-      this.title,
-      this.generalContractorApprovalDate,
-      this.homeOwnerApprovalDate,
-      this.datePaid,
-      this.price})
-      : super(key: key);
+  _CardWidget({Key key, this.lineItem}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -191,7 +163,7 @@ class _CardWidget extends StatelessWidget {
         elevation: 5,
         child: InkWell(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LineItemInfoScreen(title))),
+              builder: (context) => LineItemInfoScreen(lineItem))),
           child: Container(
             child: Padding(
               padding: EdgeInsets.all(7),
@@ -208,7 +180,7 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    title,
+                                    lineItem.title,
                                     style: TextStyle(
                                         fontSize: 22,
                                         fontWeight: FontWeight.w700),
@@ -218,7 +190,8 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    generalContractorApprovalDate,
+                                    getDate(
+                                        lineItem.generalContractorApprovalDate),
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ],
@@ -231,7 +204,7 @@ class _CardWidget extends StatelessWidget {
                                     MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    price,
+                                    '\$' + lineItem.cost.toStringAsFixed(2),
                                     style: TextStyle(color: Colors.black45),
                                   ),
                                   Text(
@@ -255,9 +228,9 @@ class _CardWidget extends StatelessWidget {
 
   String getStatus() {
     String status = "";
-    if (generalContractorApprovalDate != "") {
-      if (homeOwnerApprovalDate != "") {
-        if (datePaid != "") {
+    if (lineItem.generalContractorApprovalDate != null) {
+      if (lineItem.homeownerApprovalDate != null) {
+        if (lineItem.datePaid != null) {
           status = "Paid";
         } else {
           status = "Payment Needed";
@@ -268,5 +241,13 @@ class _CardWidget extends StatelessWidget {
     }
 
     return status;
+  }
+
+  String getDate(Timestamp date) {
+    String newDate = "";
+    if (date != null) {
+      newDate = Jiffy(date.toDate()).format("MMMM do");
+    }
+    return newDate;
   }
 }

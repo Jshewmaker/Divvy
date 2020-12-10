@@ -30,6 +30,7 @@ class LineItem extends Equatable {
   final String title;
   final String subContractor;
   final String comments;
+  final String id;
 
   const LineItem({
     @required this.title,
@@ -40,6 +41,7 @@ class LineItem extends Equatable {
     this.homeownerApprovalDate,
     this.subContractor,
     this.comments,
+    this.id,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -52,6 +54,7 @@ class LineItem extends Equatable {
     homeownerApprovalDate: null,
     subContractor: '',
     comments: '',
+    id: '',
   );
 
   @override
@@ -64,6 +67,7 @@ class LineItem extends Equatable {
         title,
         subContractor,
         comments,
+        id,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
@@ -76,6 +80,7 @@ class LineItem extends Equatable {
       title: entity.title,
       subContractor: entity.subContractor,
       comments: entity.comments,
+      id: entity.id,
     );
   }
 
@@ -89,6 +94,7 @@ class LineItem extends Equatable {
       title,
       subContractor,
       comments,
+      id,
     );
   }
 }
