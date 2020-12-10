@@ -36,7 +36,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
       try {
         UserModel user = await firebaseService.getUserData();
         final Project project =
-            await firebaseService.connectProjectToUsers(event.projectID, user);
+            await firebaseService.addUserDataToProject(event.projectID, user);
         if (project == null) {
           yield ProjectNotConnected();
         } else {

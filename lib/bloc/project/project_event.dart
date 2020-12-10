@@ -25,13 +25,12 @@ class ProjectCheck extends ProjectEvent {
 
 class ProjectRequested extends ProjectEvent {
   final String projectID;
-  final Map data;
 
-  const ProjectRequested(this.projectID, this.data);
-
-  @override
-  List<Object> get props => [projectID, data];
+  const ProjectRequested(this.projectID);
 
   @override
-  String toString() => 'Connecting Project{project $projectID and $data}';
+  List<Object> get props => [projectID];
+
+  @override
+  String toString() => 'Connecting Project{project $projectID }';
 }
