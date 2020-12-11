@@ -10,8 +10,6 @@ import 'package:divvy/bloc/project/project_state.dart';
 
 import 'dart:math' as math;
 
-import 'package:divvy/screens/screens/line_item_info_screen.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
