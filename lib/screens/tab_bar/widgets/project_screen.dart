@@ -308,4 +308,10 @@ class _MainPageState extends State<MainPage>
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
 }
