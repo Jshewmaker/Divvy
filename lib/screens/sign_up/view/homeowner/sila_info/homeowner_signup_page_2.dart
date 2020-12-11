@@ -16,6 +16,9 @@ class _HomeownerSignupPage2State extends State<HomeownerSignupPage2> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Homeowner Address'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _SignUpForm(),

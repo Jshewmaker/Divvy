@@ -7,6 +7,11 @@ import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/bloc/project/project_event.dart';
 import 'package:divvy/bloc/project/project_state.dart';
+
+import 'dart:math' as math;
+
+import 'package:divvy/screens/screens/line_item_info_screen.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
@@ -40,7 +45,7 @@ class ProjectScreen extends StatelessWidget {
         }
         if (state is ProjectLoadInProgress) {
           return Center(
-            child: CircularProgressIndicator(),
+            child: MainPage(),
           );
         }
         if (state is ProjectNotConnected) {
@@ -99,7 +104,7 @@ class ProjectScreen extends StatelessWidget {
               return Container();
             }
             if (state is LineItemLoadInProgress) {
-              return Center(child: CircularProgressIndicator());
+              return Center(child: MainPage());
             }
             if (state is LineItemLoadSuccess) {
               final lineItems = state.lineItems;
@@ -261,5 +266,48 @@ class _CardWidget extends StatelessWidget {
       newDate = Jiffy(date.toDate()).format("MMMM do");
     }
     return newDate;
+  }
+}
+
+class MainPage extends StatefulWidget {
+  MainPage({Key key}) : super(key: key);
+
+  @override
+  _MainPageState createState() => _MainPageState();
+}
+
+class _MainPageState extends State<MainPage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 2))
+          ..repeat();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (_, child) {
+            return Transform.rotate(
+              angle: _controller.value * 2 * math.pi,
+              child: child,
+            );
+          },
+          child: Image.asset(
+            'assets/divvy_logo.png',
+            height: 120,
+          ),
+        ),
+      ),
+    );
   }
 }

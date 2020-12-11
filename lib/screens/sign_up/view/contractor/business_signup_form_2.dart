@@ -11,7 +11,7 @@ class BusinessSignUpPage2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Business Sign Up')),
+      appBar: AppBar(title: const Text('Business Address')),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: _SignUpForm(),
