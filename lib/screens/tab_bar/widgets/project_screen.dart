@@ -168,7 +168,7 @@ class _CardWidget extends StatelessWidget {
       height: 130,
       width: double.maxFinite,
       child: Card(
-        color: Colors.grey[50],
+        color: Colors.teal[200],
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 5,
         child: InkWell(
@@ -206,7 +206,7 @@ class _CardWidget extends StatelessWidget {
                                 children: <Widget>[
                                   Text(
                                     getDate(lineItem.expectFinishedDate),
-                                    style: TextStyle(color: Colors.black),
+                                    style: TextStyle(color: Colors.grey[100]),
                                   ),
                                 ],
                               ),
@@ -289,7 +289,6 @@ class _MainPageState extends State<MainPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Center(
         child: AnimatedBuilder(
           animation: _controller,

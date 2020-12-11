@@ -2,7 +2,7 @@ name: divvy
 description: A new Flutter project.
 publish_to: none
 
-version: 1.0.0+8
+version: 1.0.0+9
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -33,7 +33,11 @@ dependencies:
   authentication_repository:
     path: packages/authentication_repository
 
-
+flutter_icons:
+  image_path: "assets/divvy_logo.png"
+  image_path_android: "assets/divvy_logo.png"
+  android: true
+  ios: false
 
 dev_dependencies:
   flutter_test:
@@ -41,6 +45,9 @@ dev_dependencies:
   bloc_test: ^7.0.0
   mockito: ^4.0.0
 
+  flutter_launcher_icons: "^0.8.0"
+
+  
 flutter:
   uses-material-design: true
   assets:

@@ -11,11 +11,8 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('amount'),
-      ),
       body: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 20, 8.0, 8.0),
+        padding: const EdgeInsets.fromLTRB(8.0, 100, 8.0, 8.0),
         child: Form(
           child: Column(
             children: [
@@ -25,7 +22,7 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
                       text: TextSpan(
                           style: TextStyle(
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
+                              // fontWeight: FontWeight.bold,
                               fontSize: 18),
                           text:
                               'You are about to add money to your Divvy Escrow. Once you have added money to the Escrow, the money is there until the job is done. You can not withdraw the money or change who the money is going to. Divvy NEVER has access to this money and neither does the contractor until you have approved that the work was done '))),
