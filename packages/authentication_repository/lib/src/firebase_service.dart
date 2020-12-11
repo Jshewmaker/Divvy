@@ -141,6 +141,7 @@ class FirebaseService {
         .document(projectID)
         .collection(lineItemsCollection)
         .where('phase', isEqualTo: 1)
+        .orderBy('expect_finished_date')
         .getDocuments();
     //All the examples use get not getDocuments
 

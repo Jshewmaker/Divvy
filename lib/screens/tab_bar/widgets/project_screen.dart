@@ -205,8 +205,7 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    getDate(
-                                        lineItem.generalContractorApprovalDate),
+                                    getDate(lineItem.expectFinishedDate),
                                     style: TextStyle(color: Colors.black),
                                   ),
                                 ],
