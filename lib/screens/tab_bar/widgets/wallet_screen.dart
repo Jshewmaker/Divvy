@@ -173,12 +173,16 @@ class WalletScreenPopulated extends StatelessWidget {
         Text(
           NumberFormat.currency(symbol: '\$').format(amountSila),
           style: TextStyle(
-              color: Colors.white70, fontSize: 48, fontWeight: FontWeight.bold),
+              color: Colors.teal[400],
+              fontSize: 48,
+              fontWeight: FontWeight.bold),
         ),
         Text(
           'Account Balance',
           style: TextStyle(
-              color: Colors.white70, fontSize: 18, fontWeight: FontWeight.bold),
+              color: Colors.teal[400],
+              fontSize: 18,
+              fontWeight: FontWeight.bold),
         ),
         SizedBox(
           height: 50,
