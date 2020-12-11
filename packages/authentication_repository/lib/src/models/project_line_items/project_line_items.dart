@@ -31,6 +31,7 @@ class LineItem extends Equatable {
   final String subContractor;
   final String comments;
   final String id;
+  final Timestamp expectFinishedDate;
 
   const LineItem({
     @required this.title,
@@ -42,6 +43,7 @@ class LineItem extends Equatable {
     this.subContractor,
     this.comments,
     this.id,
+    this.expectFinishedDate,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -55,6 +57,7 @@ class LineItem extends Equatable {
     subContractor: '',
     comments: '',
     id: '',
+    expectFinishedDate: null,
   );
 
   @override
@@ -68,6 +71,7 @@ class LineItem extends Equatable {
         subContractor,
         comments,
         id,
+        expectFinishedDate,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
@@ -81,6 +85,7 @@ class LineItem extends Equatable {
       subContractor: entity.subContractor,
       comments: entity.comments,
       id: entity.id,
+      expectFinishedDate: entity.expectFinishedDate,
     );
   }
 
@@ -95,6 +100,7 @@ class LineItem extends Equatable {
       subContractor,
       comments,
       id,
+      expectFinishedDate,
     );
   }
 }
