@@ -1,13 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/bloc/line_items/line_item_bloc.dart';
+import 'package:divvy/screens/screens/account/line_item_approval/line_item_approval_screen.dart';
 import 'package:divvy/bloc/line_items/line_item_event.dart';
 import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/bloc/project/project_event.dart';
 import 'package:divvy/bloc/project/project_state.dart';
-
-import 'package:divvy/screens/screens/line_item_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
@@ -16,11 +15,11 @@ class ProjectScreen extends StatelessWidget {
   final TextEditingController _textController = TextEditingController();
   String projectID = 'YuDDy02bn2Gq3QzK6KNG';
 
+  final FirebaseService _firebaseService = FirebaseService();
+
   static Route route() {
     return MaterialPageRoute<void>(builder: (_) => ProjectScreen());
   }
-
-  final FirebaseService _firebaseService = FirebaseService();
 
   @override
   Widget build(BuildContext context) {
@@ -92,6 +91,7 @@ class ProjectScreen extends StatelessWidget {
           );
         }
         if (state is ProjectLoadSuccess) {
+          Project project = state.project;
           return BlocBuilder<LineItemBloc, LineItemState>(
               builder: (context, state) {
             if (state is LineItemInitial) {
@@ -110,6 +110,7 @@ class ProjectScreen extends StatelessWidget {
                   LineItem lineItem = lineItems.lineItems[index];
                   return _CardWidget(
                     lineItem: lineItem,
+                    project: project,
                   );
                 },
               );
@@ -149,8 +150,13 @@ class _NoProject extends StatelessWidget {
 
 class _CardWidget extends StatelessWidget {
   final LineItem lineItem;
+  final Project project;
 
-  _CardWidget({Key key, this.lineItem}) : super(key: key);
+  _CardWidget({
+    Key key,
+    this.lineItem,
+    this.project,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -163,8 +169,13 @@ class _CardWidget extends StatelessWidget {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 5,
         child: InkWell(
-          onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LineItemInfoScreen(lineItem))),
+          onTap: () => Navigator.of(context)
+              .push(MaterialPageRoute(
+                  builder: (context) => LineItemInfoScreen(lineItem, project)))
+              .then((value) => {
+                    BlocProvider.of<LineItemBloc>(context)
+                        .add(LineItemRequested(1))
+                  }),
           child: Container(
             child: Padding(
               padding: EdgeInsets.all(7),

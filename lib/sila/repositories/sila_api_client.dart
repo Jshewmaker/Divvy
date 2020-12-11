@@ -1078,7 +1078,7 @@ class SilaApiClient {
       },
       "message": transferMessage,
       "destination_handle": receiverHandle,
-      "amount": amount,
+      "amount": amount * 100,
       "descriptor": transferMessage,
     };
 
