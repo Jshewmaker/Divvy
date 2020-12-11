@@ -13,9 +13,9 @@ class WalletScreenBloc extends Bloc<WalletScreenEvent, WalletScreenState> {
       try {
         FirebaseService _firebaseService = FirebaseService();
         final UserModel user = await _firebaseService.getUserData();
-        if (user.bankAccountIsConnected == false) {
+        if (user.bankAccountIsConnected != true) {
           yield WalletScreenAccountNotLinked(
-              bankAccountIsLinked: user.bankAccountIsConnected);
+              bankAccountIsLinked: false /*user.bankAccountIsConnected*/);
         } else {
           yield WalletScreenHasAccountLinked(
               bankAccountIsLinked: user.bankAccountIsConnected);
