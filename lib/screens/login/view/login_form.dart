@@ -23,7 +23,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/divvy_logo.png',
+                'assets/divvy.png',
                 height: 120,
               ),
               const SizedBox(height: 16.0),
@@ -92,19 +92,17 @@ class _LoginButton extends StatelessWidget {
     return BlocBuilder<LoginCubit, LoginState>(
       buildWhen: (previous, current) => previous.status != current.status,
       builder: (context, state) {
-        return state.status.isSubmissionInProgress
-            ? const CircularProgressIndicator()
-            : RaisedButton(
-                key: const Key('loginForm_continue_raisedButton'),
-                child: const Text('LOGIN'),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                color: const Color(0xFFa3c746),
-                onPressed: state.status.isValidated
-                    ? () => context.read<LoginCubit>().logInWithCredentials()
-                    : null,
-              );
+        return RaisedButton(
+          key: const Key('loginForm_continue_raisedButton'),
+          child: const Text('LOGIN'),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30.0),
+          ),
+          color: const Color(0xFFa3c746),
+          onPressed: state.status.isValidated
+              ? () => context.read<LoginCubit>().logInWithCredentials()
+              : null,
+        );
       },
     );
   }
