@@ -11,6 +11,9 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+      ),
       body: Padding(
         padding: const EdgeInsets.fromLTRB(8.0, 100, 8.0, 8.0),
         child: Form(

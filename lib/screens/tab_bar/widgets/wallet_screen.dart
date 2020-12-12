@@ -178,7 +178,7 @@ class WalletScreenPopulated extends StatelessWidget {
               fontWeight: FontWeight.bold),
         ),
         Text(
-          'Account Balance',
+          'Wallet Balance',
           style: TextStyle(
               color: Colors.teal[400],
               fontSize: 18,

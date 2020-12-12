@@ -5,6 +5,7 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 // ignore: must_be_immutable
 class BankAccountInfoScreen extends StatelessWidget {
@@ -24,7 +25,8 @@ class BankAccountInfoScreen extends StatelessWidget {
       child: BlocBuilder<BankAccountBalanceCubit, BankAccountBalanceState>(
         builder: (context, state) {
           if (state is BankAccountBalanceInitial) {
-            context.read<BankAccountBalanceCubit>().getBankAccountBalances();
+            //changed to watch from read
+            context.watch<BankAccountBalanceCubit>().getBankAccountBalances();
             return const BankAccountEmpty();
           } else if (state is BankAccountBalanceLoadInProgress) {
             return const BankAccountLoading();
@@ -40,26 +42,73 @@ class BankAccountInfoScreen extends StatelessWidget {
   }
 }
 
+// class BankAccountPopulated extends StatelessWidget {
+//   const BankAccountPopulated({Key key, @required this.response})
+//       : super(key: key);
+
+//   final BankAccountBalanceResponse response;
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(),
+//       body: Center(
+//         child: Column(
+//           children: [
+//             Text(response.accountName),
+//             Text(response.availableBalance.toString()),
+//             Text(response.currentBalance.toString()),
+//           ],
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 class BankAccountPopulated extends StatelessWidget {
-  const BankAccountPopulated({Key key, @required this.response})
-      : super(key: key);
+  BankAccountPopulated({
+    Key key,
+    @required this.response,
+  }) : super(key: key);
 
   final BankAccountBalanceResponse response;
 
   @override
   Widget build(BuildContext context) {
+    int amountSila;
+    amountSila = response.availableBalance.round();
+
     return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-        child: Column(
-          children: [
-            Text(response.accountName),
-            Text(response.availableBalance.toString()),
-            Text(response.currentBalance.toString()),
-          ],
+        appBar: AppBar(
+          title: Text('Bank Account Balance'),
+          elevation: 0,
         ),
-      ),
-    );
+        body: Center(
+            child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 40,
+            ),
+            Text(
+              NumberFormat.currency(symbol: '\$').format(amountSila),
+              style: TextStyle(
+                  color: Colors.teal[400],
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold),
+            ),
+            Text(
+              'Bank Account Balance',
+              style: TextStyle(
+                  color: Colors.teal[400],
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              height: 50,
+            ),
+          ],
+        )));
   }
 }
 
