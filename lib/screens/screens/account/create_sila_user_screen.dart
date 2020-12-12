@@ -1,13 +1,12 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
+import 'package:divvy/screens/custome_loading_indicator.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/semantics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'dart:math' as math;
 
 class CreateSilaUserScreen extends StatelessWidget {
   static Route route() {
@@ -70,59 +69,11 @@ class CreateSilaUserScreen extends StatelessWidget {
                 );
               }
 
-              return Center(child: MainPage());
+              return Center(child: CustomProgressIndicator());
             }),
           ),
         ),
       ),
     );
-  }
-}
-
-class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
-          ..repeat();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, child) {
-            return Transform.rotate(
-              angle: _controller.value * 4 * math.pi,
-              child: child,
-            );
-          },
-          child: Image.asset(
-            'assets/divvy_logo.png',
-            height: 120,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

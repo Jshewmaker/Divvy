@@ -1,23 +1,20 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/bloc/line_items/line_item_bloc.dart';
+import 'package:divvy/screens/custome_loading_indicator.dart';
 import 'package:divvy/screens/screens/account/line_item_approval/line_item_approval_screen.dart';
 import 'package:divvy/bloc/line_items/line_item_event.dart';
 import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/bloc/project/project_event.dart';
 import 'package:divvy/bloc/project/project_state.dart';
-
-import 'dart:math' as math;
+import 'package:divvy/screens/screens/connect_to_project.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:jiffy/jiffy.dart';
 
 class ProjectScreen extends StatelessWidget {
-  final TextEditingController _textController = TextEditingController();
-  String projectID = 'YuDDy02bn2Gq3QzK6KNG';
-
   final FirebaseService _firebaseService = FirebaseService();
 
   static Route route() {
@@ -43,55 +40,11 @@ class ProjectScreen extends StatelessWidget {
         }
         if (state is ProjectLoadInProgress) {
           return Center(
-            child: MainPage(),
+            child: CustomProgressIndicator(),
           );
         }
         if (state is ProjectNotConnected) {
-          return Form(
-            child: Align(
-              alignment: const Alignment(0, -1 / 3),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      elevation: 5,
-                      shape: (RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(15))),
-                      color: Colors.white,
-                      child: Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: TextField(
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            border: UnderlineInputBorder(),
-                            labelText: 'Project ID',
-                            hintText: '1234567',
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  RaisedButton(
-                      child: Text('Connect To Project'),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                      ),
-                      color: Colors.blue[100],
-                      onPressed: () async {
-                        if (_textController.text.isNotEmpty) {
-                          BlocProvider.of<ProjectBloc>(context)
-                              .add(ProjectRequested(
-                            _textController.text.trim(),
-                          ));
-                        }
-                      })
-                ],
-              ),
-            ),
-          );
+          return ConnectToProject();
         }
         if (state is ProjectLoadSuccess) {
           Project project = state.project;
@@ -102,7 +55,7 @@ class ProjectScreen extends StatelessWidget {
               return Container();
             }
             if (state is LineItemLoadInProgress) {
-              return Center(child: MainPage());
+              return Center(child: CustomProgressIndicator());
             }
             if (state is LineItemLoadSuccess) {
               final lineItems = state.lineItems;
@@ -135,18 +88,6 @@ class ProjectScreen extends StatelessWidget {
         }
         return Container();
       }))),
-    );
-  }
-}
-
-class _NoProject extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: RaisedButton(
-        child: Text('Link Project'),
-        onPressed: () {},
-      ),
     );
   }
 }
@@ -263,53 +204,5 @@ class _CardWidget extends StatelessWidget {
       newDate = Jiffy(date.toDate()).format("MMMM do");
     }
     return newDate;
-  }
-}
-
-class MainPage extends StatefulWidget {
-  MainPage({Key key}) : super(key: key);
-
-  @override
-  _MainPageState createState() => _MainPageState();
-}
-
-class _MainPageState extends State<MainPage>
-    with SingleTickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _controller =
-        AnimationController(vsync: this, duration: Duration(seconds: 2))
-          ..repeat();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, child) {
-            return Transform.rotate(
-              angle: _controller.value * 2 * math.pi,
-              child: child,
-            );
-          },
-          child: Image.asset(
-            'assets/divvy_logo.png',
-            height: 120,
-          ),
-        ),
-      ),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

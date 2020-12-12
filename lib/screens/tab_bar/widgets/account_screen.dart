@@ -1,6 +1,7 @@
 import 'package:divvy/screens/screens/account/account_options.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/bank_account_balance_screen.dart';
+import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -11,11 +12,15 @@ class AccountScreen extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            RaisedButton(
-              child: Text('Account'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => AccountOptionsScreen())),
-            ),
+            // RaisedButton(
+            //   shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(30.0),
+            //   ),
+            //   color: Colors.teal[200],
+            //   child: Text('Account'),
+            //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+            //       builder: (contest) => AccountOptionsScreen())),
+            // ),
             // RaisedButton(
             //   child: Text('Select Username'),
             //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
@@ -27,25 +32,38 @@ class AccountScreen extends StatelessWidget {
             //       builder: (contest) => GetWalletInfoScreen())),
             // ),
             RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
               child: Text('Check Bank Account Balance'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => BankAccountInfoScreen())),
             ),
             RaisedButton(
-              child: Text('Issue Sila'),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
+              child: Text('Connect Project'),
               onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
+                  MaterialPageRoute(builder: (contest) => ConnectToProject())),
             ),
+            // RaisedButton(
+            //   child: Text('Issue Sila'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
+            // ),
             // RaisedButton(
             //   child: Text('Get Transactions'),
             //   onPressed: () => Navigator.of(context).push(
             //       MaterialPageRoute(builder: (contest) => TransactionScreen())),
             // ),
-            RaisedButton(
-              child: Text('Link Plaid'),
-              onPressed: () => Navigator.of(context).push(
-                  MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
-            ),
+            // RaisedButton(
+            //   child: Text('Link Plaid'),
+            //   onPressed: () => Navigator.of(context).push(
+            //       MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
+            // ),
           ],
         ),
       ),

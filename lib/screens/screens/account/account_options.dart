@@ -9,6 +9,7 @@ class AccountOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         title: Text('Divvy'),
       ),
       body: Center(
@@ -60,21 +61,37 @@ class AccountOptionsScreen extends StatelessWidget {
             //       MaterialPageRoute(builder: (contest) => PlaidLinkScreen())),
             // ),
             RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
               child: Text('Update Email'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => UpdateEmailScreen())),
             ),
             RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
               child: Text('Update Phone'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (contest) => UpdatePhoneScreen())),
             ),
             RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
               child: Text('Update Address'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => UpdateAddressScreen())),
             ),
             RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
               child: Text('Update Personal Info'),
               onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                   builder: (contest) => UpdateEntityScreen())),
