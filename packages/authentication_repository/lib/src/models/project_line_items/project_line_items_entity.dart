@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'messages.dart';
 
 class LineItemListEntity {
   final List<LineItemEntity> lineItems;
@@ -28,6 +29,7 @@ class LineItemEntity extends Equatable {
   final String comments;
   final String id;
   final Timestamp expectFinishedDate;
+  final List<dynamic> messages;
 
   const LineItemEntity(
     this.generalContractorApprovalDate,
@@ -40,9 +42,11 @@ class LineItemEntity extends Equatable {
     this.comments,
     this.id,
     this.expectFinishedDate,
+    this.messages,
   );
 
   Map<String, Object> toJson() {
+    //TODO: messages to json
     return {
       "general_contractor_approval_date": generalContractorApprovalDate,
       "cost": cost,
@@ -67,9 +71,11 @@ class LineItemEntity extends Equatable {
         comments,
         id,
         expectFinishedDate,
+        messages,
       ];
 
   static LineItemEntity fromJson(Map<String, Object> json) {
+    //TODO: messages from json
     return LineItemEntity(
       json["general_contractor_approval_date"] as Timestamp,
       json["cost"] as double,
@@ -81,6 +87,7 @@ class LineItemEntity extends Equatable {
       json["comments"] as String,
       json["id"] as String,
       json["expect_finished_date"] as Timestamp,
+      json["messages"] as List<Map>,
     );
   }
 
@@ -97,6 +104,7 @@ class LineItemEntity extends Equatable {
       snap.data['comments'],
       snap.documentID,
       snap.data['expect_finished_date'],
+      snap.data['messages'],
     );
   }
 
@@ -112,6 +120,7 @@ class LineItemEntity extends Equatable {
       "sub_contactor": subContractor,
       "comments": comments,
       "expect_finished_date": expectFinishedDate,
+      "messages": messages.toList(),
     };
   }
 }

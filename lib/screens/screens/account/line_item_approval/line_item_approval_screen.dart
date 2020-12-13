@@ -1,6 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:divvy/screens/screens/account/line_item_approval/line_item_approval_wiget.dart';
+import 'package:divvy/screens/screens/account/line_item_approval/line_item_approval_widget.dart';
 import 'package:divvy/screens/tab_bar/widgets/project_screen.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
