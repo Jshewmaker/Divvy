@@ -66,6 +66,8 @@ class _SignUpFormState extends State<_SignUpForm> {
                     const SizedBox(height: 8.0),
                     _ssnInput(context),
                     const SizedBox(height: 8.0),
+                    Text(
+                        'Divvy must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.'),
                     _birthdayInput(context),
                     const SizedBox(height: 8.0),
                     _phoneNumberInput(),
