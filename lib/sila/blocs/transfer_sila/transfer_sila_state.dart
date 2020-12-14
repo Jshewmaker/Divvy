@@ -24,4 +24,18 @@ class TransferSilaLoadSuccess extends TransferSilaState {
   List<Object> get props => [response];
 }
 
-class TransferSilaLoadFailure extends TransferSilaState {}
+class TransferSilaLoadFailure extends TransferSilaState {
+  final Exception exception;
+
+  const TransferSilaLoadFailure({@required this.exception})
+      : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return super.toString();
+  }
+}

@@ -8,7 +8,7 @@ class Project {
   final String homeownerPath;
   final String generalContractorSilaHandle;
   final String homeownerSilaHandle;
-  final int projectID;
+  final String projectID;
   final String projectName;
   final double projectCost;
 

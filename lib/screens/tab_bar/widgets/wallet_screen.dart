@@ -14,6 +14,7 @@ import 'package:divvy/sila/blocs/get_sila_balance/get_sila_balance_bloc.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
@@ -178,11 +179,12 @@ class WalletScreenPopulated extends StatelessWidget {
               fontWeight: FontWeight.bold),
         ),
         Text(
-          'Account Balance',
+          'Wallet Balance',
           style: TextStyle(
-              color: Colors.teal[400],
-              fontSize: 18,
-              fontWeight: FontWeight.bold),
+            color: Colors.teal[400],
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         SizedBox(
           height: 50,

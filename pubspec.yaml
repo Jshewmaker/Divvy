@@ -26,6 +26,8 @@ dependencies:
   url_launcher: ^5.7.5
   flutter_masked_text: ^0.8.0
   jiffy: ^3.0.1
+  toast: ^0.1.5
+  fluttertoast: ^7.1.5
   #SHA-3 Hashing library
   web3dart: ^1.2.3
   bip39: ^1.0.3
