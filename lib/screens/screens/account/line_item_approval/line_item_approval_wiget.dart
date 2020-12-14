@@ -88,8 +88,7 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
                           fontSize: 24,
                         )),
                     TextSpan(
-                        text: lineItem
-                            .subContractor, // '\npool & spa services inc',
+                        text: lineItem.subContractor,
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
                   ],
                 ),
@@ -186,7 +185,7 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
                     ))
                 : Container(
                     child: Center(
-                      child: Text('Picture Placeholder'),
+                      child: Text('Tap To Add Picture'),
                     ),
                   ),
           )),
