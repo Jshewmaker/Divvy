@@ -1099,7 +1099,8 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /transfer_sila');
+      //throw Exception('error connecting to SILA /transfer_sila');
+      throw Exception(jsonDecode(silaResponse.body)["message"]);
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

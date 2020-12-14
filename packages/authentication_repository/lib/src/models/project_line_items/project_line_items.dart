@@ -1,4 +1,5 @@
 import 'project_line_items_entity.dart';
+import 'messages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -32,6 +33,7 @@ class LineItem extends Equatable {
   final String comments;
   final String id;
   final Timestamp expectFinishedDate;
+  final MessageListModel messages;
 
   const LineItem({
     @required this.title,
@@ -44,6 +46,7 @@ class LineItem extends Equatable {
     this.comments,
     this.id,
     this.expectFinishedDate,
+    this.messages,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -58,6 +61,7 @@ class LineItem extends Equatable {
     comments: '',
     id: '',
     expectFinishedDate: null,
+    messages: null,
   );
 
   @override
@@ -72,6 +76,7 @@ class LineItem extends Equatable {
         comments,
         id,
         expectFinishedDate,
+        messages,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
@@ -86,6 +91,9 @@ class LineItem extends Equatable {
       comments: entity.comments,
       id: entity.id,
       expectFinishedDate: entity.expectFinishedDate,
+      messages: (entity.messages != null)
+          ? MessageListModel.fromList(entity.messages)
+          : null,
     );
   }
 
@@ -101,6 +109,7 @@ class LineItem extends Equatable {
       comments,
       id,
       expectFinishedDate,
+      messages.toList(),
     );
   }
 }

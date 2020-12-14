@@ -7,7 +7,7 @@ class ProjectEntity extends Equatable {
   final String homeownerPath;
   final String generalContractorSilaHandle;
   final String homeownerSilaHandle;
-  final int projectID;
+  final String projectID;
   final String projectName;
   final double projectCost;
 
@@ -52,7 +52,7 @@ class ProjectEntity extends Equatable {
       json["homeowner_path"] as String,
       json["general_contractor_sila_handle"] as String,
       json["home_owner_sila_handle"] as String,
-      json["project_id"] as int,
+      json["project_id"] as String,
       json["project_name"] as String,
       json["project_cost"] as double,
     );
@@ -65,7 +65,7 @@ class ProjectEntity extends Equatable {
       snap.data['homeowner_path'],
       snap.data['general_contractor_sila_handle'],
       snap.data['home_owner_sila_handle'],
-      snap.data['project_id'],
+      snap.documentID,
       snap.data['project_name'],
       snap.data['project_cost'],
     );

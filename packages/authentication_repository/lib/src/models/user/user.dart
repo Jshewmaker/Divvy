@@ -114,6 +114,7 @@ class UserModel extends Equatable {
 
   static UserModel fromEntity(UserEntity entity) {
     return UserModel(
+      id: entity.id,
       name: entity.name,
       dateOfBirthYYYYMMDD: entity.dateOfBirthYYYYMMDD,
       identityValue: entity.identityValue,
@@ -141,6 +142,7 @@ class UserModel extends Equatable {
 
   UserEntity toEntity() {
     return UserEntity(
+      id,
       name,
       dateOfBirthYYYYMMDD,
       identityValue,

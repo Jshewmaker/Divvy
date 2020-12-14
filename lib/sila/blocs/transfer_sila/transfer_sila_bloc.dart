@@ -23,7 +23,7 @@ class TransferSilaBloc extends Bloc<TransferSilaEvent, TransferSilaState> {
             event.transferMessage);
         yield TransferSilaLoadSuccess(response: response);
       } catch (_) {
-        yield TransferSilaLoadFailure();
+        yield TransferSilaLoadFailure(exception: _);
       }
     }
   }

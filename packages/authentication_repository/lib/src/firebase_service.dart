@@ -50,11 +50,27 @@ class FirebaseService {
   void addDataToProjectDocument(
       Map<String, dynamic> data, String projectID, String lineID) async {
     Firestore.instance
-        .collection('projects')
+        .collection(projectCollection)
         .document(projectID)
-        .collection('line_items')
+        .collection(lineItemsCollection)
         .document(lineID)
         .updateData(data);
+  }
+
+  void addMessageToProjectDocument(
+      dynamic data, String projectID, String lineID) async {
+    Map<String, dynamic> firebaseData;
+
+    firebaseData = {
+      "messages": FieldValue.arrayUnion([data]),
+    };
+
+    Firestore.instance
+        .collection(projectCollection)
+        .document(projectID)
+        .collection(lineItemsCollection)
+        .document(lineID)
+        .updateData(firebaseData);
   }
 
   void addDataToBusinessUserDocument(
@@ -147,6 +163,19 @@ class FirebaseService {
 
     return LineItemListModel.fromEntity(
         LineItemListEntity.fromSnapshot(_querySnapshot));
+  }
+
+  Future<LineItem> getLineItem(String projectID, String lineItemID) async {
+    //FirebaseUser lineItems = await firebaseAuth.currentUser();
+    DocumentSnapshot _documentSnapshot = await Firestore.instance
+        .collection(projectCollection)
+        .document(projectID)
+        .collection(lineItemsCollection)
+        .document(lineItemID)
+        .get();
+    //All the examples use get not getDocuments
+
+    return LineItem.fromEntity(LineItemEntity.fromSnapshot(_documentSnapshot));
   }
 
 //Gets individual that is link to a business
