@@ -1,11 +1,14 @@
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as Path;
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:divvy/screens/tab_bar/widgets/project_screen.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'messages_widget.dart';
 import 'package:authentication_repository/src/models/project_line_items/messages.dart';
 import 'package:http/http.dart' as http;
 import 'package:jiffy/jiffy.dart';
@@ -15,17 +18,32 @@ import 'package:divvy/bloc/chat/chat_event.dart';
 import 'package:toast/toast.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
-class LineItemApprovalWidget extends StatelessWidget {
-  LineItemApprovalWidget(
+class LineItemApprovalWidget extends StatefulWidget {
+  LineItemApprovalWidget(this.lineItem, this.project);
+
+  final LineItem lineItem;
+  final Project project;
+
+  @override
+  State<LineItemApprovalWidget> createState() =>
+      _LineItemApprovalWidgetState(lineItem, project);
+}
+
+class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
+  _LineItemApprovalWidgetState(
     this.lineItem,
     this.project,
   );
 
   final LineItem lineItem;
   final Project project;
-  ScrollController _scrollController = ScrollController();
-  FirebaseService _firebaseService = FirebaseService();
-  final TextEditingController _controller = TextEditingController();
+  final FirebaseService _firebaseService = FirebaseService();
+
+  File _image;
+  String _uploadedFileURL;
+  UserModel _user;
+
+  double _boraderRadius = 10.0;
 
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
@@ -51,8 +69,9 @@ class LineItemApprovalWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    _uploadedFileURL = lineItem.pictureUrl;
     var userProvider = context.watch<UserModelProvider>();
-    UserModel user = userProvider.user;
+    _user = userProvider.user;
     return MultiBlocListener(
       listeners: [
         BlocListener<TransferSilaBloc, TransferSilaState>(
@@ -69,9 +88,14 @@ class LineItemApprovalWidget extends StatelessWidget {
                   backgroundColor: Colors.red,
                   textColor: Colors.white,
                   fontSize: 16.0); */
+              //TODO: See if we can get the snackbar below working
+              //        Scaffold.of(context)
+              // ..hideCurrentSnackBar()
+              // ..showSnackBar(
+              //     const SnackBar(content: Text('Authentication Failure')));
             }
             if (state is TransferSilaLoadSuccess) {
-              approve(user.projectID, lineItem.id);
+              approve(_user.projectID, lineItem.id);
               Navigator.pop(context);
             }
           },
@@ -109,40 +133,28 @@ class LineItemApprovalWidget extends StatelessWidget {
                   SizedBox(
                     height: 10,
                   ),
-                  Container(
-                    height: 300,
-                    width: double.maxFinite,
-                    child: Card(
-                      color: Colors.teal[50],
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0)),
-                      elevation: 5,
-                      child: Center(
-                        child: Text('Picture Placeholder'),
-                      ),
-                    ),
-                  ),
+                  _pictureWidget(),
                   SizedBox(
                     height: 20,
                   ),
-                  _Chat(lineItem, user, project),
+                  _Chat(lineItem, _user, project),
                   Visibility(
-                    visible: user.isHomeowner,
+                    visible: _user.isHomeowner,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        _ApproveButton(lineItem, user,
+                        _ApproveButton(lineItem, _user,
                             project.generalContractorSilaHandle),
-                        _DenyButton(lineItem, user),
+                        _DenyButton(lineItem, _user),
                       ],
                     ),
                   ),
                   Visibility(
-                      visible: !user.isHomeowner,
+                      visible: !_user.isHomeowner,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          _SubmitButton(lineItem, user),
+                          _SubmitButton(lineItem, _user),
                         ],
                       )),
                 ],
@@ -152,6 +164,100 @@ class LineItemApprovalWidget extends StatelessWidget {
         ]),
       ),
     );
+  }
+
+  Widget _pictureWidget() {
+    return Container(
+      height: 300,
+      width: double.maxFinite,
+      child: GestureDetector(
+          onTap: () {
+            _showPicker(context);
+          },
+          child: Card(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(_boraderRadius)),
+              child: _uploadedFileURL != null
+                  ? Image.network(_uploadedFileURL)
+                  : (_image != null
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(_boraderRadius),
+                          child: Image.file(
+                            _image,
+                            fit: BoxFit.fitHeight,
+                          ))
+                      : Container(
+                          child: Center(
+                            child: Text('Tap To Add Picture'),
+                          ),
+                        )))),
+    );
+  }
+
+  _imgFromCamera() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 100);
+    setState(() {
+      if (image != null) _image = File(image.path);
+      _addImageToFirebase(context);
+    });
+  }
+
+  _imgFromGallery() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 100);
+
+    setState(() {
+      if (image != null) _image = File(image.path);
+      _addImageToFirebase(context);
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void _addImageToFirebase(context) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('${_user.id}/${lineItem.title}-' + Path.basename(_image.path));
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      FirebaseService firebaseService = FirebaseService();
+      firebaseService.addDataToProjectDocument(
+          {'picture_url': fileURL}, _user.projectID, lineItem.id);
+    });
   }
 }
 

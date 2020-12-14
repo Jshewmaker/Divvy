@@ -32,6 +32,7 @@ class LineItem extends Equatable {
   final String subContractor;
   final String comments;
   final String id;
+  final String pictureUrl;
   final Timestamp expectFinishedDate;
   final MessageListModel messages;
 
@@ -45,6 +46,7 @@ class LineItem extends Equatable {
     this.subContractor,
     this.comments,
     this.id,
+    this.pictureUrl,
     this.expectFinishedDate,
     this.messages,
   });
@@ -60,6 +62,7 @@ class LineItem extends Equatable {
     subContractor: '',
     comments: '',
     id: '',
+    pictureUrl: '',
     expectFinishedDate: null,
     messages: null,
   );
@@ -75,6 +78,7 @@ class LineItem extends Equatable {
         subContractor,
         comments,
         id,
+        pictureUrl,
         expectFinishedDate,
         messages,
       ];
@@ -90,6 +94,7 @@ class LineItem extends Equatable {
       subContractor: entity.subContractor,
       comments: entity.comments,
       id: entity.id,
+      pictureUrl: entity.pictureUrl,
       expectFinishedDate: entity.expectFinishedDate,
       messages: (entity.messages != null)
           ? MessageListModel.fromList(entity.messages)
@@ -108,6 +113,7 @@ class LineItem extends Equatable {
       subContractor,
       comments,
       id,
+      pictureUrl,
       expectFinishedDate,
       messages.toList(),
     );

@@ -28,6 +28,7 @@ class LineItemEntity extends Equatable {
   final String subContractor;
   final String comments;
   final String id;
+  final String pictureUrl;
   final Timestamp expectFinishedDate;
   final List<dynamic> messages;
 
@@ -41,6 +42,7 @@ class LineItemEntity extends Equatable {
     this.subContractor,
     this.comments,
     this.id,
+    this.pictureUrl,
     this.expectFinishedDate,
     this.messages,
   );
@@ -56,6 +58,7 @@ class LineItemEntity extends Equatable {
       "title": title,
       "sub_contactor": subContractor,
       "comments": comments,
+      "picture_url": pictureUrl,
       "expect_finished_date": expectFinishedDate,
     };
   }
@@ -70,6 +73,7 @@ class LineItemEntity extends Equatable {
         subContractor,
         comments,
         id,
+        pictureUrl,
         expectFinishedDate,
         messages,
       ];
@@ -86,6 +90,7 @@ class LineItemEntity extends Equatable {
       json["sub_contactor"] as String,
       json["comments"] as String,
       json["id"] as String,
+      json["picture_url"] as String,
       json["expect_finished_date"] as Timestamp,
       json["messages"] as List<Map>,
     );
@@ -103,6 +108,7 @@ class LineItemEntity extends Equatable {
       snap.data['sub_contactor'],
       snap.data['comments'],
       snap.documentID,
+      snap.data['picture_url'],
       snap.data['expect_finished_date'],
       snap.data['messages'],
     );
@@ -119,6 +125,7 @@ class LineItemEntity extends Equatable {
       "title": title,
       "sub_contactor": subContractor,
       "comments": comments,
+      "picture_url": pictureUrl,
       "expect_finished_date": expectFinishedDate,
       "messages": messages.toList(),
     };
