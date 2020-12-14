@@ -1,19 +1,40 @@
+import 'dart:io';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as Path;
 
-class LineItemApprovalWidget extends StatelessWidget {
-  LineItemApprovalWidget(
+class LineItemApprovalWidget extends StatefulWidget {
+  LineItemApprovalWidget(this.lineItem, this.project);
+
+  final LineItem lineItem;
+  final Project project;
+
+  @override
+  State<LineItemApprovalWidget> createState() =>
+      _LineItemApprovalWidgetState(lineItem, project);
+}
+
+class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
+  _LineItemApprovalWidgetState(
     this.lineItem,
     this.project,
   );
 
   final LineItem lineItem;
   final Project project;
+  File _image;
+  String _uploadedFileURL;
+
+  double _boraderRadius = 10.0;
 
   final TextEditingController _controller = TextEditingController();
 
@@ -67,8 +88,7 @@ class LineItemApprovalWidget extends StatelessWidget {
                           fontSize: 24,
                         )),
                     TextSpan(
-                        text: lineItem
-                            .subContractor, // '\npool & spa services inc',
+                        text: lineItem.subContractor,
                         style: TextStyle(color: Colors.grey, fontSize: 14)),
                   ],
                 ),
@@ -82,19 +102,7 @@ class LineItemApprovalWidget extends StatelessWidget {
                     child: ListView(
                       shrinkWrap: true,
                       children: [
-                        Container(
-                          height: 300,
-                          width: double.maxFinite,
-                          child: Card(
-                            color: Colors.teal[50],
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0)),
-                            elevation: 5,
-                            child: Center(
-                              child: Text('Picture Placeholder'),
-                            ),
-                          ),
-                        ),
+                        pictureWidget(),
                         SizedBox(
                           height: 20,
                         ),
@@ -107,13 +115,13 @@ class LineItemApprovalWidget extends StatelessWidget {
                             decoration: InputDecoration(
                               hintText: 'Comments',
                               enabledBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(_boraderRadius)),
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               focusedBorder: OutlineInputBorder(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(10.0)),
+                                borderRadius: BorderRadius.all(
+                                    Radius.circular(_boraderRadius)),
                                 borderSide: BorderSide(color: Colors.grey),
                               ),
                               suffixIcon: IconButton(
@@ -155,6 +163,100 @@ class LineItemApprovalWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget pictureWidget() {
+    return Container(
+      height: 300,
+      width: double.maxFinite,
+      child: GestureDetector(
+          onTap: () {
+            _showPicker(context);
+          },
+          child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(_boraderRadius)),
+            child: _image != null
+                ? ClipRRect(
+                    borderRadius: BorderRadius.circular(_boraderRadius),
+                    child: Image.file(
+                      _image,
+                      fit: BoxFit.fitHeight,
+                    ))
+                : Container(
+                    child: Center(
+                      child: Text('Tap To Add Picture'),
+                    ),
+                  ),
+          )),
+    );
+  }
+
+  _imgFromCamera() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.getImage(source: ImageSource.camera, imageQuality: 100);
+    setState(() {
+      _image = File(image.path);
+      addImageToFirebase(context);
+    });
+  }
+
+  _imgFromGallery() async {
+    final picker = ImagePicker();
+    final image =
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 100);
+
+    setState(() {
+      _image = File(image.path);
+      addImageToFirebase(context);
+    });
+  }
+
+  void _showPicker(context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return SafeArea(
+            child: Container(
+              child: new Wrap(
+                children: <Widget>[
+                  new ListTile(
+                      leading: new Icon(Icons.photo_library),
+                      title: new Text('Photo Library'),
+                      onTap: () {
+                        _imgFromGallery();
+
+                        Navigator.of(context).pop();
+                      }),
+                  new ListTile(
+                    leading: new Icon(Icons.photo_camera),
+                    title: new Text('Camera'),
+                    onTap: () {
+                      _imgFromCamera();
+
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
+  }
+
+  void addImageToFirebase(context) async {
+    StorageReference storageReference = FirebaseStorage.instance
+        .ref()
+        .child('chats/${Path.basename(_image.path)}}');
+    StorageUploadTask uploadTask = storageReference.putFile(_image);
+    await uploadTask.onComplete;
+    print('File Uploaded');
+    storageReference.getDownloadURL().then((fileURL) {
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
+    });
   }
 }
 
