@@ -1076,7 +1076,7 @@ class SilaApiClient {
         "crypto": "ETH",
         "reference": _random.nextInt(10000).toString(),
       },
-      "message": transferMessage,
+      "message": "transfer_msg",
       "destination_handle": receiverHandle,
       "amount": amount * 100,
       "descriptor": transferMessage,

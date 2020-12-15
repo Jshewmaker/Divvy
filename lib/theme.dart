@@ -7,6 +7,7 @@ final theme = ThemeData(
   primaryColorLight: Colors.blue[100],
   primaryColor: Colors.blue[100],
   appBarTheme: AppBarTheme(
+      elevation: 0,
       color: Colors.white,
       textTheme: TextTheme(
           headline6: TextStyle(

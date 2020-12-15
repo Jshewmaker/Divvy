@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as Path;
 
@@ -96,7 +97,12 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
             }
             if (state is TransferSilaLoadSuccess) {
               approve(_user.projectID, lineItem.id);
-              Navigator.pop(context);
+              //TODO: push invoice page here
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => InvoiceScreen(
+                      lineItem,
+                      project.generalContractorSilaHandle,
+                      project.homeownerSilaHandle)));
             }
           },
         ),
@@ -257,6 +263,9 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
       FirebaseService firebaseService = FirebaseService();
       firebaseService.addDataToProjectDocument(
           {'picture_url': fileURL}, _user.projectID, lineItem.id);
+      setState(() {
+        _uploadedFileURL = fileURL;
+      });
     });
   }
 }
@@ -284,14 +293,14 @@ class _ApproveButton extends StatelessWidget {
           color: const Color(0xFF1E90FF),
           textColor: Colors.white,
           onPressed: isEnabled
-              ? () => {
-                    BlocProvider.of<TransferSilaBloc>(context).add(
-                        TransferSilaRequest(
-                            sender: user,
-                            amount: lineItem.cost,
-                            receiverHandle: generalContractorSilaHandle,
-                            transferMessage: 'transfer_msg'))
-                  }
+              ? () {
+                  BlocProvider.of<TransferSilaBloc>(context).add(
+                      TransferSilaRequest(
+                          sender: user,
+                          amount: lineItem.cost,
+                          receiverHandle: generalContractorSilaHandle,
+                          transferMessage: lineItem.id));
+                }
               : null,
         );
       },

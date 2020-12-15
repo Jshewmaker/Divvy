@@ -24,5 +24,19 @@ class LineItemBloc extends Bloc<LineItemEvent, LineItemState> {
         yield LineItemLoadFailure();
       }
     }
+    if (event is LineItemRequestedForInvoice) {
+      yield LineItemLoadInProgress();
+      try {
+        UserModel user = await firebaseService.getUserData();
+        final LineItem lineItem =
+            await firebaseService.getLineItem(user.projectID, event.lineItemID);
+        final Project project =
+            await firebaseService.getProjects(user.projectID);
+        yield LineItemForInvoiceLoadSuccess(
+            lineItem: lineItem, project: project);
+      } catch (_) {
+        yield LineItemLoadFailure();
+      }
+    }
   }
 }
