@@ -35,7 +35,7 @@ class TabSelector extends StatelessWidget {
     else if (tab == AppTab.invoices)
       return 'invoices';
     else if (tab == AppTab.wallet)
-      return 'wallet';
+      return 'safe';
     else if (tab == AppTab.account) return 'account';
     return "";
   }

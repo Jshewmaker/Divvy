@@ -62,7 +62,7 @@ class TabBarContainer extends StatelessWidget {
     } else if (activeTab == 1) {
       return 'Invoices';
     } else if (activeTab == 2) {
-      return 'Wallet';
+      return 'Divvy Digital Safe';
     } else if (activeTab == 3) {
       return 'Account';
     }
