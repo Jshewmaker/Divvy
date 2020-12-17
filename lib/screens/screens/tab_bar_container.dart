@@ -32,15 +32,18 @@ class TabBarContainer extends StatelessWidget {
             title: Text(tabTitle(activeTab.index),
                 style: GoogleFonts.bigShouldersDisplay(
                     textStyle: TextStyle(fontSize: 32))),
-            actions: [
-              IconButton(
-                key: const Key('homePage_logout_iconButton'),
-                icon: const Icon(Icons.more_vert),
-                onPressed: () => context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested()),
-              ),
-            ],
+            // actions: [
+            //   TextButton(
+            //     key: const Key('homePage_logout_iconButton'),
+            //     child: Text(
+            //       'Sign Out',
+            //       style: TextStyle(color: Colors.black),
+            //     ),
+            //     onPressed: () => context
+            //         .read<AuthenticationBloc>()
+            //         .add(AuthenticationLogoutRequested()),
+            //   ),
+            // ],
           ),
           body: activeTabFunction(activeTab),
           bottomNavigationBar: TabSelector(

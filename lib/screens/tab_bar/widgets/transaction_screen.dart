@@ -1,4 +1,4 @@
-import 'package:divvy/screens/invoice_nav_screen.dart';
+import 'package:divvy/screens/invoice_helper.dart';
 import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:divvy/sila/blocs/get_transactions/get_transactions.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
@@ -64,7 +64,7 @@ class PopulatedWidget extends StatelessWidget {
       itemBuilder: (context, index) {
         return ListTile(
             onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => InvoiceNavScreen(
+                builder: (context) => InvoiceHelperScreen(
                     transactions.transactions[index].descriptor))),
             leading: Text(transactions.transactions[index].status),
             title: Text(DateFormat('MM-dd-yyyy').format(

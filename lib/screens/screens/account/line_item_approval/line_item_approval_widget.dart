@@ -99,10 +99,7 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
               approve(_user.projectID, lineItem.id);
               //TODO: push invoice page here
               Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => InvoiceScreen(
-                      lineItem,
-                      project.generalContractorSilaHandle,
-                      project.homeownerSilaHandle)));
+                  builder: (context) => InvoiceScreen(lineItem, project)));
             }
           },
         ),

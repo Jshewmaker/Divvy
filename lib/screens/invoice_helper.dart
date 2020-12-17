@@ -6,9 +6,9 @@ import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InvoiceNavScreen extends StatelessWidget {
+class InvoiceHelperScreen extends StatelessWidget {
   final FirebaseService _firebaseService = FirebaseService();
-  InvoiceNavScreen(this.lineItemID);
+  InvoiceHelperScreen(this.lineItemID);
 
   final String lineItemID;
 
@@ -32,10 +32,7 @@ class InvoiceNavScreen extends StatelessWidget {
               final LineItem lineItem = state.lineItem;
               final Project project = state.project;
 
-              return InvoiceScreen(
-                  lineItem,
-                  project.generalContractorSilaHandle,
-                  project.homeownerSilaHandle);
+              return InvoiceScreen(lineItem, project);
             }
             if (state is LineItemLoadFailure) {
               return Text(
