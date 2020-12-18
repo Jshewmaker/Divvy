@@ -16,28 +16,27 @@ import 'package:jiffy/jiffy.dart';
 import 'package:divvy/bloc/chat/chat_bloc.dart';
 import 'package:divvy/bloc/chat/chat_state.dart';
 import 'package:divvy/bloc/chat/chat_event.dart';
-import 'package:toast/toast.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
-class LineItemApprovalWidget extends StatefulWidget {
-  LineItemApprovalWidget(this.lineItem, this.project);
+class LineItemInfoScreen extends StatefulWidget {
+  LineItemInfoScreen(this._lineItem, this._project);
 
-  final LineItem lineItem;
-  final Project project;
+  final LineItem _lineItem;
+  final Project _project;
 
   @override
-  State<LineItemApprovalWidget> createState() =>
-      _LineItemApprovalWidgetState(lineItem, project);
+  State<LineItemInfoScreen> createState() =>
+      _LineItemInfoScreenState(_lineItem, _project);
 }
 
-class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
-  _LineItemApprovalWidgetState(
-    this.lineItem,
-    this.project,
+class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
+  _LineItemInfoScreenState(
+    this._lineItem,
+    this._project,
   );
 
-  final LineItem lineItem;
-  final Project project;
+  final LineItem _lineItem;
+  final Project _project;
   final FirebaseService _firebaseService = FirebaseService();
 
   File _image;
@@ -49,17 +48,6 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
-  void approve(String projectID, String lineID) {
-    Timestamp value = Timestamp.now();
-    Map<String, Timestamp> firebaseData;
-
-    firebaseData = {
-      "homeowner_approval_date": value,
-      "date_paid": value,
-    };
-    _firebaseService.addDataToProjectDocument(firebaseData, projectID, lineID);
-  }
-
   void sendMessage(
       String message, UserModel user, Project project, LineItem lineItem) {
     Message messageModel =
@@ -70,103 +58,92 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
 
   @override
   Widget build(BuildContext context) {
-    _uploadedFileURL = lineItem.pictureUrl;
+    _uploadedFileURL = _lineItem.pictureUrl;
     var userProvider = context.watch<UserModelProvider>();
     _user = userProvider.user;
-    return MultiBlocListener(
-      listeners: [
-        BlocListener<TransferSilaBloc, TransferSilaState>(
-          listener: (context, state) {
-            if (state is TransferSilaLoadFailure) {
-              Toast.show(state.exception.toString(), context,
-                  duration: 4, gravity: Toast.BOTTOM);
-              /*
-              Fluttertoast.showToast(
-                  msg: "This is Center Short Toast",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: Colors.red,
-                  textColor: Colors.white,
-                  fontSize: 16.0); */
-              //TODO: See if we can get the snackbar below working
-              //        Scaffold.of(context)
-              // ..hideCurrentSnackBar()
-              // ..showSnackBar(
-              //     const SnackBar(content: Text('Authentication Failure')));
-            }
-            if (state is TransferSilaLoadSuccess) {
-              approve(_user.projectID, lineItem.id);
-              //TODO: push invoice page here
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => InvoiceScreen(lineItem, project)));
-            }
-          },
+    return Scaffold(
+      appBar: AppBar(
+        title: RichText(
+          text: new TextSpan(
+            // Note: Styles for TextSpans must be explicitly defined.
+            // Child text spans will inherit styles from parent
+            children: <TextSpan>[
+              new TextSpan(
+                  text: _lineItem.title,
+                  style: new TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.teal[400],
+                    fontSize: 24,
+                  )),
+              TextSpan(
+                  text: _lineItem.subContractor, // '\npool & spa services inc',
+                  style: TextStyle(color: Colors.grey, fontSize: 14)),
+            ],
+          ),
         ),
-      ],
-      child: Scaffold(
-        appBar: AppBar(
-          title: RichText(
-            text: new TextSpan(
-              // Note: Styles for TextSpans must be explicitly defined.
-              // Child text spans will inherit styles from parent
-              children: <TextSpan>[
-                new TextSpan(
-                    text: lineItem.title,
-                    style: new TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Colors.teal[400],
-                      fontSize: 24,
+      ),
+      body: ListView(shrinkWrap: true, children: [
+        Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width / 1.1,
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                _pictureWidget(),
+                SizedBox(
+                  height: 20,
+                ),
+                _Chat(_lineItem, _user, _project),
+                Visibility(
+                  visible: _user.isHomeowner,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Visibility(
+                          visible: _lineItem.datePaid == null,
+                          child: _approveButton('Approve')),
+                      Visibility(
+                          visible: _lineItem.datePaid != null,
+                          child: _approveButton('View Receipt')),
+                      _DenyButton(_lineItem, _user),
+                    ],
+                  ),
+                ),
+                Visibility(
+                    visible: !_user.isHomeowner,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _SubmitButton(_lineItem, _user),
+                      ],
                     )),
-                TextSpan(
-                    text:
-                        lineItem.subContractor, // '\npool & spa services inc',
-                    style: TextStyle(color: Colors.grey, fontSize: 14)),
               ],
             ),
           ),
         ),
-        body: ListView(shrinkWrap: true, children: [
-          Center(
-            child: Container(
-              width: MediaQuery.of(context).size.width / 1.1,
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  SizedBox(
-                    height: 10,
-                  ),
-                  _pictureWidget(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  _Chat(lineItem, _user, project),
-                  Visibility(
-                    visible: _user.isHomeowner,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _ApproveButton(lineItem, _user,
-                            project.generalContractorSilaHandle),
-                        _DenyButton(lineItem, _user),
-                      ],
-                    ),
-                  ),
-                  Visibility(
-                      visible: !_user.isHomeowner,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _SubmitButton(lineItem, _user),
-                        ],
-                      )),
-                ],
-              ),
-            ),
-          ),
-        ]),
-      ),
+      ]),
     );
+  }
+
+  Widget _approveButton(String buttonText) {
+    return RaisedButton(
+        child: Text(
+          buttonText,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+        color: const Color(0xFF1E90FF),
+        textColor: Colors.white,
+        onPressed: () => {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => InvoiceScreen(_lineItem, _project)))
+            });
   }
 
   Widget _pictureWidget() {
@@ -252,56 +229,18 @@ class _LineItemApprovalWidgetState extends State<LineItemApprovalWidget> {
   void _addImageToFirebase(context) async {
     StorageReference storageReference = FirebaseStorage.instance
         .ref()
-        .child('${_user.id}/${lineItem.title}-' + Path.basename(_image.path));
+        .child('${_user.id}/${_lineItem.title}-' + Path.basename(_image.path));
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');
     storageReference.getDownloadURL().then((fileURL) {
       FirebaseService firebaseService = FirebaseService();
       firebaseService.addDataToProjectDocument(
-          {'picture_url': fileURL}, _user.projectID, lineItem.id);
+          {'picture_url': fileURL}, _user.projectID, _lineItem.id);
       setState(() {
         _uploadedFileURL = fileURL;
       });
     });
-  }
-}
-
-class _ApproveButton extends StatelessWidget {
-  _ApproveButton(this.lineItem, this.user, this.generalContractorSilaHandle);
-
-  final LineItem lineItem;
-  final UserModel user;
-  final String generalContractorSilaHandle;
-
-  @override
-  Widget build(BuildContext context) {
-    bool isEnabled = (lineItem.generalContractorApprovalDate != null &&
-            lineItem.homeownerApprovalDate == null)
-        ? true
-        : false;
-    return BlocBuilder<TransferSilaBloc, TransferSilaState>(
-      //buildWhen: (previous, current) => previous.status != current.status,
-      builder: (context, state) {
-        return RaisedButton(
-          child: Text('Approve'),
-          shape:
-              (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-          color: const Color(0xFF1E90FF),
-          textColor: Colors.white,
-          onPressed: isEnabled
-              ? () {
-                  BlocProvider.of<TransferSilaBloc>(context).add(
-                      TransferSilaRequest(
-                          sender: user,
-                          amount: lineItem.cost,
-                          receiverHandle: generalContractorSilaHandle,
-                          transferMessage: lineItem.id));
-                }
-              : null,
-        );
-      },
-    );
   }
 }
 
@@ -329,17 +268,21 @@ class _DenyButton extends StatelessWidget {
     //return BlocBuilder<TransferSilaBloc, TransferSilaState>(
     //buildWhen: (previous, current) => previous.status != current.status,
     //builder: (context, state) {
-    return RaisedButton(
-      child: Text('Deny'),
-      shape: (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-      color: const Color(0xFFff0000),
-      textColor: Colors.white,
-      onPressed: isEnabled
-          ? () => {
-                deny(user.projectID, lineItem.id),
-                Navigator.pop(context),
-              }
-          : null,
+    return Visibility(
+      visible: lineItem.datePaid == null,
+      child: RaisedButton(
+        child: Text('Deny'),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+        color: const Color(0xFFff0000),
+        textColor: Colors.white,
+        onPressed: isEnabled
+            ? () => {
+                  deny(user.projectID, lineItem.id),
+                  Navigator.pop(context),
+                }
+            : null,
+      ),
     );
     //},
     //);

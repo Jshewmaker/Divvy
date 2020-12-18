@@ -2,12 +2,12 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/bloc/line_items/line_item_bloc.dart';
 import 'package:divvy/screens/custome_loading_indicator.dart';
-import 'package:divvy/screens/screens/account/line_item_approval/line_item_approval_screen.dart';
 import 'package:divvy/bloc/line_items/line_item_event.dart';
 import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/bloc/project/project_event.dart';
 import 'package:divvy/bloc/project/project_state.dart';
+import 'package:divvy/screens/screens/account/line_item_approval/line_item_info_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 
 import 'package:flutter/material.dart';
