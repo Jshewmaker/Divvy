@@ -32,8 +32,8 @@ class TabSelector extends StatelessWidget {
   String label(tab) {
     if (tab == AppTab.project)
       return 'project';
-    else if (tab == AppTab.invoices)
-      return 'invoices';
+    else if (tab == AppTab.transactions)
+      return 'transactions';
     else if (tab == AppTab.wallet)
       return 'safe';
     else if (tab == AppTab.account) return 'account';
@@ -43,7 +43,7 @@ class TabSelector extends StatelessWidget {
   Widget icon(tab) {
     if (tab == AppTab.project)
       return Icon(Icons.list);
-    else if (tab == AppTab.invoices)
+    else if (tab == AppTab.transactions)
       return Icon(Icons.attach_money);
     else if (tab == AppTab.wallet)
       return Icon(Icons.account_balance_wallet_outlined);

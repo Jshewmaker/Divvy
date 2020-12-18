@@ -2,8 +2,6 @@ import 'package:divvy/Screens/tab_bar/blocs/blocs.dart';
 import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
-import 'package:divvy/Screens/tab_bar/widgets/invoices.dart';
-import 'package:divvy/Screens/tab_bar/widgets/project_screen.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,20 +28,22 @@ class TabBarContainer extends StatelessWidget {
       builder: (context, activeTab) {
         return Scaffold(
           appBar: AppBar(
-            elevation: 0,
             // title: Text(FlutterBlocLocalizations.of(context).appTitle),
             title: Text(tabTitle(activeTab.index),
                 style: GoogleFonts.bigShouldersDisplay(
                     textStyle: TextStyle(fontSize: 32))),
-            actions: [
-              IconButton(
-                key: const Key('homePage_logout_iconButton'),
-                icon: const Icon(Icons.more_vert),
-                onPressed: () => context
-                    .read<AuthenticationBloc>()
-                    .add(AuthenticationLogoutRequested()),
-              ),
-            ],
+            // actions: [
+            //   TextButton(
+            //     key: const Key('homePage_logout_iconButton'),
+            //     child: Text(
+            //       'Sign Out',
+            //       style: TextStyle(color: Colors.black),
+            //     ),
+            //     onPressed: () => context
+            //         .read<AuthenticationBloc>()
+            //         .add(AuthenticationLogoutRequested()),
+            //   ),
+            // ],
           ),
           body: activeTabFunction(activeTab),
           bottomNavigationBar: TabSelector(
@@ -60,7 +60,7 @@ class TabBarContainer extends StatelessWidget {
     if (activeTab == 0) {
       return 'Project';
     } else if (activeTab == 1) {
-      return 'Invoices';
+      return 'Transactions';
     } else if (activeTab == 2) {
       return 'Divvy Digital Safe';
     } else if (activeTab == 3) {
@@ -71,7 +71,7 @@ class TabBarContainer extends StatelessWidget {
 
   Widget activeTabFunction(activeTab) {
     if (activeTab == AppTab.project) return ProjectScreen();
-    if (activeTab == AppTab.invoices) return InvoiceScreen();
+    if (activeTab == AppTab.transactions) return TransactionsScreen();
     if (activeTab == AppTab.wallet) return WalletScreen();
     if (activeTab == AppTab.account) return AccountScreen();
     return Container();

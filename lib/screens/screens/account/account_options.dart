@@ -9,7 +9,6 @@ class AccountOptionsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
         title: Text('Divvy'),
       ),
       body: Center(

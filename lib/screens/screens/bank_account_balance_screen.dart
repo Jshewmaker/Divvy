@@ -81,7 +81,6 @@ class BankAccountPopulated extends StatelessWidget {
     return Scaffold(
         appBar: AppBar(
           title: Text('Bank Account Balance'),
-          elevation: 0,
         ),
         body: Center(
             child: Column(

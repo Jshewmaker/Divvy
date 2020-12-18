@@ -146,9 +146,9 @@ class FirebaseService {
     }
   }
 
-  /// Return user data in a UserModel
+  /// Return a list of all line items in a given phase.
   ///
-  /// /*
+  /// Requires phase and projectID
   Future<LineItemListModel> getPhaseLineItems(
       int phase, String projectID) async {
     //FirebaseUser lineItems = await firebaseAuth.currentUser();
@@ -165,6 +165,9 @@ class FirebaseService {
         LineItemListEntity.fromSnapshot(_querySnapshot));
   }
 
+  ///Get a single line Item.
+  ///
+  ///Requires projectID and lineItemID
   Future<LineItem> getLineItem(String projectID, String lineItemID) async {
     //FirebaseUser lineItems = await firebaseAuth.currentUser();
     DocumentSnapshot _documentSnapshot = await Firestore.instance

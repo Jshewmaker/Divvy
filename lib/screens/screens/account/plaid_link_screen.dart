@@ -21,7 +21,6 @@ class PlaidLinkScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
-          elevation: 0,
           title: RichText(
             text: new TextSpan(
               // Note: Styles for TextSpans must be explicitly defined.
