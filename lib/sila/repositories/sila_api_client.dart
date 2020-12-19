@@ -391,7 +391,6 @@ class SilaApiClient {
       "message": "issue_msg",
       "amount": amount,
       "account_name": "$handle plaid account",
-      "descriptor": "showing that transactions are not working",
       "processing_type": "STANDARD_ACH"
     };
     String authSignature = await eth.signing(body, divvyPrivateKey);
@@ -1034,7 +1033,6 @@ class SilaApiClient {
       "message": "redeem_msg",
       "amount": amount,
       "account_name": user.silaHandle + " plaid account",
-      "descriptor": "redeem sila walet",
       "processing_type": "STANDARD_ACH"
     };
 

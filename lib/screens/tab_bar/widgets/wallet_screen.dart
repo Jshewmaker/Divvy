@@ -140,7 +140,7 @@ class WalletScreenInitial extends StatelessWidget {
                 color: const Color(0xFF1E90FF),
                 shape: (RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30))),
-                child: Text('Send Money to Bank'),
+                child: Text('Transfer to Bank'),
                 onPressed: () => {},
               ),
             ),
@@ -161,7 +161,7 @@ class WalletScreenPopulated extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double amountSila;
-    amountSila = (response.silaBalance.round()) / 100;
+    amountSila = (response.silaBalance.roundToDouble()) / 100;
 
     return Scaffold(
         body: Center(
@@ -217,18 +217,18 @@ class WalletScreenPopulated extends StatelessWidget {
             Visibility(
               visible: user.isHomeowner == false,
               child: RaisedButton(
-                  child: Text('Send Money to Bank'),
+                  child: Text('Transfer to Bank'),
                   shape: (RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(30))),
                   color: const Color(0xFF1E90FF),
                   textColor: Colors.white,
                   onPressed: () => {
-                        if (amountSila == 0)
-                          {}
-                        else
-                          Navigator.of(context).push(MaterialPageRoute(
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
                               builder: (context) => RedeemSilaScreen(
-                                  amount: amountSila.round()))),
+                                  //TODO: where do we wanna do all of the sila converting
+                                  amount: (amountSila * 100).round())),
+                        )
                       }),
             ),
           ],

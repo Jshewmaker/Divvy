@@ -319,7 +319,8 @@ class _ApproveButton extends StatelessWidget {
                           sender: user,
                           amount: _lineItem.cost,
                           receiverHandle: generalContractorSilaHandle,
-                          transferMessage: _lineItem.id));
+                          transferMessage:
+                              _lineItem.id + '-' + _lineItem.title));
                 }
               : null,
         );
