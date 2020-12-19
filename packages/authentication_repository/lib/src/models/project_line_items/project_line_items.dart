@@ -91,7 +91,9 @@ class LineItem extends Equatable {
       datePaid: entity.datePaid,
       phase: entity.phase,
       title: entity.title,
-      subContractor: entity.subContractor,
+      subContractor: (entity.subContractor == null)
+          ? 'Contractor not listed'
+          : entity.subContractor,
       comments: entity.comments,
       id: entity.id,
       pictureUrl: entity.pictureUrl,

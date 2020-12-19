@@ -73,43 +73,59 @@ class InvoiceScreen extends StatelessWidget {
               appBar: AppBar(
                 title: Text('Invoice'),
               ),
-              body: Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      _Header(_lineItem),
-                      _Table(_lineItem),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Divider(
-                        thickness: 3,
-                      ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      _PaymentInfoCard(_project, _lineItem.cost),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Text(
-                        'I authorize Divvy to debit my Divvy Digital Safe and send money to the Contractor in my agreement. Once the funds have been sent Divvy can not refund you or dictate what the funds are used for',
-                        style: TextStyle(color: Colors.grey[400]),
-                        textAlign: TextAlign.center,
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      Visibility(
-                        visible: _lineItem.homeownerApprovalDate == null,
-                        child: _ApproveButton(_lineItem, _user,
-                            _project.generalContractorSilaHandle),
-                      ),
-                    ],
+              body: Column(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(15.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                _Header(_lineItem),
+                                _Table(_lineItem),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                Divider(
+                                  thickness: 3,
+                                ),
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                _PaymentInfoCard(_project, _lineItem.cost),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                                Text(
+                                  'I authorize Divvy to debit my Divvy Digital Safe and send money to the Contractor in my agreement. Once the funds have been sent Divvy can not refund you or dictate what the funds are used for',
+                                  style: TextStyle(color: Colors.grey[400]),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(
+                                  height: 30,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Visibility(
+                    visible: _lineItem.homeownerApprovalDate == null,
+                    child: _ApproveButton(
+                        _lineItem, _user, _project.generalContractorSilaHandle),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                ],
               ),
             )));
   }
