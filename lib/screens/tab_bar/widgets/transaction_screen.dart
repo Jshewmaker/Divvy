@@ -10,7 +10,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
 class TransactionsScreen extends StatelessWidget {
-  final String collection = "users";
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
@@ -62,16 +61,113 @@ class PopulatedWidget extends StatelessWidget {
       itemCount: transactions.transactions.length,
       separatorBuilder: (BuildContext context, int index) => Divider(height: 3),
       itemBuilder: (context, index) {
-        return ListTile(
-            onTap: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => InvoiceHelperScreen(
-                    transactions.transactions[index].descriptor))),
-            leading: Text(transactions.transactions[index].status),
-            title: Text(DateFormat('MM-dd-yyyy').format(
-                DateTime.parse(transactions.transactions[index].lastUpdate))),
-            trailing: Text(NumberFormat.currency(symbol: '\$')
-                .format(transactions.transactions[index].silaAmount / 100)));
+        var color = cardColor(transactions.transactions[index].transactionType);
+        return _Card(transactions, index, color);
       },
     ));
+  }
+
+  Color cardColor(String transactionType) {
+    if (transactionType == 'transfer')
+      return Colors.blue;
+    else if (transactionType == 'issue')
+      return Colors.teal;
+    else if (transactionType == 'redeem')
+      return Colors.green;
+    else
+      return Colors.black;
+  }
+}
+
+class _Card extends StatelessWidget {
+  _Card(this._transactions, this.index, this._color);
+  final GetTransactionsResponse _transactions;
+  final int index;
+  final Color _color;
+
+  @override
+  Widget build(BuildContext context) {
+    var lineItemID = getLineItem(_transactions.transactions[index].descriptor);
+    return ListTile(
+      onTap: () => {
+        if (_transactions.transactions[index].transactionType == 'transfer')
+          Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => InvoiceHelperScreen(lineItemID)))
+      },
+      leading: Text(
+        DateFormat('MM-dd-yyyy').format(
+                DateTime.parse(_transactions.transactions[index].lastUpdate)) +
+            '\n${_transactions.transactions[index].status}',
+        style: TextStyle(color: _color),
+      ),
+      title: Text(
+        getTransactionName(_transactions.transactions[index]),
+        style: TextStyle(color: _color),
+      ),
+      trailing: Text(
+        NumberFormat.currency(symbol: '\$')
+            .format(_transactions.transactions[index].silaAmount / 100),
+        style: TextStyle(color: _color),
+      ),
+    );
+
+    // Container(
+    //   height: 50,
+    //   child: Card(
+    //     elevation: 0,
+    //     child: Row(
+    //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    //       children: [
+    //         Text(
+    //           DateFormat('MM-dd-yyyy').format(
+    //               DateTime.parse(_transactions.transactions[index].lastUpdate)),
+    //           style: TextStyle(color: _color),
+    //         ),
+    //         Text(
+    //           _transactions.transactions[index].status,
+    //           style: TextStyle(color: _color),
+    //         ),
+    //         Text(
+    //           NumberFormat.currency(symbol: '\$')
+    //               .format(_transactions.transactions[index].silaAmount / 100),
+    //           style: TextStyle(color: _color),
+    //         )
+    //       ],
+    //     ),
+    //   ),
+    // );
+  }
+
+  String getLineItem(String lineItemID) {
+    if (lineItemID.contains('-')) {
+      var splitTrans = lineItemID.split('-');
+
+      // if (splitTrans.length == 1) {
+      //   return splitTrans[0];
+      // }
+      return splitTrans[0];
+    }
+    return lineItemID;
+  }
+
+  String getTransactionName(Transactions transaction) {
+    if (transaction.transactionType == 'redeem') {
+      return 'Transfered Funds To Bank';
+    }
+    if (transaction.transactionType == 'issue') {
+      return 'Deposit into Divvy Digital Wallet';
+    }
+    if (transaction.transactionType == 'transfer') {
+      if (transaction.descriptor.contains('-')) {
+        var splitTrans = transaction.descriptor.split('-');
+
+        if (splitTrans.length == 1) {
+          return "";
+        }
+        return 'Payment for ${splitTrans[1]}';
+      }
+    }
+
+    return "";
   }
 }
