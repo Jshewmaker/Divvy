@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart' as Path;
 
 import 'package:authentication_repository/authentication_repository.dart';
@@ -16,6 +17,8 @@ import 'package:jiffy/jiffy.dart';
 import 'package:divvy/bloc/chat/chat_bloc.dart';
 import 'package:divvy/bloc/chat/chat_state.dart';
 import 'package:divvy/bloc/chat/chat_event.dart';
+
+import '../messaging_screen.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class LineItemInfoScreen extends StatefulWidget {
@@ -63,68 +66,110 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
     _user = userProvider.user;
     return Scaffold(
       appBar: AppBar(
-        title: RichText(
-          text: new TextSpan(
-            // Note: Styles for TextSpans must be explicitly defined.
-            // Child text spans will inherit styles from parent
-            children: <TextSpan>[
-              new TextSpan(
-                  text: _lineItem.title,
-                  style: new TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.teal[400],
-                    fontSize: 24,
-                  )),
-              TextSpan(
-                  text: _lineItem.subContractor, // '\npool & spa services inc',
-                  style: TextStyle(color: Colors.grey, fontSize: 14)),
-            ],
-          ),
-        ),
+        title: Text('Work Submission'),
       ),
-      body: ListView(shrinkWrap: true, children: [
-        Center(
-          child: Container(
-            width: MediaQuery.of(context).size.width / 1.1,
-            child: ListView(
-              shrinkWrap: true,
+      body: Column(
+        children: [
+          Expanded(
+            child: Center(
+              child: Container(
+                width: MediaQuery.of(context).size.width / 1.1,
+                child: ListView(
+                  children: [
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                      child: Column(
+                        children: [
+                          Text(
+                            _lineItem.title,
+                            style: TextStyle(
+                              color: Colors.teal[400],
+                              fontSize: 36,
+                            ),
+                          ),
+                          Text(
+                            _lineItem
+                                .subContractor, // '\npool & spa services inc',
+                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                          ),
+                          Text(
+                            NumberFormat.currency(symbol: '\$')
+                                .format(_lineItem.cost),
+                            style: TextStyle(
+                              color: Colors.teal[400],
+                              fontSize: 30,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    _pictureWidget(),
+                    SizedBox(
+                      height: 40,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                MessagingScreen(_lineItem, _project)));
+                      },
+                      child: Center(
+                          child: Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.message,
+                            color: Colors.teal[400],
+                          ),
+                          Text(' Chat with general contractor',
+                              style: TextStyle(
+                                  color: Colors.teal[400],
+                                  fontSize: 14,
+                                  decoration: TextDecoration.underline)),
+                        ],
+                      )),
+                    ),
+                    SizedBox(
+                      height: 40,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Visibility(
+            visible: _user.isHomeowner,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                SizedBox(
-                  height: 10,
-                ),
-                _pictureWidget(),
-                SizedBox(
-                  height: 20,
-                ),
-                _Chat(_lineItem, _user, _project),
                 Visibility(
-                  visible: _user.isHomeowner,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Visibility(
-                          visible: _lineItem.datePaid == null,
-                          child: _approveButton('Approve')),
-                      Visibility(
-                          visible: _lineItem.datePaid != null,
-                          child: _approveButton('View Receipt')),
-                      _DenyButton(_lineItem, _user),
-                    ],
-                  ),
-                ),
+                    visible: _lineItem.datePaid == null,
+                    child: _approveButton('Approve')),
                 Visibility(
-                    visible: !_user.isHomeowner,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        _SubmitButton(_lineItem, _user),
-                      ],
-                    )),
+                    visible: _lineItem.datePaid != null,
+                    child: _approveButton('View Receipt')),
+                _DenyButton(_lineItem, _user),
               ],
             ),
           ),
-        ),
-      ]),
+          Visibility(
+              visible: !_user.isHomeowner,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _SubmitButton(_lineItem, _user),
+                ],
+              )),
+          SizedBox(
+            height: 40,
+          ),
+        ],
+      ),
     );
   }
 
@@ -322,204 +367,6 @@ class _SubmitButton extends StatelessWidget {
                   Navigator.pop(context),
                 }
             : null,
-      ),
-    );
-  }
-}
-
-class _MessageWidget extends StatelessWidget {
-  final Message message;
-  final UserModel user;
-  //final Project project;
-
-  _MessageWidget({
-    Key key,
-    this.message,
-    this.user,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment:
-          (user.id == message.id) ? Alignment.topRight : Alignment.topLeft,
-      child: Wrap(
-        children: [
-          Card(
-            color: Colors.teal[200],
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0)),
-            elevation: 1,
-            child: Padding(
-              padding: EdgeInsets.all(16.0),
-              child: Text(message.message),
-            ),
-          )
-        ],
-      ),
-    );
-  }
-}
-
-class _TimestampWidget extends StatelessWidget {
-  final Message message;
-  final UserModel user;
-  //final Project project;
-
-  _TimestampWidget({
-    Key key,
-    this.message,
-    this.user,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment:
-          (user.id == message.id) ? Alignment.topRight : Alignment.topLeft,
-      child: Text(
-        getTime(message.timestamp),
-        style: TextStyle(
-          color: Colors.black45,
-        ),
-      ),
-    );
-  }
-
-  String getTime(Timestamp date) {
-    String newDate = "";
-    if (date != null) {
-      newDate = Jiffy(date.toDate()).format("MM/dd/yy, h:mm a");
-    }
-    return newDate;
-  }
-}
-
-class _Chat extends StatelessWidget {
-  _Chat(this.lineItem, this.user, this.project);
-
-  final LineItem lineItem;
-  final UserModel user;
-  final Project project;
-  final FirebaseService _firebaseService = FirebaseService();
-
-  void sendMessage(
-      String message, UserModel user, Project project, LineItem lineItem) {
-    Message messageModel =
-        Message(id: user.id, message: message, timestamp: Timestamp.now());
-    _firebaseService.addMessageToProjectDocument(
-        messageModel.toMap(), project.projectID, lineItem.id);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChatBloc(firebaseService: _firebaseService),
-      child: BlocBuilder<ChatBloc, ChatState>(
-        builder: (context, state) {
-          if (state is ChatInitial) {
-            BlocProvider.of<ChatBloc>(context).add(LoadChat(lineItem));
-          }
-          if (state is NoMessages) {
-            return Column(
-              children: [
-                SizedBox(
-                  height: 20,
-                ),
-                _textField(context),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            );
-          } else if (state is ChatLoadFailure) {
-            return Column(
-              children: [
-                Text('Something went wrong with loading the messages!',
-                    style: TextStyle(color: Colors.red)),
-                SizedBox(
-                  height: 20,
-                ),
-                _textField(context),
-                SizedBox(
-                  height: 20,
-                ),
-              ],
-            );
-          } else if (state is ChatLoadSuccess) {
-            List<dynamic> messageList =
-                List.from(state.lineItem.messages.messages.reversed);
-            return _messages(messageList, context);
-          } else {
-            return _textField(context);
-          }
-        },
-      ),
-    );
-  }
-
-  Column _messages(List<dynamic> messageList, BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          height: 300,
-          child: ListView.builder(
-            reverse: true,
-            shrinkWrap: true,
-            itemCount: messageList.length,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  _MessageWidget(
-                    message: messageList[index],
-                    user: user,
-                  ),
-                  _TimestampWidget(
-                    message: messageList[index],
-                    user: user,
-                  ),
-                ],
-              );
-            },
-          ),
-        ),
-        SizedBox(
-          height: 20,
-        ),
-        _textField(context),
-        SizedBox(
-          height: 20,
-        ),
-      ],
-    );
-  }
-
-  Container _textField(BuildContext context) {
-    final TextEditingController _controller = TextEditingController();
-    return Container(
-      child: TextField(
-        controller: _controller,
-        minLines: 1,
-        maxLines: 15,
-        autocorrect: false,
-        decoration: InputDecoration(
-          hintText: 'Comments',
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.all(Radius.circular(10.0)),
-            borderSide: BorderSide(color: Colors.grey),
-          ),
-          suffixIcon: IconButton(
-              icon: Icon(Icons.send, color: Colors.black45),
-              onPressed: () => {
-                    BlocProvider.of<ChatBloc>(context).add(
-                        SendMessage(user, lineItem, _controller.text, project)),
-                    _controller.clear(),
-                  }),
-        ),
       ),
     );
   }
