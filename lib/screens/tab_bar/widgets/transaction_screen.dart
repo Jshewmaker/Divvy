@@ -88,54 +88,92 @@ class _Card extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var lineItemID = getLineItem(_transactions.transactions[index].descriptor);
-    return ListTile(
-      onTap: () => {
-        if (_transactions.transactions[index].transactionType == 'transfer')
-          Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => InvoiceHelperScreen(lineItemID)))
-      },
-      leading: Text(
-        DateFormat('MM-dd-yyyy').format(
-                DateTime.parse(_transactions.transactions[index].lastUpdate)) +
-            '\n${_transactions.transactions[index].status}',
-        style: TextStyle(color: _color),
-      ),
-      title: Text(
-        getTransactionName(_transactions.transactions[index]),
-        style: TextStyle(color: _color),
-      ),
-      trailing: Text(
-        NumberFormat.currency(symbol: '\$')
-            .format(_transactions.transactions[index].silaAmount / 100),
-        style: TextStyle(color: _color),
+    return
+
+        // ListTile(
+        //   onTap: () => {
+        //     if (_transactions.transactions[index].transactionType == 'transfer')
+        //       Navigator.of(context).push(MaterialPageRoute(
+        //           builder: (context) => InvoiceHelperScreen(lineItemID)))
+        //   },
+        //   leading: Text(
+        //     DateFormat('MM-dd-yyyy').format(
+        //             DateTime.parse(_transactions.transactions[index].lastUpdate)) +
+        //         '\n${_transactions.transactions[index].status}',
+        //     style: TextStyle(color: _color),
+        //   ),
+        //   title: Text(
+        //     getTransactionName(_transactions.transactions[index]),
+        //     style: TextStyle(color: _color),
+        //   ),
+        //   trailing: Text(
+        //     NumberFormat.currency(symbol: '\$')
+        //         .format(_transactions.transactions[index].silaAmount / 100),
+        //     style: TextStyle(color: _color),
+        //   ),
+        // );
+
+        Container(
+      height: 50,
+      child: Card(
+        elevation: 0,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat('MM-dd-yyyy').format(DateTime.parse(
+                          _transactions.transactions[index].lastUpdate)),
+                      style: TextStyle(color: _color),
+                    ),
+                    Text(
+                      _transactions.transactions[index].status,
+                      style: TextStyle(color: _color),
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 7,
+              child: Container(
+                child: Column(
+                  children: [
+                    Text(
+                      getTransactionName(_transactions.transactions[index]),
+                      style: TextStyle(color: _color),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Container(
+                child: Column(
+                  children: [
+                    FittedBox(
+                      fit: BoxFit.fitWidth,
+                      child: Text(
+                        NumberFormat.currency(symbol: '\$').format(
+                            _transactions.transactions[index].silaAmount / 100),
+                        style: TextStyle(color: _color),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
-
-    // Container(
-    //   height: 50,
-    //   child: Card(
-    //     elevation: 0,
-    //     child: Row(
-    //       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-    //       children: [
-    //         Text(
-    //           DateFormat('MM-dd-yyyy').format(
-    //               DateTime.parse(_transactions.transactions[index].lastUpdate)),
-    //           style: TextStyle(color: _color),
-    //         ),
-    //         Text(
-    //           _transactions.transactions[index].status,
-    //           style: TextStyle(color: _color),
-    //         ),
-    //         Text(
-    //           NumberFormat.currency(symbol: '\$')
-    //               .format(_transactions.transactions[index].silaAmount / 100),
-    //           style: TextStyle(color: _color),
-    //         )
-    //       ],
-    //     ),
-    //   ),
-    // );
   }
 
   String getLineItem(String lineItemID) {
