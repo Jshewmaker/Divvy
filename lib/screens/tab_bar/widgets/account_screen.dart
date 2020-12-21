@@ -3,6 +3,7 @@ import 'package:divvy/screens/screens/account/account_options.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/bank_account_balance_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
+import 'package:divvy/screens/screens/contact_divvy_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -50,6 +51,15 @@ class AccountScreen extends StatelessWidget {
               child: Text('Connect Project'),
               onPressed: () => Navigator.of(context).push(
                   MaterialPageRoute(builder: (contest) => ConnectToProject())),
+            ),
+            RaisedButton(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+              ),
+              color: Colors.teal[200],
+              child: Text('Contact Divvy'),
+              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (contest) => ContactDivvyScreen())),
             ),
             RaisedButton(
               shape: RoundedRectangleBorder(

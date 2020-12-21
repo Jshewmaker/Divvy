@@ -6,17 +6,12 @@ import 'package:path/path.dart' as Path;
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:authentication_repository/src/models/project_line_items/messages.dart';
 import 'package:http/http.dart' as http;
-import 'package:jiffy/jiffy.dart';
-import 'package:divvy/bloc/chat/chat_bloc.dart';
-import 'package:divvy/bloc/chat/chat_state.dart';
-import 'package:divvy/bloc/chat/chat_event.dart';
 
 import '../messaging_screen.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
@@ -61,6 +56,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
+    PickedFile image;
     _uploadedFileURL = _lineItem.pictureUrl;
     var userProvider = context.watch<UserModelProvider>();
     _user = userProvider.user;
@@ -235,7 +231,11 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
         await picker.getImage(source: ImageSource.gallery, imageQuality: 100);
 
     setState(() {
-      if (image != null) _image = File(image.path);
+      if (image != null) {
+        _image = File(image.path);
+        _uploadedFileURL = null;
+      }
+
       _addImageToFirebase(context);
     });
   }
@@ -272,19 +272,22 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   }
 
   void _addImageToFirebase(context) async {
-    StorageReference storageReference = FirebaseStorage.instance
-        .ref()
-        .child('${_user.id}/${_lineItem.title}-' + Path.basename(_image.path));
+    StorageReference storageReference = FirebaseStorage.instance.ref();
+    if (_image.path != null) {
+      storageReference = storageReference.child(
+          '${_user.id}/${_lineItem.title}-' + Path.basename(_image.path));
+    }
     StorageUploadTask uploadTask = storageReference.putFile(_image);
     await uploadTask.onComplete;
     print('File Uploaded');
+
     storageReference.getDownloadURL().then((fileURL) {
       FirebaseService firebaseService = FirebaseService();
       firebaseService.addDataToProjectDocument(
           {'picture_url': fileURL}, _user.projectID, _lineItem.id);
-      setState(() {
-        _uploadedFileURL = fileURL;
-      });
+      // setState(() {
+      //   _uploadedFileURL = fileURL;
+      // });
     });
   }
 }
