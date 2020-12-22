@@ -6,43 +6,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
 
-// class SignUpPage extends StatelessWidget {
-//   const SignUpPage({Key key}) : super(key: key);
-
-//   static Route route() {
-//     return MaterialPageRoute<void>(builder: (_) => const SignUpPage());
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Homeowner Sign Up'),
-//         actions: [
-//           TextButton(
-//               child: Text(
-//                 'Next',
-//                 style: TextStyle(
-//                     color: Colors.blue,
-//                     fontWeight: FontWeight.normal,
-//                     fontSize: 18),
-//               ),
-//               onPressed: () => _SignUpButton()),
-//         ],
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(8.0),
-//         child: BlocProvider<SignUpCubit>(
-//           create: (_) => SignUpCubit(
-//             context.read<AuthenticationRepository>(),
-//           ),
-//           child: SignUpForm(),
-//         ),
-//       ),
-//     );
-//   }
-// }
-
 // ignore: must_be_immutable
 class SignUpPage extends StatelessWidget {
   const SignUpPage({Key key}) : super(key: key);
@@ -52,16 +15,7 @@ class SignUpPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // Scaffold(
-        //   appBar: AppBar(
-        //     title: const Text('Homeowner Sign Up'),
-        //     actions: [
-        //       _signUpButton(context),
-        //     ],
-        //   ),
-        //   child:
-        BlocProvider<SignUpCubit>(
+    return BlocProvider<SignUpCubit>(
       create: (_) => SignUpCubit(
         context.read<AuthenticationRepository>(),
       ),
