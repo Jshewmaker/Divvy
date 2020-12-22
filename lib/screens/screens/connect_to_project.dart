@@ -1,4 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/bloc/project/project_bloc.dart';
+import 'package:divvy/bloc/project/project_event.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -52,7 +54,8 @@ class _ConnectToProjectState extends State<ConnectToProject> {
                       FirebaseService _firebaseService = FirebaseService();
                       _firebaseService.addUserDataToProject(
                           _textController.text.trim(), user.user);
-                      Navigator.pop(context);
+                      BlocProvider.of<ProjectBloc>(context)
+                          .add(ProjectInitialEvent());
                     }
                   })
             ],
