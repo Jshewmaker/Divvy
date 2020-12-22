@@ -1,34 +1,33 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_1.dart';
 import 'package:divvy/screens/sign_up/view/contractor/business_admin_alert_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class BusinessSignUpPage2 extends StatelessWidget {
-  const BusinessSignUpPage2({Key key}) : super(key: key);
+// class BusinessSignUpPage2 extends StatelessWidget {
+//   const BusinessSignUpPage2({Key key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Business Address')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _SignUpForm(),
-      ),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Business Address')),
+//       body: Padding(
+//         padding: const EdgeInsets.all(8.0),
+//         child: _SignUpForm(),
+//       ),
+//     );
+//   }
+// }
 
-class _SignUpForm extends StatefulWidget {
-  _SignUpForm({Key key}) : super(key: key);
+class BusinessSignUpPage2 extends StatefulWidget {
+  BusinessSignUpPage2({Key key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 // ignore: must_be_immutable
-class _SignUpFormState extends State<_SignUpForm> {
+class _SignUpFormState extends State<BusinessSignUpPage2> {
   String stateDropdownValue = 'AL';
 
   final TextEditingController _streetAddressController =
@@ -43,40 +42,40 @@ class _SignUpFormState extends State<_SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Card(
-              shadowColor: Colors.teal,
-              elevation: 3,
-              shape: (RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _streetAddressInput(),
-                    const SizedBox(height: 8.0),
-                    _cityInput(),
-                    const SizedBox(height: 8.0),
-                    _stateInput(),
-                    const SizedBox(height: 8.0),
-                    _countryInput(),
-                    const SizedBox(height: 8.0),
-                    _postalCodeInput(),
-                  ],
-                ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text('Business Address'),
+        actions: [
+          TextButton(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            _signUpButton(context),
-          ],
+              onPressed: () => _signUpButton(context)),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              _streetAddressInput(),
+              const SizedBox(height: 8.0),
+              _cityInput(),
+              const SizedBox(height: 8.0),
+              _stateInput(),
+              const SizedBox(height: 8.0),
+              _countryInput(),
+              const SizedBox(height: 8.0),
+              _postalCodeInput(),
+            ],
+          ),
         ),
       ),
     );
@@ -219,35 +218,25 @@ class _SignUpFormState extends State<_SignUpForm> {
     );
   }
 
-  Widget _signUpButton(BuildContext context) {
+  void _signUpButton(BuildContext context) {
     FirebaseService _firebaseService = FirebaseService();
-    return SizedBox(
-      width: double.infinity,
-      child: RaisedButton(
-          child: const Text('Continue'),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          color: Colors.orangeAccent,
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _firebaseService.addDataToFirestoreDocument(
-                  'users',
-                  UserModel(
-                    streetAddress: _streetAddressController.text,
-                    city: _cityController.text,
-                    state: stateDropdownValue,
-                    country: _countryController.text,
-                    postalCode: _postalCodeController.text,
-                  ).toEntity().toDocumentAddresses());
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BusinessAdminTrasitionScreen(),
-                ),
-              );
-            }
-          }),
-    );
+
+    if (_formKey.currentState.validate()) {
+      _firebaseService.addDataToFirestoreDocument(
+          'users',
+          UserModel(
+            streetAddress: _streetAddressController.text,
+            city: _cityController.text,
+            state: stateDropdownValue,
+            country: _countryController.text,
+            postalCode: _postalCodeController.text,
+          ).toEntity().toDocumentAddresses());
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BusinessAdminTrasitionScreen(),
+        ),
+      );
+    }
   }
 }
