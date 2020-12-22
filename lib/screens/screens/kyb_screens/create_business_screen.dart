@@ -27,8 +27,9 @@ class CreateSilaBusinessScreen extends StatelessWidget {
           child: BlocListener<CreateSilaBusinessCubit, CreateSilaBusinessState>(
             listener: (context, state) {
               if (state is CreateSilaBusinessSuccess) {
-                Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(builder: (contest) => HomeScreen()));
+                Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (contest) => HomeScreen()),
+                    (route) => false);
               }
             },
             child:
