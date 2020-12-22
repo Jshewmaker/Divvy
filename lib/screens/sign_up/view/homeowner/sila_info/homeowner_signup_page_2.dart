@@ -5,37 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
+// ignore: must_be_immutable
 class HomeownerSignupPage2 extends StatefulWidget {
   HomeownerSignupPage2({Key key}) : super(key: key);
-
-  @override
-  _HomeownerSignupPage2State createState() => _HomeownerSignupPage2State();
-}
-
-class _HomeownerSignupPage2State extends State<HomeownerSignupPage2> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Homeowner Address'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _SignUpForm(),
-      ),
-    );
-  }
-}
-
-// ignore: must_be_immutable
-class _SignUpForm extends StatefulWidget {
-  _SignUpForm({Key key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<_SignUpForm> {
+class _SignUpFormState extends State<HomeownerSignupPage2> {
   String stateDropdownValue = 'AL';
   FirebaseService _firebaseService = FirebaseService();
 
@@ -51,40 +29,41 @@ class _SignUpFormState extends State<_SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Card(
-              shadowColor: Colors.teal,
-              elevation: 3,
-              shape: (RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _streetAddressInput(),
-                    const SizedBox(height: 8.0),
-                    _cityInput(),
-                    const SizedBox(height: 8.0),
-                    _stateInput(),
-                    const SizedBox(height: 8.0),
-                    _countryInput(),
-                    const SizedBox(height: 8.0),
-                    _postalCodeInput(),
-                  ],
-                ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title:
+            FittedBox(fit: BoxFit.fitWidth, child: Text('Homeowner Address')),
+        actions: [
+          TextButton(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            _signUpButton(context),
-          ],
+              onPressed: () => _signUpButton(context)),
+        ],
+      ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              _streetAddressInput(),
+              const SizedBox(height: 8.0),
+              _cityInput(),
+              const SizedBox(height: 8.0),
+              _stateInput(),
+              const SizedBox(height: 8.0),
+              _countryInput(),
+              const SizedBox(height: 8.0),
+              _postalCodeInput(),
+            ],
+          ),
         ),
       ),
     );
@@ -227,38 +206,24 @@ class _SignUpFormState extends State<_SignUpForm> {
     );
   }
 
-  Widget _signUpButton(context) {
-    return SizedBox(
-      width: double.infinity,
-      child: RaisedButton(
-          child: const Text(
-            'Sign Up',
-            style: TextStyle(color: Colors.white, fontSize: 18),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          color: Color(0xff00c1ca),
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _firebaseService.addDataToFirestoreDocument(
-                  'users',
-                  UserModel(
-                    streetAddress: _streetAddressController.text,
-                    city: _cityController.text,
-                    state: stateDropdownValue,
-                    postalCode: _postalCodeController.text,
-                    country: _countryController.text,
-                  ).toEntity().toDocumentAddresses());
+  void _signUpButton(context) {
+    if (_formKey.currentState.validate()) {
+      _firebaseService.addDataToFirestoreDocument(
+          'users',
+          UserModel(
+            streetAddress: _streetAddressController.text,
+            city: _cityController.text,
+            state: stateDropdownValue,
+            postalCode: _postalCodeController.text,
+            country: _countryController.text,
+          ).toEntity().toDocumentAddresses());
 
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CreateSilaUserScreen(),
-                ),
-              );
-            }
-          }),
-    );
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateSilaUserScreen(),
+        ),
+      );
+    }
   }
 }

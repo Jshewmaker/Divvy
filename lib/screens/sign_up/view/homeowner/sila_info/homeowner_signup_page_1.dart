@@ -7,32 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 
-class HomeownerSignupPage1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Homeowner Info'),
-      ),
-
-      // appBar: AppBar(title: const Text('Homeowner Sign Up')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _SignUpForm(),
-      ),
-    );
-  }
-}
-
-class _SignUpForm extends StatefulWidget {
-  _SignUpForm({Key key}) : super(key: key);
+class HomeownerSignupPage1 extends StatefulWidget {
+  HomeownerSignupPage1({Key key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 // ignore: must_be_immutable
-class _SignUpFormState extends State<_SignUpForm> {
+class _SignUpFormState extends State<HomeownerSignupPage1> {
   FirebaseService _firebaseService = FirebaseService();
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
@@ -45,42 +28,47 @@ class _SignUpFormState extends State<_SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Card(
-              elevation: 5,
-              shape: (RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _nameInput(),
-                    const SizedBox(height: 8.0),
-                    _ssnInput(context),
-                    const SizedBox(height: 8.0),
-                    Text(
-                        'Divvy must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.'),
-                    _birthdayInput(context),
-                    const SizedBox(height: 8.0),
-                    _phoneNumberInput(),
-                    const SizedBox(height: 8.0),
-                  ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: FittedBox(
+            fit: BoxFit.fitWidth, child: Text('Homeowner Personal Info')),
+        actions: [
+          TextButton(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18),
+              ),
+              onPressed: () => _signUpButton(context)),
+        ],
+      ),
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              _nameInput(),
+              const SizedBox(height: 8.0),
+              _ssnInput(context),
+              const SizedBox(height: 8.0),
+              _birthdayInput(context),
+              const SizedBox(height: 8.0),
+              _phoneNumberInput(),
+              const SizedBox(height: 30.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'Divvy must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
+                  style: TextStyle(color: Colors.grey),
                 ),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            _signUpButton(
-              context,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -124,8 +112,8 @@ class _SignUpFormState extends State<_SignUpForm> {
             keyboardType: TextInputType.number,
           ),
         ),
-        IconButton(
-            icon: Icon(Icons.info), onPressed: () => _showAlertDialog(context)),
+        // IconButton(
+        //     icon: Icon(Icons.info), onPressed: () => _showAlertDialog(context)),
       ],
     );
   }
@@ -170,19 +158,15 @@ class _SignUpFormState extends State<_SignUpForm> {
               }
               return null;
             },
+            decoration: InputDecoration(
+              suffixIcon: Icon(Icons.calendar_today),
+              border: UnderlineInputBorder(),
+            ),
             onTap: () => _selectDate(context),
             controller: _birthdayController,
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              hintText: 'YYYY/MM/DD',
-              labelText: 'Birthday',
-            ),
             keyboardType: TextInputType.datetime,
           ),
         ),
-        IconButton(
-            icon: Icon(Icons.calendar_today),
-            onPressed: () => {_selectDate(context)}),
       ],
     );
   }
@@ -237,39 +221,25 @@ class _SignUpFormState extends State<_SignUpForm> {
     );
   }
 
-  Widget _signUpButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: RaisedButton(
-          child: const Text(
-            'Continue',
-            style: TextStyle(color: Colors.white),
-          ),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          color: Color(0x9f20677c),
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _firebaseService.addUserEmailToFirebaseDocument();
-              _firebaseService.userSetupCreateFirestore(
-                  'users',
-                  UserModel(
-                    name: _nameController.text,
-                    dateOfBirthYYYYMMDD: _birthdayController.text,
-                    identityValue: _ssnController.text,
-                    phone: _phoneNumberController.text,
-                    isHomeowner: true,
-                    bankAccountIsConnected: false,
-                  ).toEntity().toDocumentPersonalInfo());
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HomeownerSignupPage2(),
-                ),
-              );
-            }
-          }),
-    );
+  void _signUpButton(BuildContext context) {
+    if (_formKey.currentState.validate()) {
+      _firebaseService.addUserEmailToFirebaseDocument();
+      _firebaseService.userSetupCreateFirestore(
+          'users',
+          UserModel(
+            name: _nameController.text,
+            dateOfBirthYYYYMMDD: _birthdayController.text,
+            identityValue: _ssnController.text,
+            phone: _phoneNumberController.text,
+            isHomeowner: true,
+            bankAccountIsConnected: false,
+          ).toEntity().toDocumentPersonalInfo());
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HomeownerSignupPage2(),
+        ),
+      );
+    }
   }
 }

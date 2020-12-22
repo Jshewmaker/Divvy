@@ -7,28 +7,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 
-class BusinessAdminSignupPage1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Admin Info')),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: _SignUpForm(),
-      ),
-    );
-  }
-}
-
-class _SignUpForm extends StatefulWidget {
-  _SignUpForm({Key key}) : super(key: key);
+class BusinessAdminSignupPage1 extends StatefulWidget {
+  BusinessAdminSignupPage1({Key key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 // ignore: must_be_immutable
-class _SignUpFormState extends State<_SignUpForm> {
+class _SignUpFormState extends State<BusinessAdminSignupPage1> {
   FirebaseService _firebaseService = FirebaseService();
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
@@ -42,42 +29,41 @@ class _SignUpFormState extends State<_SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: _formKey,
-      child: Align(
-        alignment: const Alignment(0, -1 / 3),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Card(
-              elevation: 5,
-              shape: (RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(15))),
-              child: Padding(
-                padding: const EdgeInsets.only(left: 8, right: 8),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _nameInput(),
-                    const SizedBox(height: 8.0),
-                    _emailInput(),
-                    const SizedBox(height: 8.0),
-                    _ssnInput(context),
-                    const SizedBox(height: 8.0),
-                    _birthdayInput(context),
-                    const SizedBox(height: 8.0),
-                    _phoneNumberInput(),
-                    const SizedBox(height: 8.0),
-                  ],
-                ),
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: Text('Admin Personal Info'),
+        actions: [
+          TextButton(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18),
               ),
-            ),
-            const SizedBox(height: 16.0),
-            _signUpButton(
-              context,
-            ),
-          ],
+              onPressed: () => _signUpButton(context)),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              _nameInput(),
+              const SizedBox(height: 8.0),
+              _emailInput(),
+              const SizedBox(height: 8.0),
+              _ssnInput(context),
+              const SizedBox(height: 8.0),
+              _birthdayInput(context),
+              const SizedBox(height: 8.0),
+              _phoneNumberInput(),
+              const SizedBox(height: 8.0),
+            ],
+          ),
         ),
       ),
     );
@@ -187,6 +173,7 @@ class _SignUpFormState extends State<_SignUpForm> {
         border: UnderlineInputBorder(),
         labelText: 'Email',
       ),
+      keyboardType: TextInputType.emailAddress,
     );
   }
 
@@ -240,35 +227,24 @@ class _SignUpFormState extends State<_SignUpForm> {
     );
   }
 
-  Widget _signUpButton(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: RaisedButton(
-          child: const Text('Continue'),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30.0),
-          ),
-          color: Colors.orangeAccent,
-          onPressed: () {
-            if (_formKey.currentState.validate()) {
-              _firebaseService.createBusinessAdminInFirestore(
-                  'users',
-                  UserModel(
-                    name: _nameController.text,
-                    email: _emailController.text,
-                    dateOfBirthYYYYMMDD: _birthdayController.text,
-                    identityValue: _ssnController.text,
-                    phone: _phoneNumberController.text,
-                    isHomeowner: false,
-                  ).toEntity().toDocumentAdminInfo());
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => BusinessAdminSignupPage2(),
-                ),
-              );
-            }
-          }),
-    );
+  void _signUpButton(BuildContext context) {
+    if (_formKey.currentState.validate()) {
+      _firebaseService.createBusinessAdminInFirestore(
+          'users',
+          UserModel(
+            name: _nameController.text,
+            email: _emailController.text,
+            dateOfBirthYYYYMMDD: _birthdayController.text,
+            identityValue: _ssnController.text,
+            phone: _phoneNumberController.text,
+            isHomeowner: false,
+          ).toEntity().toDocumentAdminInfo());
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BusinessAdminSignupPage2(),
+        ),
+      );
+    }
   }
 }
