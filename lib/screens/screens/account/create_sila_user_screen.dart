@@ -38,6 +38,7 @@ class CreateSilaUserScreen extends StatelessWidget {
           child: BlocListener<CreateSilaUserBloc, CreateSilaUserState>(
             listener: (context, state) {
               if (state is CreateSilaUserSuccess) {
+                // Navigator.popUntil(context, (route) => false)
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(builder: (contest) => HomeScreen()),
                     (route) => false);
