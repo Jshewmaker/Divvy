@@ -13,6 +13,8 @@ class SignUpPage extends StatelessWidget {
     return MaterialPageRoute<void>(builder: (_) => const SignUpPage());
   }
 
+  // final TextEditingController _passwordValidatorController =
+  //     TextEditingController();
   @override
   Widget build(BuildContext context) {
     return BlocProvider<SignUpCubit>(
@@ -50,6 +52,13 @@ class SignUpPage extends StatelessWidget {
                   _EmailInput(),
                   const SizedBox(height: 8.0),
                   _PasswordInput(),
+
+                  // const SizedBox(height: 8.0),
+                  _ConfirmPasswordInput(),
+                  Text(
+                    'Passwords must be 8 characters in legnth and include numbers and letters.',
+                    style: TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
                 ],
               ),
             ),
@@ -115,14 +124,42 @@ class _PasswordInput extends StatelessWidget {
       builder: (context, state) {
         return TextField(
           key: const Key('signUpForm_passwordInput_textField'),
-          onChanged: (password) =>
-              context.read<SignUpCubit>().passwordChanged(password),
+          onChanged: (value) =>
+              context.read<SignUpCubit>().passwordChanged(value),
           obscureText: true,
           decoration: InputDecoration(
             border: UnderlineInputBorder(),
             labelText: 'password',
             helperText: '',
             errorText: state.password.invalid ? 'invalid password' : null,
+          ),
+        );
+      },
+    );
+  }
+}
+
+class _ConfirmPasswordInput extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<SignUpCubit, SignUpState>(
+      buildWhen: (previous, current) =>
+          previous.password != current.password ||
+          previous.confirmedPassword != current.confirmedPassword,
+      builder: (context, state) {
+        return TextField(
+          key: const Key('signUpForm_confirmedPasswordInput_textField'),
+          onChanged: (confirmPassword) => context
+              .read<SignUpCubit>()
+              .confirmedPasswordChanged(confirmPassword),
+          obscureText: true,
+          decoration: InputDecoration(
+            border: UnderlineInputBorder(),
+            labelText: 'confirm password',
+            helperText: '',
+            errorText: state.confirmedPassword.invalid
+                ? 'passwords do not match'
+                : null,
           ),
         );
       },
