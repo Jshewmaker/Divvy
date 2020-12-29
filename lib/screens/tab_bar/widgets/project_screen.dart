@@ -102,6 +102,25 @@ class _CardWidget extends StatelessWidget {
     this.project,
   }) : super(key: key);
 
+  Color _cardColor() {
+    if (lineItem.generalContractorApprovalDate != null) {
+      if (lineItem.homeownerApprovalDate != null) {
+        if (lineItem.datePaid != null) {
+          return Colors.teal[100];
+          //status = Paid
+        } else {
+          return Colors.teal[200];
+          //status = Payment Needed
+        }
+      } else {
+        return Colors.amber[400];
+        //status = Approval Needed
+      }
+    } else {
+      return Colors.teal[200];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -109,7 +128,7 @@ class _CardWidget extends StatelessWidget {
       height: 130,
       width: double.maxFinite,
       child: Card(
-        color: Colors.teal[200],
+        color: _cardColor(),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
         elevation: 5,
         child: InkWell(
