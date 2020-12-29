@@ -123,6 +123,7 @@ class _Card extends StatelessWidget {
         },
         child: Card(
           elevation: 0,
+          color: Colors.grey[50],
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
@@ -132,10 +133,13 @@ class _Card extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        DateFormat('MM-dd-yyyy').format(DateTime.parse(
-                            _transactions.transactions[index].lastUpdate)),
-                        style: TextStyle(color: _color),
+                      FittedBox(
+                        fit: BoxFit.fitWidth,
+                        child: Text(
+                          DateFormat('MM-dd-yyyy').format(DateTime.parse(
+                              _transactions.transactions[index].lastUpdate)),
+                          style: TextStyle(color: _color),
+                        ),
                       ),
                       Text(
                         _transactions.transactions[index].status,
@@ -152,9 +156,9 @@ class _Card extends StatelessWidget {
                   child: Column(
                     children: [
                       Text(
-                        getTransactionName(_transactions.transactions[index]),
-                        style: TextStyle(color: _color),
-                      ),
+                          getTransactionName(_transactions.transactions[index]),
+                          style: TextStyle(color: _color),
+                          textAlign: TextAlign.center),
                     ],
                   ),
                 ),
