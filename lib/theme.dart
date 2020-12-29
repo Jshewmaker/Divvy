@@ -8,7 +8,7 @@ final theme = ThemeData(
   primaryColor: Colors.blue[100],
   appBarTheme: AppBarTheme(
       elevation: 0,
-      color: Colors.white,
+      color: Colors.grey[50],
       textTheme: TextTheme(
           headline6: TextStyle(
         color: Colors.black,
@@ -16,7 +16,7 @@ final theme = ThemeData(
       )),
       iconTheme: IconThemeData(color: Colors.black)),
   accentColor: Colors.redAccent,
-  scaffoldBackgroundColor: Colors.white,
+  scaffoldBackgroundColor: Colors.grey[50],
   textSelectionHandleColor: Colors.black,
   inputDecorationTheme: InputDecorationTheme(
     border: OutlineInputBorder(

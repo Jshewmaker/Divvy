@@ -19,15 +19,15 @@ class GetWalletInfoScreen extends StatelessWidget {
           child: BlocBuilder<GetSilaBalanceBloc, GetSilaBalanceState>(
             builder: (context, state) {
               if (state is GetSilaBalanceInitial) {
-                BlocProvider.of<GetSilaBalanceBloc>(context)
-                    .add(GetSilaBalanceRequest());
+                //BlocProvider.of<GetSilaBalanceBloc>(context)
+                //    .add(GetSilaBalanceRequest(user));
                 return Container();
               }
               if (state is GetSilaBalanceLoadInProgress) {
                 return Center(child: CircularProgressIndicator());
               }
               if (state is GetSilaBalanceLoadSuccess) {
-                final apiResponse = state.response;
+                final apiResponse = state.userSilaResponse;
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,

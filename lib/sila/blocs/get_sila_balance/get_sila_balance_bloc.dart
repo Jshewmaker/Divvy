@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/blocs/get_sila_balance/get_sila_balance.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -7,6 +8,7 @@ import 'package:flutter/material.dart';
 class GetSilaBalanceBloc
     extends Bloc<GetSilaBalanceEvent, GetSilaBalanceState> {
   final SilaRepository silaRepository;
+  FirebaseService _firebaseService = FirebaseService();
 
   GetSilaBalanceBloc({@required this.silaRepository})
       : assert(silaRepository != null),
@@ -18,9 +20,21 @@ class GetSilaBalanceBloc
     if (event is GetSilaBalanceRequest) {
       yield GetSilaBalanceLoadInProgress();
       try {
-        final GetSilaBalanceResponse response =
+        final GetSilaBalanceResponse userSilaResponse =
             await silaRepository.getSilaBalance();
-        yield GetSilaBalanceLoadSuccess(response: response);
+        if (event.user.projectID != null) {
+          Project project =
+              await _firebaseService.getProjects(event.user.projectID);
+          UserModel homeowner = await _firebaseService
+              .getUserByPath(project.homeownerPath.substring(1));
+          final GetSilaBalanceResponse projectSilaResponse =
+              await silaRepository.getProjectBalance(homeowner.wallet);
+          yield GetSilaBalanceLoadSuccess(
+              userSilaResponse: userSilaResponse,
+              projectSilaResponse: projectSilaResponse);
+        } else {
+          yield GetSilaBalanceLoadSuccess(userSilaResponse: userSilaResponse);
+        }
       } catch (_) {
         yield GetSilaBalanceLoadFailure();
       }
