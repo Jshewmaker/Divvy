@@ -88,6 +88,12 @@ class SilaRepository {
     return response;
   }
 
+  Future<GetSilaBalanceResponse> getProjectBalance(String wallet) async {
+    final GetSilaBalanceResponse response =
+        await silaApiClient.getSilaBalance(wallet);
+    return response;
+  }
+
   ///Get transactions from SILA wallet
   ///
   ///This will return any transaction that deal with: Adding money to the wallet,

@@ -16,6 +16,7 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 
 class WalletScreen extends StatefulWidget {
   @override
@@ -57,7 +58,7 @@ class _WalletScreenState extends State<WalletScreen> {
                   builder: (context, state) {
                     if (state is GetSilaBalanceInitial) {
                       BlocProvider.of<GetSilaBalanceBloc>(context)
-                          .add(GetSilaBalanceRequest());
+                          .add(GetSilaBalanceRequest(user.user));
                       return Container();
                     }
                     if (state is GetSilaBalanceLoadInProgress) {
@@ -66,10 +67,18 @@ class _WalletScreenState extends State<WalletScreen> {
                       );
                     }
                     if (state is GetSilaBalanceLoadSuccess) {
-                      return WalletScreenPopulated(
-                        response: state.response,
-                        user: user.user,
-                      );
+                      if (state.projectSilaResponse != null) {
+                        return WalletScreenPopulated(
+                          userSilaResponse: state.userSilaResponse,
+                          projectSilaResponse: state.projectSilaResponse,
+                          user: user.user,
+                        );
+                      } else {
+                        return WalletScreenPopulated(
+                          userSilaResponse: state.userSilaResponse,
+                          user: user.user,
+                        );
+                      }
                     }
                     if (state is GetSilaBalanceLoadFailure) {
                       return Text(
@@ -97,143 +106,187 @@ class WalletScreenInitial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: Center(
-            child: Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        Text(
-          "",
-          style: TextStyle(
-              color: Colors.teal, fontSize: 48, fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'Account Balance',
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Column(children: [
+      SizedBox(
+        height: 20,
+      ),
+      Center(
+          child: Container(
+              width: MediaQuery.of(context).size.width / 1.1,
+              child: BalanceCard(
+                  amountSila: 0,
+                  title: "Project",
+                  buttonVisible: user.isHomeowner,
+                  user: user))),
+      Visibility(
+        visible: !user.isHomeowner,
+        child: Column(
           children: [
-            Visibility(
-              visible: user.isHomeowner,
-              child: RaisedButton(
-                child: Text("Add Money"),
-                shape: (RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30))),
-                color: const Color(0xFF1E90FF),
-                textColor: Colors.white,
-                onPressed: () async {
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (contest) => IssueSilaScreen()));
-                },
-              ),
+            SizedBox(
+              height: 20,
             ),
-            Visibility(
-              visible: user.isHomeowner == false,
-              child: RaisedButton(
-                color: const Color(0xFF1E90FF),
-                shape: (RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30))),
-                child: Text('Transfer to Bank'),
-                onPressed: () => {},
-              ),
-            ),
+            Center(
+                child: Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    child: BalanceCard(
+                        amountSila: 0,
+                        title: "Your",
+                        buttonVisible: true,
+                        user: user))),
           ],
         ),
-      ],
-    )));
+      ),
+    ]);
   }
 }
 
 class WalletScreenPopulated extends StatelessWidget {
-  WalletScreenPopulated({Key key, @required this.response, this.user})
+  WalletScreenPopulated(
+      {Key key,
+      @required this.userSilaResponse,
+      this.projectSilaResponse,
+      this.user})
       : super(key: key);
 
-  final GetSilaBalanceResponse response;
+  final GetSilaBalanceResponse userSilaResponse;
+  final GetSilaBalanceResponse projectSilaResponse;
   final UserModel user;
 
   @override
   Widget build(BuildContext context) {
-    double amountSila;
-    amountSila = (response.silaBalance.roundToDouble()) / 100;
+    double amountUserSila, amountProjectSila;
+    amountUserSila = (userSilaResponse.silaBalance.roundToDouble()) / 100;
+    if (projectSilaResponse != null) {
+      amountProjectSila =
+          (projectSilaResponse.silaBalance.roundToDouble()) / 100;
+    } else {
+      amountProjectSila = 0.0;
+    }
 
-    return Scaffold(
-        body: Center(
-            child: Column(
-      children: [
-        SizedBox(
-          height: 40,
-        ),
-        Text(
-          NumberFormat.currency(symbol: '\$').format(amountSila),
-          style: TextStyle(
-              color: Colors.teal[400],
-              fontSize: 48,
-              fontWeight: FontWeight.bold),
-        ),
-        Text(
-          'Safe Balance',
-          style: TextStyle(
-            color: Colors.teal[400],
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(
-          height: 50,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return Column(children: [
+      SizedBox(
+        height: 20,
+      ),
+      Center(
+          child: Container(
+              width: MediaQuery.of(context).size.width / 1.1,
+              child: BalanceCard(
+                  amountSila: amountProjectSila,
+                  title: "Project",
+                  buttonVisible: user.isHomeowner,
+                  user: user))),
+      Visibility(
+        visible: !user.isHomeowner,
+        child: Column(
           children: [
-            Visibility(
-              visible: user.isHomeowner,
-              child: RaisedButton(
-                child: Text("Add Money"),
-                shape: (RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30))),
-                color: const Color(0xFF1E90FF),
-                textColor: Colors.white,
-                onPressed: () async {
-                  final amount = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => IssueSilaScreen()));
-                  if (amount != null) {
-                    BlocProvider.of<IssueSilaBloc>(context)
-                        .add(IssueSilaRequest(amount: double.parse(amount)));
-                  }
-
-                  // Navigator.of(context).push(MaterialPageRoute(
-                  //     builder: (contest) => IssueSilaScreen()));
-                },
-              ),
+            SizedBox(
+              height: 20,
             ),
-            Visibility(
-              visible: user.isHomeowner == false,
-              child: RaisedButton(
-                  child: Text('Transfer to Bank'),
-                  shape: (RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30))),
-                  color: const Color(0xFF1E90FF),
-                  textColor: Colors.white,
-                  onPressed: () => {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                              builder: (context) => RedeemSilaScreen(
-                                  //TODO: where do we wanna do all of the sila converting
-                                  amount: (amountSila * 100).round())),
-                        )
-                      }),
-            ),
+            Center(
+                child: Container(
+                    width: MediaQuery.of(context).size.width / 1.1,
+                    child: BalanceCard(
+                        amountSila: amountUserSila,
+                        title: "Your",
+                        buttonVisible: true,
+                        user: user))),
           ],
         ),
-      ],
-    )));
+      ),
+    ]);
+  }
+}
+
+class BalanceCard extends StatelessWidget {
+  BalanceCard(
+      {Key key, this.amountSila, this.title, this.buttonVisible, this.user});
+
+  final double amountSila;
+  final String title;
+  final bool buttonVisible;
+  final UserModel user;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Column(
+        children: [
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            title + ' Balance',
+            style: TextStyle(
+              color: Colors.teal[400],
+              fontSize: 30,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Text(
+            NumberFormat.currency(symbol: '\$').format(amountSila),
+            style: TextStyle(
+              color: Colors.teal[400],
+              fontSize: 30,
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          Visibility(
+            visible: buttonVisible,
+            child: _button(context, user.isHomeowner, amountSila),
+          ),
+          SizedBox(
+            height: 20,
+          ),
+        ],
+      ),
+    );
+  }
+
+  RaisedButton _button(
+      BuildContext context, bool isHomeowner, double amountSila) {
+    if (isHomeowner) {
+      return RaisedButton(
+        child: Text("Add Money"),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+        color: const Color(0xFF1E90FF),
+        textColor: Colors.white,
+        onPressed: () async {
+          final amount = await Navigator.push(context,
+              MaterialPageRoute(builder: (context) => IssueSilaScreen()));
+
+          if (amount != null) {
+            BlocProvider.of<IssueSilaBloc>(context)
+                .add(IssueSilaRequest(amount: double.parse(amount)));
+          }
+
+          // Navigator.of(context).push(MaterialPageRoute(
+
+          //     builder: (contest) => IssueSilaScreen()));
+        },
+      );
+    } else {
+      return RaisedButton(
+          child: Text('Transfer to Bank'),
+          shape:
+              (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+          color: const Color(0xFF1E90FF),
+          textColor: Colors.white,
+          onPressed: () => {
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                      builder: (context) => RedeemSilaScreen(
+
+                          //TODO: where do we wanna do all of the sila converting
+
+                          amount: (amountSila * 100).round())),
+                )
+              });
+    }
   }
 }

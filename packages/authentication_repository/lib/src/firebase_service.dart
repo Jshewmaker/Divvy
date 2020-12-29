@@ -102,12 +102,21 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
+  Future<UserModel> getUserByPath(String path) async {
+    DocumentSnapshot _documentSnapshot =
+        await Firestore.instance.document(path).get();
+    if (!_documentSnapshot.exists) {
+      return null;
+    }
+    return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
+  }
+
   Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
       if (user.isHomeowner == true) {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
-          "home_owner_path": '/users/' + value.uid,
-          "home_owner_sila_handle": user.silaHandle,
+          "homeowner_path": '/users/' + value.uid,
+          "homeowner_sila_handle": user.silaHandle,
         });
       } else {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {

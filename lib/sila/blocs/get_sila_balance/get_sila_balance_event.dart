@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class GetSilaBalanceEvent extends Equatable {
@@ -5,7 +6,9 @@ abstract class GetSilaBalanceEvent extends Equatable {
 }
 
 class GetSilaBalanceRequest extends GetSilaBalanceEvent {
-  const GetSilaBalanceRequest();
+  const GetSilaBalanceRequest(this.user);
+
+  final UserModel user;
 
   @override
   List<Object> get props => [];

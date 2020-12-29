@@ -14,13 +14,15 @@ class GetSilaBalanceInitial extends GetSilaBalanceState {}
 class GetSilaBalanceLoadInProgress extends GetSilaBalanceState {}
 
 class GetSilaBalanceLoadSuccess extends GetSilaBalanceState {
-  final GetSilaBalanceResponse response;
+  final GetSilaBalanceResponse userSilaResponse;
+  final GetSilaBalanceResponse projectSilaResponse;
 
-  const GetSilaBalanceLoadSuccess({@required this.response})
-      : assert(response != null);
+  const GetSilaBalanceLoadSuccess(
+      {@required this.userSilaResponse, this.projectSilaResponse})
+      : assert(userSilaResponse != null);
 
   @override
-  List<Object> get props => [response];
+  List<Object> get props => [userSilaResponse, projectSilaResponse];
 }
 
 class GetSilaBalanceLoadFailure extends GetSilaBalanceState {}
