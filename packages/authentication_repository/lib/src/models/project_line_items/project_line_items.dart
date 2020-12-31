@@ -33,7 +33,7 @@ class LineItem extends Equatable {
   final String comments;
   final String id;
   final String pictureUrl;
-  final Timestamp expectFinishedDate;
+  final DateTime expectFinishedDate;
   final MessageListModel messages;
 
   const LineItem({
@@ -84,6 +84,9 @@ class LineItem extends Equatable {
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
+    print('DATETIMEL ' +
+        DateTime.fromMillisecondsSinceEpoch(entity.expectFinishedDate)
+            .toString());
     return LineItem(
       generalContractorApprovalDate: entity.generalContractorApprovalDate,
       cost: entity.cost,
@@ -97,7 +100,9 @@ class LineItem extends Equatable {
       comments: entity.comments,
       id: entity.id,
       pictureUrl: entity.pictureUrl,
-      expectFinishedDate: entity.expectFinishedDate,
+      expectFinishedDate: entity.expectFinishedDate != null
+          ? DateTime.fromMillisecondsSinceEpoch(entity.expectFinishedDate)
+          : null,
       messages: (entity.messages != null)
           ? MessageListModel.fromList(entity.messages)
           : null,
@@ -105,6 +110,8 @@ class LineItem extends Equatable {
   }
 
   LineItemEntity toEntity() {
+    var expectedFinishDateToUnix =
+        expectFinishedDate.toUtc().millisecondsSinceEpoch;
     return LineItemEntity(
       generalContractorApprovalDate,
       cost,
@@ -116,7 +123,7 @@ class LineItem extends Equatable {
       comments,
       id,
       pictureUrl,
-      expectFinishedDate,
+      expectedFinishDateToUnix,
       messages.toList(),
     );
   }

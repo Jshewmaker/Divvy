@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'messages.dart';
 
 class LineItemListEntity {
   final List<LineItemEntity> lineItems;
@@ -29,7 +28,7 @@ class LineItemEntity extends Equatable {
   final String comments;
   final String id;
   final String pictureUrl;
-  final Timestamp expectFinishedDate;
+  final int expectFinishedDate;
   final List<dynamic> messages;
 
   const LineItemEntity(
@@ -91,7 +90,7 @@ class LineItemEntity extends Equatable {
       json["comments"] as String,
       json["id"] as String,
       json["picture_url"] as String,
-      json["expect_finished_date"] as Timestamp,
+      json["expect_finished_date"] as int,
       json["messages"] as List<Map>,
     );
   }

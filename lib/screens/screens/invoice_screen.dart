@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila_bloc.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
@@ -191,8 +190,7 @@ class _Table extends StatelessWidget {
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
-              DateFormat.yMMMMd('en_US')
-                  .format(_lineItem.expectFinishedDate.toDate()),
+              DateFormat.yMMMMd('en_US').format(_lineItem.expectFinishedDate),
               style: TextStyle(fontSize: 18),
             ),
           ),

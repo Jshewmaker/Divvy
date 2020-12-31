@@ -198,10 +198,10 @@ class _CardWidget extends StatelessWidget {
     return status;
   }
 
-  String getDate(Timestamp date) {
+  String getDate(DateTime date) {
     String newDate = "";
     if (date != null) {
-      newDate = Jiffy(date.toDate()).format("MMMM do");
+      newDate = Jiffy(date).format("MMMM do");
     }
     return newDate;
   }
