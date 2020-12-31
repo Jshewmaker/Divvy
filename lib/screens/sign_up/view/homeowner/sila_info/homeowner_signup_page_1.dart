@@ -20,9 +20,14 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
       MaskedTextController(mask: '000-00-0000');
+  final MaskedTextController _confirmSsnController =
+      MaskedTextController(mask: '000-00-0000');
   final TextEditingController _birthdayController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
+  String yearDropDown = '1900';
+  String monthDropDown = '1';
+  String dayDropDown = '1';
 
   final _formKey = GlobalKey<FormState>();
 
@@ -56,7 +61,14 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
               const SizedBox(height: 8.0),
               _ssnInput(context),
               const SizedBox(height: 8.0),
-              _birthdayInput(context),
+              _confirmSsn(),
+              const SizedBox(height: 8.0),
+              _birthdayInput(),
+              const SizedBox(height: 8.0),
+              Text(
+                'YYYY      MM     DD',
+                style: TextStyle(color: Colors.grey),
+              ),
               const SizedBox(height: 8.0),
               _phoneNumberInput(),
               const SizedBox(height: 30.0),
@@ -92,29 +104,100 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
   }
 
   Widget _ssnInput(BuildContext context) {
+    return Container(
+      width: 200,
+      child: TextFormField(
+        validator: (value) {
+          if (value.length != 11) {
+            return 'Please Enter Valid Social Security Number';
+          }
+          return null;
+        },
+        controller: _ssnController,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: "xxx-xx-xxxx",
+          labelText: 'Social Security Number',
+        ),
+        keyboardType: TextInputType.number,
+      ),
+    );
+  }
+
+  Widget _confirmSsn() {
+    return TextFormField(
+      controller: _confirmSsnController,
+      validator: (val) {
+        if (val.isEmpty) return "";
+        if (val != _ssnController.text) return 'SSNs Do Not Match';
+        return null;
+      },
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Confirm SSN',
+        hintText: 'xxx-xx-xxxx',
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget _birthdayInput() {
+    var yearList =
+        new List<String>.generate(103, (i) => (1899 + i + 1).toString());
+    var monthList = new List<String>.generate(12, (i) => (i + 1).toString());
+
+    var dayList = new List<String>.generate(31, (i) => (i + 1).toString());
+
     return Row(
       children: [
-        Container(
-          width: 200,
-          child: TextFormField(
-            validator: (value) {
-              if (value.length != 11) {
-                return 'Please Enter Valid Social Security Number';
-              }
-              return null;
-            },
-            controller: _ssnController,
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              hintText: "xxx-xx-xxxx",
-              labelText: 'Social Security Number',
-            ),
-            keyboardType: TextInputType.number,
-          ),
+        customDropDown(
+          yearList,
         ),
-        // IconButton(
-        //     icon: Icon(Icons.info), onPressed: () => _showAlertDialog(context)),
+        customDropDown(
+          monthList,
+        ),
+        customDropDown(
+          dayList,
+        )
       ],
+    );
+  }
+
+  Widget customDropDown(
+    List<String> list,
+  ) {
+    var startingValue;
+    if (list.length > 32) {
+      startingValue = yearDropDown;
+    } else if (list.length > 12) {
+      startingValue = dayDropDown;
+    } else {
+      startingValue = monthDropDown;
+    }
+    return DropdownButton<String>(
+      value: startingValue,
+      underline: Container(
+        height: 1.5,
+        color: Colors.grey[400],
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+          if (list.length > 32) {
+            yearDropDown = newValue;
+          } else if (list.length > 12) {
+            dayDropDown = newValue;
+          } else {
+            monthDropDown = newValue;
+          }
+        });
+      },
+      items: list.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      iconEnabledColor: Colors.white,
     );
   }
 
@@ -146,63 +229,6 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
     );
   }
 
-  Widget _birthdayInput(context) {
-    return Row(
-      children: [
-        Container(
-          width: 200,
-          child: TextFormField(
-            validator: (value) {
-              if (value.length != 10) {
-                return 'Please Enter Birthday as YYYY-MM-DD';
-              }
-              return null;
-            },
-            decoration: InputDecoration(
-              suffixIcon: Icon(Icons.calendar_today),
-              border: UnderlineInputBorder(),
-            ),
-            onTap: () => _selectDate(context),
-            controller: _birthdayController,
-            keyboardType: TextInputType.datetime,
-          ),
-        ),
-      ],
-    );
-  }
-
-  _selectDate(BuildContext context) async {
-    DateTime _selectedDate;
-    DateTime newSelectedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2040),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: ColorScheme.light(
-                primary: Colors.teal[200],
-                onPrimary: Colors.white,
-                surface: Colors.teal[200],
-                onSurface: Colors.black,
-              ),
-              // dialogBackgroundColor: Colors.teal[500],
-            ),
-            child: child,
-          );
-        });
-
-    if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      _birthdayController
-        ..text = DateFormat("yyyy-MM-dd").format(_selectedDate)
-        ..selection = TextSelection.fromPosition(TextPosition(
-            offset: _birthdayController.text.length,
-            affinity: TextAffinity.upstream));
-    }
-  }
-
   Widget _phoneNumberInput() {
     return TextFormField(
       validator: (value) {
@@ -228,7 +254,7 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
           'users',
           UserModel(
             name: _nameController.text,
-            dateOfBirthYYYYMMDD: _birthdayController.text,
+            dateOfBirthYYYYMMDD: '$yearDropDown-$monthDropDown-$dayDropDown',
             identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
             isHomeowner: true,

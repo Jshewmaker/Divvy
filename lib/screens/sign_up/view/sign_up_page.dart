@@ -23,12 +23,6 @@ class SignUpPage extends StatelessWidget {
       ),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            'Homeowner Sign Up',
-            style: TextStyle(
-              fontSize: 18,
-            ),
-          ),
           actions: [
             _signUpButton(context),
           ],
@@ -43,25 +37,36 @@ class SignUpPage extends StatelessWidget {
                 ));
             }
           },
-          child: Form(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ListView(
-                shrinkWrap: true,
-                children: [
-                  _EmailInput(),
-                  const SizedBox(height: 8.0),
-                  _PasswordInput(),
-
-                  // const SizedBox(height: 8.0),
-                  _ConfirmPasswordInput(),
-                  Text(
-                    'Passwords must be 8 characters in legnth and include numbers and letters.',
-                    style: TextStyle(color: Colors.grey, fontSize: 12),
-                  ),
-                ],
+          child: Column(
+            children: [
+              Image.asset(
+                'assets/divvy.png',
+                height: 120,
               ),
-            ),
+              Form(
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: [
+                        _EmailInput(),
+                        const SizedBox(height: 8.0),
+                        _PasswordInput(),
+
+                        // const SizedBox(height: 8.0),
+                        _ConfirmPasswordInput(),
+                        Text(
+                          'Passwords must be 8 characters in legnth and include numbers and letters.',
+                          style: TextStyle(color: Colors.grey, fontSize: 12),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

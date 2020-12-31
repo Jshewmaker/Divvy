@@ -25,6 +25,8 @@ class _SignupFormState extends State<BusinessSignUpPage> {
   final TextEditingController _websiteController = TextEditingController();
   final MaskedTextController _einController =
       MaskedTextController(mask: '00-0000000');
+  final MaskedTextController _confirmEinController =
+      MaskedTextController(mask: '00-0000000');
 
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
@@ -64,6 +66,8 @@ class _SignupFormState extends State<BusinessSignUpPage> {
                 _websiteInput(),
                 const SizedBox(height: 8.0),
                 _einInput(),
+                const SizedBox(height: 8.0),
+                _confirmEin(),
                 const SizedBox(height: 8.0),
                 _phoneNumberInput(),
               ],
@@ -155,6 +159,23 @@ class _SignupFormState extends State<BusinessSignUpPage> {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'EIN',
+        hintText: '12-1234567',
+      ),
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  Widget _confirmEin() {
+    return TextFormField(
+      controller: _confirmEinController,
+      validator: (val) {
+        if (val.isEmpty) return "";
+        if (val != _einController.text) return 'EINs Do Not Match';
+        return null;
+      },
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Confirm EIN',
         hintText: '12-1234567',
       ),
       keyboardType: TextInputType.number,

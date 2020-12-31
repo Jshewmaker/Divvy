@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:intl/intl.dart';
 
 class BusinessAdminSignupPage1 extends StatefulWidget {
   BusinessAdminSignupPage1({Key key}) : super(key: key);
@@ -20,11 +19,15 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
       MaskedTextController(mask: '000-00-0000');
+  final MaskedTextController _confirmSsnController =
+      MaskedTextController(mask: '000-00-0000');
   final TextEditingController _birthdayController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
   final TextEditingController _emailController = TextEditingController();
-
+  String yearDropDown = '1900';
+  String monthDropDown = '1';
+  String dayDropDown = '1';
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -56,12 +59,21 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
               const SizedBox(height: 8.0),
               _emailInput(),
               const SizedBox(height: 8.0),
-              _ssnInput(context),
+              _ssnInput(),
               const SizedBox(height: 8.0),
-              _birthdayInput(context),
+              _confirmSSN(),
+              const SizedBox(height: 8.0),
+              _birthdayInput(),
               const SizedBox(height: 8.0),
               _phoneNumberInput(),
               const SizedBox(height: 8.0),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  'Divvy must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
+                  style: TextStyle(color: Colors.grey),
+                ),
+              ),
             ],
           ),
         ),
@@ -86,7 +98,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     );
   }
 
-  Widget _ssnInput(BuildContext context) {
+  Widget _ssnInput() {
     return Row(
       children: [
         Flexible(
@@ -106,56 +118,131 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
             keyboardType: TextInputType.number,
           ),
         ),
-        IconButton(
-            icon: Icon(Icons.info), onPressed: () => _showAlertDialog(context)),
       ],
     );
   }
 
-  _showAlertDialog(BuildContext context) {
-    // set up the button
-    Widget okButton = FlatButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.pop(context);
-      },
-    );
-
-    // set up the AlertDialog
-    AlertDialog alert = AlertDialog(
-      title: Text("My title"),
-      content: Text(
-          "We need your SSN to validate who you are. We do this for your protection to make sure no one can open an account in your name"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    // show the dialog
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-
-  Widget _birthdayInput(context) {
+  Widget _confirmSSN() {
     return TextFormField(
-      validator: (value) {
-        if (value.length != 10) {
-          return 'Please Enter Birthday as YYYY-MM-DD';
-        }
+      controller: _confirmSsnController,
+      validator: (val) {
+        if (val.isEmpty) return "";
+        if (val != _ssnController.text) return 'SSNs Do Not Match';
         return null;
       },
-      onTap: () => _selectDate(context),
-      controller: _birthdayController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        hintText: 'YYYY/MM/DD',
-        labelText: 'Birthday',
+        labelText: 'Confirm SSN',
+        hintText: 'xxx-xx-xxxx',
       ),
-      keyboardType: TextInputType.datetime,
+      keyboardType: TextInputType.number,
+    );
+  }
+
+  // _showAlertDialog(BuildContext context) {
+  //   // set up the button
+  //   Widget okButton = FlatButton(
+  //     child: Text("OK"),
+  //     onPressed: () {
+  //       Navigator.pop(context);
+  //     },
+  //   );
+
+  //   // set up the AlertDialog
+  //   AlertDialog alert = AlertDialog(
+  //     title: Text("My title"),
+  //     content: Text(
+  //         "We need your SSN to validate who you are. We do this for your protection to make sure no one can open an account in your name"),
+  //     actions: [
+  //       okButton,
+  //     ],
+  //   );
+
+  //   // show the dialog
+  //   showDialog(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return alert;
+  //     },
+  //   );
+  // }
+
+  // Widget _birthdayInput(context) {
+  //   return TextFormField(
+  //     validator: (value) {
+  //       if (value.length != 10) {
+  //         return 'Please Enter Birthday as YYYY-MM-DD';
+  //       }
+  //       return null;
+  //     },
+  //     onTap: () => _selectDate(context),
+  //     controller: _birthdayController,
+  //     decoration: InputDecoration(
+  //       border: UnderlineInputBorder(),
+  //       hintText: 'YYYY/MM/DD',
+  //       labelText: 'Birthday',
+  //     ),
+  //     keyboardType: TextInputType.datetime,
+  //   );
+  // }
+
+  Widget _birthdayInput() {
+    var yearList =
+        new List<String>.generate(103, (i) => (1899 + i + 1).toString());
+    var monthList = new List<String>.generate(12, (i) => (i + 1).toString());
+
+    var dayList = new List<String>.generate(31, (i) => (i + 1).toString());
+
+    return Row(
+      children: [
+        customDropDown(
+          yearList,
+        ),
+        customDropDown(
+          monthList,
+        ),
+        customDropDown(
+          dayList,
+        )
+      ],
+    );
+  }
+
+  Widget customDropDown(
+    List<String> list,
+  ) {
+    var startingValue;
+    if (list.length > 32) {
+      startingValue = yearDropDown;
+    } else if (list.length > 12) {
+      startingValue = dayDropDown;
+    } else {
+      startingValue = monthDropDown;
+    }
+    return DropdownButton<String>(
+      value: startingValue,
+      underline: Container(
+        height: 1.5,
+        color: Colors.grey[400],
+      ),
+      onChanged: (String newValue) {
+        setState(() {
+          if (list.length > 32) {
+            yearDropDown = newValue;
+          } else if (list.length > 12) {
+            dayDropDown = newValue;
+          } else {
+            monthDropDown = newValue;
+          }
+        });
+      },
+      items: list.map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      iconEnabledColor: Colors.white,
     );
   }
 
@@ -177,37 +264,37 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     );
   }
 
-  _selectDate(BuildContext context) async {
-    DateTime _selectedDate;
-    DateTime newSelectedDate = await showDatePicker(
-        context: context,
-        initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-        firstDate: DateTime(1900),
-        lastDate: DateTime(2040),
-        builder: (BuildContext context, Widget child) {
-          return Theme(
-            data: ThemeData.light().copyWith(
-              colorScheme: ColorScheme.light(
-                primary: Colors.teal[200],
-                onPrimary: Colors.white,
-                surface: Colors.teal[200],
-                onSurface: Colors.black,
-              ),
-              // dialogBackgroundColor: Colors.teal[500],
-            ),
-            child: child,
-          );
-        });
+  // _selectDate(BuildContext context) async {
+  //   DateTime _selectedDate;
+  //   DateTime newSelectedDate = await showDatePicker(
+  //       context: context,
+  //       initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
+  //       firstDate: DateTime(1900),
+  //       lastDate: DateTime(2040),
+  //       builder: (BuildContext context, Widget child) {
+  //         return Theme(
+  //           data: ThemeData.light().copyWith(
+  //             colorScheme: ColorScheme.light(
+  //               primary: Colors.teal[200],
+  //               onPrimary: Colors.white,
+  //               surface: Colors.teal[200],
+  //               onSurface: Colors.black,
+  //             ),
+  //             // dialogBackgroundColor: Colors.teal[500],
+  //           ),
+  //           child: child,
+  //         );
+  //       });
 
-    if (newSelectedDate != null) {
-      _selectedDate = newSelectedDate;
-      _birthdayController
-        ..text = DateFormat("yyyy-MM-dd").format(_selectedDate)
-        ..selection = TextSelection.fromPosition(TextPosition(
-            offset: _birthdayController.text.length,
-            affinity: TextAffinity.upstream));
-    }
-  }
+  //   if (newSelectedDate != null) {
+  //     _selectedDate = newSelectedDate;
+  //     _birthdayController
+  //       ..text = DateFormat("yyyy-MM-dd").format(_selectedDate)
+  //       ..selection = TextSelection.fromPosition(TextPosition(
+  //           offset: _birthdayController.text.length,
+  //           affinity: TextAffinity.upstream));
+  //   }
+  // }
 
   Widget _phoneNumberInput() {
     return TextFormField(
@@ -234,7 +321,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
           UserModel(
             name: _nameController.text,
             email: _emailController.text,
-            dateOfBirthYYYYMMDD: _birthdayController.text,
+            dateOfBirthYYYYMMDD: '$yearDropDown-$monthDropDown-$dayDropDown',
             identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
             isHomeowner: false,
