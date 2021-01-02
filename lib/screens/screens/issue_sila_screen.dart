@@ -7,102 +7,103 @@ class IssueSilaScreen extends StatefulWidget {
 
 class _IssueSilaScreenState extends State<IssueSilaScreen> {
   final TextEditingController _textController = TextEditingController();
-  bool canSendMoney = false;
+  bool accepted = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(8.0, 100, 8.0, 8.0),
-        child: Form(
+      appBar: AppBar(title: Text('Project Safe Deposit')),
+      body: Center(
           child: Column(
-            children: [
-              Container(
-                  padding: EdgeInsets.all(15),
-                  child: RichText(
-                      text: TextSpan(
-                          style: TextStyle(
-                              color: Colors.black,
-                              // fontWeight: FontWeight.bold,
-                              fontSize: 18),
-                          text:
-                              'You are about to add money to your Divvy Escrow. Once you have added money to the Escrow, the money is there until the job is done. You can not withdraw the money or change who the money is going to. Divvy NEVER has access to this money and neither does the contractor until you have approved that the work was done '))),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width / 1.1,
+            child: Container(
+              child: Column(
                 children: [
-                  RaisedButton(
-                    shape: (RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30))),
-                    color: Colors.white,
-                    elevation: 3,
-                    onPressed: () => Navigator.pop(context),
-                    child: Text(
-                      'cancel',
-                      style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () => setState(() => canSendMoney = true),
-                    child: Text(
-                      'accept',
-                      style: TextStyle(
-                          color: Colors.teal[300],
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(
-                height: 20,
-              ),
-              Row(
-                children: [
-                  Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(left: 10.0),
-                      child: Visibility(
-                        visible: canSendMoney,
-                        child: TextFormField(
-                          controller: _textController,
-                          decoration: InputDecoration(
-                            prefix: Text('\$'),
-                            labelText: 'Amount',
-                            hintText: '1000',
+                  Form(
+                      child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: EdgeInsets.only(left: 15.0, right: 15.0),
+                              child: TextFormField(
+                                controller: _textController,
+                                decoration: InputDecoration(
+                                  prefix: Text('\$'),
+                                  labelText: 'Amount',
+                                  hintText: '1000',
+                                ),
+                              ),
+                            ),
                           ),
+                        ],
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(15.0),
+                        padding: const EdgeInsets.all(3.0),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey[300]),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Checkbox(
+                                value: accepted,
+                                activeColor: Colors.teal[200],
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    this.accepted = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              flex: 7,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    Text(
+                                        "I understand I am about to add money to my Divvy Safe. Once I have added money to the Safe, the money is there until the job is done. I can not withdraw the money or change who the money is going to. Divvy NEVER has access to this money and neither does the contractor until I have approved that the work was done."),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                  ),
+                      RaisedButton(
+                        child: const Text('Deposit Money'),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30.0),
+                        ),
+                        color: const Color(0xFFa3c746),
+                        onPressed: (accepted &&
+                                _textController.text.trim() != '')
+                            ? () {
+                                // Navigator.push(context,
+                                //     MaterialPageRoute(builder: (context) => Alertdialog()));
+                                // Alertdialog();
+                                // showAlertDialog(context);
+                                Navigator.pop(context, _textController.text);
+                              }
+                            : null,
+                      ),
+                    ],
+                  ))
                 ],
               ),
-              Visibility(
-                visible: canSendMoney,
-                child: RaisedButton(
-                  child: const Text('Deposit Money'),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30.0),
-                  ),
-                  color: const Color(0xFFa3c746),
-                  onPressed: () {
-                    // Navigator.push(context,
-                    //     MaterialPageRoute(builder: (context) => Alertdialog()));
-                    // Alertdialog();
-                    // showAlertDialog(context);
-                    Navigator.pop(context, _textController.text);
-                  },
-                ),
-              )
-            ],
+            ),
           ),
-        ),
-      ),
+        ],
+      )),
     );
   }
 

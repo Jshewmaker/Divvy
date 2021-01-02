@@ -206,43 +206,59 @@ class BalanceCard extends StatelessWidget {
   final bool buttonVisible;
   final UserModel user;
 
+  final SilaRepository silaRepository =
+      SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            title + ' Balance',
-            style: TextStyle(
-              color: Colors.teal[400],
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
+    return BlocListener<IssueSilaBloc, IssueSilaState>(
+      listener: (context, state) {
+        if (state is IssueSilaLoadSuccess) {
+          final snackBar = SnackBar(content: Text('Deposit success!'));
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
+        if (state is IssueSilaLoadFailure) {
+          final snackBar =
+              SnackBar(content: Text('Deposite failed. Please try again.'));
+          Scaffold.of(context).showSnackBar(snackBar);
+        }
+      },
+      child: Card(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Text(
-            NumberFormat.currency(symbol: '\$').format(amountSila),
-            style: TextStyle(
-              color: Colors.teal[400],
-              fontSize: 30,
+            Text(
+              title + ' Balance',
+              style: TextStyle(
+                color: Colors.teal[400],
+                fontSize: 30,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-          Visibility(
-            visible: buttonVisible,
-            child: _button(context, user.isHomeowner, amountSila),
-          ),
-          SizedBox(
-            height: 20,
-          ),
-        ],
+            SizedBox(
+              height: 20,
+            ),
+            Text(
+              NumberFormat.currency(symbol: '\$').format(amountSila),
+              style: TextStyle(
+                color: Colors.teal[400],
+                fontSize: 30,
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            Visibility(
+              visible: buttonVisible,
+              child: _button(context, user.isHomeowner, amountSila),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -277,16 +293,18 @@ class BalanceCard extends StatelessWidget {
               (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
           color: const Color(0xFF1E90FF),
           textColor: Colors.white,
-          onPressed: () => {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                      builder: (context) => RedeemSilaScreen(
+          onPressed: (amountSila > 0)
+              ? () => {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                          builder: (context) => RedeemSilaScreen(
 
-                          //TODO: where do we wanna do all of the sila converting
+                              //TODO: where do we wanna do all of the sila converting
 
-                          amount: (amountSila * 100).round())),
-                )
-              });
+                              amount: (amountSila * 100).round())),
+                    )
+                  }
+              : null);
     }
   }
 }
