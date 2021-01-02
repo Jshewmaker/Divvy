@@ -144,11 +144,15 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Visibility(
-                    visible: _lineItem.datePaid == null,
-                    child: _approveButton('Approve')),
+                    visible: (_lineItem.datePaid == null &&
+                        _lineItem.homeownerApprovalDate == null),
+                    child: _approveButton(
+                        'Approve',
+                        (_lineItem.generalContractorApprovalDate != null &&
+                            _lineItem.homeownerApprovalDate == null))),
                 Visibility(
-                    visible: _lineItem.datePaid != null,
-                    child: _approveButton('View Receipt')),
+                    visible: (_lineItem.datePaid != null),
+                    child: _approveButton('View Receipt', true)),
                 _DenyButton(_lineItem, _user),
               ],
             ),
@@ -169,22 +173,21 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
     );
   }
 
-  Widget _approveButton(String buttonText) {
+  Widget _approveButton(String buttonText, bool isEnabled) {
     return RaisedButton(
         child: Text(
           buttonText,
-          style: TextStyle(
-            color: Colors.white,
-          ),
         ),
         shape:
             (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
         color: const Color(0xFF1E90FF),
         textColor: Colors.white,
-        onPressed: () => {
-              Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => InvoiceScreen(_lineItem, _project)))
-            });
+        onPressed: isEnabled
+            ? () => {
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => InvoiceScreen(_lineItem, _project)))
+                }
+            : null);
   }
 
   Widget _pictureWidget() {
@@ -317,7 +320,8 @@ class _DenyButton extends StatelessWidget {
     //buildWhen: (previous, current) => previous.status != current.status,
     //builder: (context, state) {
     return Visibility(
-      visible: lineItem.datePaid == null,
+      visible:
+          (lineItem.datePaid == null && lineItem.homeownerApprovalDate == null),
       child: RaisedButton(
         child: Text('Deny'),
         shape:
