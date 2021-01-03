@@ -22,8 +22,8 @@ class InvoiceScreen extends StatelessWidget {
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
   void approve(String projectID, String lineID) {
-    Timestamp value = Timestamp.now();
-    Map<String, Timestamp> firebaseData;
+    int value = DateTime.now().millisecondsSinceEpoch;
+    Map<String, int> firebaseData;
 
     firebaseData = {
       "homeowner_approval_date": value,
@@ -190,7 +190,7 @@ class _Table extends StatelessWidget {
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
-              DateFormat.yMMMMd('en_US').format(_lineItem.expectFinishedDate),
+              DateFormat.yMMMMd('en_US').format(_lineItem.expectedFinishDate),
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -212,7 +212,7 @@ class _Table extends StatelessWidget {
             fit: BoxFit.fitWidth,
             child: Text(
               DateFormat.yMMMMd('en_US')
-                  .format(_lineItem.generalContractorApprovalDate.toDate()),
+                  .format(_lineItem.generalContractorApprovalDate),
               style: TextStyle(fontSize: 18),
             ),
           ),
@@ -244,10 +244,10 @@ class _Table extends StatelessWidget {
 
   String paidDate() {
     if (_lineItem.datePaid == null) {
-      Timestamp date = Timestamp.now();
-      return DateFormat.yMMMMd('en_US').format(date.toDate());
+      DateTime date = DateTime.now();
+      return DateFormat.yMMMMd('en_US').format(date);
     } else {
-      return DateFormat.yMMMMd('en_US').format(_lineItem.datePaid.toDate());
+      return DateFormat.yMMMMd('en_US').format(_lineItem.datePaid);
     }
   }
 }

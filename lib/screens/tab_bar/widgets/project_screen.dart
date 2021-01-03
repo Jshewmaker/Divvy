@@ -146,7 +146,7 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    getDate(lineItem.expectFinishedDate),
+                                    getDate(lineItem.expectedFinishDate),
                                     style: TextStyle(color: Colors.grey[100]),
                                   ),
                                 ],

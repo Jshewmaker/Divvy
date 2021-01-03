@@ -56,7 +56,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
 
   @override
   Widget build(BuildContext context) {
-    PickedFile image;
+    // PickedFile image;
     _uploadedFileURL = _lineItem.pictureUrl;
     var userProvider = context.watch<UserModelProvider>();
     _user = userProvider.user;
@@ -344,8 +344,8 @@ class _SubmitButton extends StatelessWidget {
   final UserModel user;
 
   void submit(String projectID, String lineID) {
-    Map<String, Timestamp> firebaseData;
-    Timestamp date = Timestamp.now();
+    Map<String, int> firebaseData;
+    int date = DateTime.now().millisecondsSinceEpoch;
     firebaseData = {
       "general_contractor_approval_date": date,
     };

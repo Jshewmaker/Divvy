@@ -1,6 +1,5 @@
 import 'project_line_items_entity.dart';
 import 'messages.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 
@@ -23,17 +22,17 @@ class LineItemListModel {
 class LineItem extends Equatable {
   /// {@macro user}
 
-  final Timestamp generalContractorApprovalDate;
+  final DateTime generalContractorApprovalDate;
   final double cost;
-  final Timestamp homeownerApprovalDate;
-  final Timestamp datePaid;
+  final DateTime homeownerApprovalDate;
+  final DateTime datePaid;
   final int phase;
   final String title;
   final String subContractor;
   final String comments;
   final String id;
   final String pictureUrl;
-  final DateTime expectFinishedDate;
+  final DateTime expectedFinishDate;
   final MessageListModel messages;
 
   const LineItem({
@@ -47,7 +46,7 @@ class LineItem extends Equatable {
     this.comments,
     this.id,
     this.pictureUrl,
-    this.expectFinishedDate,
+    this.expectedFinishDate,
     this.messages,
   });
 
@@ -63,7 +62,7 @@ class LineItem extends Equatable {
     comments: '',
     id: '',
     pictureUrl: '',
-    expectFinishedDate: null,
+    expectedFinishDate: null,
     messages: null,
   );
 
@@ -79,19 +78,24 @@ class LineItem extends Equatable {
         comments,
         id,
         pictureUrl,
-        expectFinishedDate,
+        expectedFinishDate,
         messages,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
-    print('DATETIMEL ' +
-        DateTime.fromMillisecondsSinceEpoch(entity.expectFinishedDate)
-            .toString());
     return LineItem(
-      generalContractorApprovalDate: entity.generalContractorApprovalDate,
+      generalContractorApprovalDate:
+          entity.generalContractorApprovalDate != null
+              ? DateTime.fromMillisecondsSinceEpoch(
+                  entity.generalContractorApprovalDate)
+              : null,
       cost: entity.cost,
-      homeownerApprovalDate: entity.homeownerApprovalDate,
-      datePaid: entity.datePaid,
+      homeownerApprovalDate: entity.homeownerApprovalDate != null
+          ? DateTime.fromMillisecondsSinceEpoch(entity.homeownerApprovalDate)
+          : null,
+      datePaid: entity.datePaid != null
+          ? DateTime.fromMillisecondsSinceEpoch(entity.datePaid)
+          : null,
       phase: entity.phase,
       title: entity.title,
       subContractor: (entity.subContractor == null)
@@ -100,8 +104,8 @@ class LineItem extends Equatable {
       comments: entity.comments,
       id: entity.id,
       pictureUrl: entity.pictureUrl,
-      expectFinishedDate: entity.expectFinishedDate != null
-          ? DateTime.fromMillisecondsSinceEpoch(entity.expectFinishedDate)
+      expectedFinishDate: entity.expectedFinishDate != null
+          ? DateTime.fromMillisecondsSinceEpoch(entity.expectedFinishDate)
           : null,
       messages: (entity.messages != null)
           ? MessageListModel.fromList(entity.messages)
@@ -111,12 +115,17 @@ class LineItem extends Equatable {
 
   LineItemEntity toEntity() {
     var expectedFinishDateToUnix =
-        expectFinishedDate.toUtc().millisecondsSinceEpoch;
+        expectedFinishDate.toUtc().millisecondsSinceEpoch;
+    var generalContractorApprovalDateToUnix =
+        generalContractorApprovalDate.toUtc().millisecondsSinceEpoch;
+    var homeownerApprovalDateToUnix =
+        homeownerApprovalDate.toUtc().millisecondsSinceEpoch;
+    var datePaidToUnix = datePaid.toUtc().millisecondsSinceEpoch;
     return LineItemEntity(
-      generalContractorApprovalDate,
+      generalContractorApprovalDateToUnix,
       cost,
-      homeownerApprovalDate,
-      datePaid,
+      homeownerApprovalDateToUnix,
+      datePaidToUnix,
       phase,
       title,
       subContractor,
