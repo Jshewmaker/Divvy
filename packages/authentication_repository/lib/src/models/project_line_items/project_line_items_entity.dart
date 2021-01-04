@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'messages.dart';
 
 class LineItemListEntity {
   final List<LineItemEntity> lineItems;
@@ -19,17 +18,17 @@ class LineItemListEntity {
 }
 
 class LineItemEntity extends Equatable {
-  final Timestamp generalContractorApprovalDate;
+  final int generalContractorApprovalDate;
   final double cost;
-  final Timestamp homeownerApprovalDate;
-  final Timestamp datePaid;
+  final int homeownerApprovalDate;
+  final int datePaid;
   final int phase;
   final String title;
   final String subContractor;
   final String comments;
   final String id;
   final String pictureUrl;
-  final Timestamp expectFinishedDate;
+  final int expectedFinishDate;
   final List<dynamic> messages;
 
   const LineItemEntity(
@@ -43,7 +42,7 @@ class LineItemEntity extends Equatable {
     this.comments,
     this.id,
     this.pictureUrl,
-    this.expectFinishedDate,
+    this.expectedFinishDate,
     this.messages,
   );
 
@@ -59,7 +58,7 @@ class LineItemEntity extends Equatable {
       "sub_contactor": subContractor,
       "comments": comments,
       "picture_url": pictureUrl,
-      "expect_finished_date": expectFinishedDate,
+      "expect_finished_date": expectedFinishDate,
     };
   }
 
@@ -74,24 +73,24 @@ class LineItemEntity extends Equatable {
         comments,
         id,
         pictureUrl,
-        expectFinishedDate,
+        expectedFinishDate,
         messages,
       ];
 
   static LineItemEntity fromJson(Map<String, Object> json) {
     //TODO: messages from json
     return LineItemEntity(
-      json["general_contractor_approval_date"] as Timestamp,
+      json["general_contractor_approval_date"] as int,
       json["cost"] as double,
-      json["homeowner_approval_date"] as Timestamp,
-      json["date_paid"] as Timestamp,
+      json["homeowner_approval_date"] as int,
+      json["date_paid"] as int,
       json["phase"] as int,
       json["title"] as String,
       json["sub_contactor"] as String,
       json["comments"] as String,
       json["id"] as String,
       json["picture_url"] as String,
-      json["expect_finished_date"] as Timestamp,
+      json["expected_finish_date"] as int,
       json["messages"] as List<Map>,
     );
   }
@@ -126,7 +125,7 @@ class LineItemEntity extends Equatable {
       "sub_contactor": subContractor,
       "comments": comments,
       "picture_url": pictureUrl,
-      "expect_finished_date": expectFinishedDate,
+      "expect_finished_date": expectedFinishDate,
       "messages": messages.toList(),
     };
   }

@@ -165,7 +165,7 @@ class _CardWidget extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    getDate(lineItem.expectFinishedDate),
+                                    getDate(lineItem.expectedFinishDate),
                                     style: TextStyle(color: Colors.grey[100]),
                                   ),
                                 ],
@@ -217,10 +217,10 @@ class _CardWidget extends StatelessWidget {
     return status;
   }
 
-  String getDate(Timestamp date) {
+  String getDate(DateTime date) {
     String newDate = "";
     if (date != null) {
-      newDate = Jiffy(date.toDate()).format("MMMM do");
+      newDate = Jiffy(date).format("MMMM do");
     }
     return newDate;
   }

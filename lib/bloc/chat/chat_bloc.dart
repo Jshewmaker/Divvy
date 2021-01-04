@@ -1,6 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/bloc/project/project_event.dart';
-import 'package:divvy/bloc/project/project_state.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:meta/meta.dart';
