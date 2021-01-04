@@ -20,10 +20,12 @@ void main() {
     ),
   );
 
+//  final FirebaseService firebaseService = FirebaseService();
   runApp(ChangeNotifierProvider(
       create: (context) => UserModelProvider(),
       child: App(
         authenticationRepository: AuthenticationRepository(),
         silaRepository: checkHandleRepository,
+        firebaseService: FirebaseService(),
       )));
 }

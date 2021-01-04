@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/screens/screens/account/account_options.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
@@ -9,12 +10,36 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AccountScreen extends StatelessWidget {
+  static const Color blueHighlight = const Color(0xFF3665FF);
+
   @override
   Widget build(BuildContext context) {
+    var userProvider = context.watch<UserModelProvider>();
+    var _user = userProvider.user;
     return Scaffold(
       body: Center(
         child: Column(
           children: [
+            RichText(
+              text: new TextSpan(
+                // Note: Styles for TextSpans must be explicitly defined.
+                // Child text spans will inherit styles from parent
+                style: new TextStyle(
+                  fontSize: 25.0,
+                  color: Colors.black45,
+                ),
+                children: <TextSpan>[
+                  new TextSpan(text: 'Hello '),
+                  new TextSpan(
+                      text: '${_user.name}!',
+                      style: new TextStyle(
+                          fontWeight: FontWeight.bold, color: blueHighlight)),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
             // RaisedButton(
             //   shape: RoundedRectangleBorder(
             //     borderRadius: BorderRadius.circular(30.0),
@@ -34,15 +59,7 @@ class AccountScreen extends StatelessWidget {
             //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
             //       builder: (contest) => GetWalletInfoScreen())),
             // ),
-            RaisedButton(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              color: Colors.teal[200],
-              child: Text('Check Bank Account Balance'),
-              onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (contest) => BankAccountInfoScreen())),
-            ),
+
             RaisedButton(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(30.0),
