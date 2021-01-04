@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
@@ -17,11 +18,13 @@ class App extends StatelessWidget {
     Key key,
     @required this.authenticationRepository,
     @required this.silaRepository,
+    @required this.firebaseService,
   })  : assert(authenticationRepository != null),
         super(key: key);
 
   final AuthenticationRepository authenticationRepository;
   final SilaRepository silaRepository;
+  final FirebaseService firebaseService;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +41,9 @@ class App extends StatelessWidget {
               silaRepository: silaRepository,
             ),
           ),
+          BlocProvider(
+              create: (context) =>
+                  ProjectBloc(firebaseService: firebaseService)),
         ], child: AppView()));
   }
 }

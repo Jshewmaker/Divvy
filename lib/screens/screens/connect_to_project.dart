@@ -57,6 +57,7 @@ class _ConnectToProjectState extends State<ConnectToProject> {
                       BlocProvider.of<ProjectBloc>(context)
                           .add(ProjectInitialEvent());
                     }
+                    Navigator.pop(context);
                   })
             ],
           ),
