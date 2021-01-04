@@ -58,7 +58,7 @@ class LineItemEntity extends Equatable {
       "sub_contactor": subContractor,
       "comments": comments,
       "picture_url": pictureUrl,
-      "expect_finished_date": expectedFinishDate,
+      "expected_finish_date": expectedFinishDate,
     };
   }
 
@@ -108,7 +108,7 @@ class LineItemEntity extends Equatable {
       snap.data['comments'],
       snap.documentID,
       snap.data['picture_url'],
-      snap.data['expect_finished_date'],
+      snap.data['expected_finish_date'],
       snap.data['messages'],
     );
   }
@@ -125,7 +125,7 @@ class LineItemEntity extends Equatable {
       "sub_contactor": subContractor,
       "comments": comments,
       "picture_url": pictureUrl,
-      "expect_finished_date": expectedFinishDate,
+      "expected_finish_date": expectedFinishDate,
       "messages": messages.toList(),
     };
   }

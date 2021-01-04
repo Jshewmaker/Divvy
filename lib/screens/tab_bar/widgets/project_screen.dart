@@ -151,24 +151,20 @@ class _CardWidget extends StatelessWidget {
                           padding: const EdgeInsets.only(
                               left: 10, top: 5, right: 10),
                           child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    lineItem.title,
-                                    style: TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.w700),
-                                  ),
-                                ],
+                              FittedBox(
+                                fit: BoxFit.fitWidth,
+                                child: Text(
+                                  lineItem.title,
+                                  style: TextStyle(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700),
+                                ),
                               ),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    getDate(lineItem.expectedFinishDate),
-                                    style: TextStyle(color: Colors.grey[100]),
-                                  ),
-                                ],
+                              Text(
+                                getDate(lineItem.expectedFinishDate),
+                                style: TextStyle(color: Colors.grey[100]),
                               ),
                               SizedBox(
                                 height: 15,
