@@ -16,7 +16,6 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:path/path.dart';
 
 class WalletScreen extends StatefulWidget {
   @override
