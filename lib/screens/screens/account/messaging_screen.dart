@@ -100,7 +100,7 @@ class _MessageWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(30.0)),
               elevation: 1,
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
                 child: Text(message.message),
               ),
             ),
@@ -265,9 +265,12 @@ class _Chat extends StatelessWidget {
           suffixIcon: IconButton(
               icon: Icon(Icons.send, color: Colors.black45),
               onPressed: () => {
-                    BlocProvider.of<ChatBloc>(context).add(
-                        SendMessage(user, lineItem, _controller.text, project)),
-                    _controller.clear(),
+                    if (_controller.text.trim() != '')
+                      {
+                        BlocProvider.of<ChatBloc>(context).add(SendMessage(
+                            user, lineItem, _controller.text, project)),
+                        _controller.clear(),
+                      }
                   }),
         ),
       ),
