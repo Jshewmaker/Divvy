@@ -1,7 +1,6 @@
 import 'dart:ui';
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila.dart';
 import 'package:divvy/sila/blocs/transfer_sila/transfer_sila_bloc.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
@@ -46,20 +45,6 @@ class InvoiceScreen extends StatelessWidget {
                   if (state is TransferSilaLoadFailure) {
                     Toast.show(state.exception.toString(), context,
                         duration: 4, gravity: Toast.BOTTOM);
-                    /*
-                  Fluttertoast.showToast(
-                      msg: "This is Center Short Toast",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.CENTER,
-                      timeInSecForIosWeb: 1,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white,
-                      fontSize: 16.0); */
-                    //TODO: See if we can get the snackbar below working
-                    //        Scaffold.of(context)
-                    // ..hideCurrentSnackBar()
-                    // ..showSnackBar(
-                    //     const SnackBar(content: Text('Authentication Failure')));
                   }
                   if (state is TransferSilaLoadSuccess) {
                     approve(_user.projectID, _lineItem.id);

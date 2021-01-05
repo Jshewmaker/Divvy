@@ -68,13 +68,6 @@ class AuthenticationRepository {
         email: email,
         password: password,
       );
-
-      // FirebaseService firebaseService = FirebaseService();
-      // firebaseService.userSetupCreateFirestore(
-      //     'users', userData.toEntity().toDocument());
-      //-----------------
-      // userCollection.add(user.toEntity().toDocument());
-      // userCollection.document(user.id).
     }
     //This is the way to get the error if the email is already taken
     // catch (_) {
@@ -82,7 +75,6 @@ class AuthenticationRepository {
     // }
     //We need to make this throw the above error
     on Exception {
-      print(value);
       throw SignUpFailure();
     }
   }

@@ -1,5 +1,7 @@
 import 'package:divvy/screens/login/login.dart';
+import 'package:divvy/screens/login/view/forgot_password_screen.dart';
 import 'package:divvy/screens/sign_up/view/sign_up_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:formz/formz.dart';
@@ -30,6 +32,7 @@ class LoginForm extends StatelessWidget {
               _EmailInput(),
               const SizedBox(height: 8.0),
               _PasswordInput(),
+              _ForgotPassword(),
               const SizedBox(height: 8.0),
               _LoginButton(),
               const SizedBox(height: 8.0),
@@ -83,6 +86,16 @@ class _PasswordInput extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class _ForgotPassword extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+        onPressed: () => Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => ForgotPasswordScreen())),
+        child: Text('Forgot Password'));
   }
 }
 
