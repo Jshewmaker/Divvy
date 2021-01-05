@@ -72,10 +72,12 @@ class ProjectScreen extends StatelessWidget {
               );
             }
             if (state is LineItemLoadFailure) {
-              return Text(
-                'Something went wrong with loading line items!',
-                style: TextStyle(color: Colors.red),
-              );
+              final snackBar = SnackBar(
+                  content:
+                      Text('Something went wrong with loading line items!'));
+              Scaffold.of(context).showSnackBar(snackBar);
+              return Container();
+              //ConnectToProject();
             }
             return Container();
           });
