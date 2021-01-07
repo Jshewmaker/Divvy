@@ -59,7 +59,9 @@ class ProjectScreen extends StatelessWidget {
           }
           if (state is ProjectLoadInProgress) {
             return Center(
-              child: CustomProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+              ),
             );
           }
           if (state is ProjectLoadSuccess) {
@@ -77,10 +79,18 @@ class ProjectScreen extends StatelessWidget {
               child: BlocBuilder<LineItemBloc, LineItemState>(
                   builder: (context, state) {
                 if (state is LineItemInitial) {
-                  return Center(child: CustomProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+                  ));
                 }
                 if (state is LineItemLoadInProgress) {
-                  return Center(child: CustomProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+                  ));
                 }
                 if (state is LineItemLoadSuccess) {
                   final lineItems = state.lineItems;
