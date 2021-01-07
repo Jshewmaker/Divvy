@@ -16,13 +16,19 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     if (event is ProjectInitialEvent) {
       yield ProjectLoadInProgress();
       try {
-        UserModel user = await firebaseService.getUserData();
-        final Project project =
-            await firebaseService.getProjects(user.projectID);
-        if (project == null) {
-          yield ProjectNotConnected();
+        bool projectExist =
+            await firebaseService.projectExists(event.projectID);
+        if (projectExist) {
+          UserModel user = await firebaseService.getUserData();
+          final Project project =
+              await firebaseService.addUserDataToProject(event.projectID, user);
+          if (project == null) {
+            yield ProjectNotConnected();
+          } else {
+            yield ProjectLoadSuccess(project: project);
+          }
         } else {
-          yield ProjectLoadSuccess(project: project);
+          yield ProjectDoesNotExist();
         }
 
         // final LineItemListModel lineItem =
@@ -31,16 +37,37 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         yield ProjectLoadFailure();
       }
     }
+    if (event is CheckForProject) {
+      try {
+        yield CheckProjectInitial();
+        UserModel user = await firebaseService.getUserData();
+        if (user.projectID != null) {
+          yield ProjectLoadInProgress();
+          Project project = await firebaseService.getProjects(user.projectID);
+          yield ProjectLoadSuccess(project: project);
+        } else {
+          yield ProjectNotConnected();
+        }
+      } catch (_) {
+        yield ProjectLoadFailure();
+      }
+    }
     if (event is ProjectRequested) {
       yield ProjectLoadInProgress();
       try {
-        UserModel user = await firebaseService.getUserData();
-        final Project project =
-            await firebaseService.addUserDataToProject(event.projectID, user);
-        if (project == null) {
-          yield ProjectNotConnected();
+        bool projectExists =
+            await firebaseService.projectExists(event.projectID);
+        if (projectExists) {
+          UserModel user = await firebaseService.getUserData();
+          final Project project =
+              await firebaseService.addUserDataToProject(event.projectID, user);
+          if (project == null) {
+            yield ProjectNotConnected();
+          } else {
+            yield ProjectLoadSuccess(project: project);
+          }
         } else {
-          yield ProjectLoadSuccess(project: project);
+          yield ProjectDoesNotExist();
         }
       } catch (_) {
         yield ProjectLoadFailure();

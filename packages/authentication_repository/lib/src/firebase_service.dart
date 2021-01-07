@@ -111,16 +111,28 @@ class FirebaseService {
     return UserModel.fromEntity(UserEntity.fromSnapshot(_documentSnapshot));
   }
 
+  Future<bool> projectExists(String docID) async {
+    DocumentReference cityRef =
+        Firestore.instance.collection(projectCollection).document(docID);
+    DocumentSnapshot doc = await cityRef.get();
+
+    if (!doc.exists) {
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
       if (user.isHomeowner == true) {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
-          "homeowner_path": '/users/' + value.uid,
+          "homeowner_path": 'users/' + value.uid,
           "homeowner_sila_handle": user.silaHandle,
         });
       } else {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
-          "general_contractor_path": '/users/' + value.uid,
+          "general_contractor_path": 'users/' + value.uid,
           "general_contractor_sila_handle": user.silaHandle
         });
       }
@@ -165,7 +177,6 @@ class FirebaseService {
         .collection(projectCollection)
         .document(projectID)
         .collection(lineItemsCollection)
-        .where('phase', isEqualTo: 1)
         .orderBy('expected_finish_date')
         .getDocuments();
     //All the examples use get not getDocuments
