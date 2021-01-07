@@ -25,8 +25,8 @@ class GetSilaBalanceBloc
         if (event.user.projectID != null) {
           Project project =
               await _firebaseService.getProjects(event.user.projectID);
-          UserModel homeowner = await _firebaseService
-              .getUserByPath(project.homeownerPath.substring(1));
+          UserModel homeowner =
+              await _firebaseService.getUserByPath(project.homeownerPath);
           final GetSilaBalanceResponse projectSilaResponse =
               await silaRepository.getProjectBalance(homeowner.wallet);
           yield GetSilaBalanceLoadSuccess(

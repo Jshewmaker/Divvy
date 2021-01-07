@@ -11,9 +11,13 @@ abstract class ProjectState extends Equatable {
 
 class ProjectInitial extends ProjectState {}
 
+class CheckProjectInitial extends ProjectState {}
+
 class ProjectLoadInProgress extends ProjectState {}
 
 class ProjectNotConnected extends ProjectState {}
+
+class ProjectDoesNotExist extends ProjectState {}
 
 class ProjectLoadSuccess extends ProjectState {
   final Project project;

@@ -32,64 +32,77 @@ class ProjectScreen extends StatelessWidget {
           create: (context) => LineItemBloc(firebaseService: _firebaseService),
         )
       ],
-      child: Scaffold(body: Center(child:
-          BlocBuilder<ProjectBloc, ProjectState>(builder: (context, state) {
-        if (state is ProjectInitial) {
-          BlocProvider.of<ProjectBloc>(context).add(ProjectInitialEvent());
-          return Container();
-        }
-        if (state is ProjectLoadInProgress) {
-          return Center(
-            child: CustomProgressIndicator(),
-          );
-        }
-        if (state is ProjectNotConnected) {
-          return ConnectToProject();
-        }
-        if (state is ProjectLoadSuccess) {
-          Project project = state.project;
-          return BlocBuilder<LineItemBloc, LineItemState>(
-              builder: (context, state) {
-            if (state is LineItemInitial) {
-              BlocProvider.of<LineItemBloc>(context).add(LineItemRequested(1));
-              return Container();
-            }
-            if (state is LineItemLoadInProgress) {
-              return Center(child: CustomProgressIndicator());
-            }
-            if (state is LineItemLoadSuccess) {
-              final lineItems = state.lineItems;
-
-              return ListView.builder(
-                itemCount: lineItems.lineItems.length,
-                itemBuilder: (context, index) {
-                  LineItem lineItem = lineItems.lineItems[index];
-                  return _CardWidget(
-                    lineItem: lineItem,
-                    project: project,
-                  );
-                },
-              );
-            }
-            if (state is LineItemLoadFailure) {
-              final snackBar = SnackBar(
-                  content:
-                      Text('Something went wrong with loading line items!'));
-              Scaffold.of(context).showSnackBar(snackBar);
-              return Container();
-              //ConnectToProject();
-            }
+      child: Scaffold(
+          body: Center(
+              child: BlocListener<ProjectBloc, ProjectState>(
+        listener: (context, state) {
+          if (state is ProjectDoesNotExist) {
+            SnackBar snackBar = SnackBar(
+                content: Text('Project does not Exist. Please try again'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is ProjectDoesNotExist) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'Something went wrong loading project. Please try again'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+        },
+        child:
+            BlocBuilder<ProjectBloc, ProjectState>(builder: (context, state) {
+          if (state is ProjectInitial) {
+            BlocProvider.of<ProjectBloc>(context).add(CheckForProject());
             return Container();
-          });
-        }
-        if (state is ProjectLoadFailure) {
-          return Text(
-            'Something went wrong with loading project!',
-            style: TextStyle(color: Colors.red),
-          );
-        }
-        return Container();
-      }))),
+          }
+          if (state is CheckProjectInitial) {
+            return Container();
+          }
+          if (state is ProjectLoadInProgress) {
+            return Center(
+              child: CustomProgressIndicator(),
+            );
+          }
+          if (state is ProjectLoadSuccess) {
+            Project project = state.project;
+            BlocProvider.of<LineItemBloc>(context).add(LineItemRequested(1));
+            return BlocListener<LineItemBloc, LineItemState>(
+              listener: (context, state) {
+                if (state is LineItemLoadFailure) {
+                  final snackBar = SnackBar(
+                      content: Text(
+                          'Something went wrong with loading line items!'));
+                  Scaffold.of(context).showSnackBar(snackBar);
+                }
+              },
+              child: BlocBuilder<LineItemBloc, LineItemState>(
+                  builder: (context, state) {
+                if (state is LineItemInitial) {
+                  return Center(child: CustomProgressIndicator());
+                }
+                if (state is LineItemLoadInProgress) {
+                  return Center(child: CustomProgressIndicator());
+                }
+                if (state is LineItemLoadSuccess) {
+                  final lineItems = state.lineItems;
+
+                  return ListView.builder(
+                    itemCount: lineItems.lineItems.length,
+                    itemBuilder: (context, index) {
+                      LineItem lineItem = lineItems.lineItems[index];
+                      return _CardWidget(
+                        lineItem: lineItem,
+                        project: project,
+                      );
+                    },
+                  );
+                }
+                return ConnectToProject();
+              }),
+            );
+          }
+          return ConnectToProject();
+        }),
+      ))),
     );
   }
 }

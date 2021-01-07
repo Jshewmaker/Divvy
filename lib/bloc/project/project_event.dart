@@ -9,11 +9,18 @@ abstract class ProjectEvent extends Equatable {
 
 class ProjectConnectedLoadSuccess extends ProjectEvent {}
 
+class CheckForProject extends ProjectEvent {}
+
 class ProjectInitialEvent extends ProjectEvent {
-  const ProjectInitialEvent();
+  final String projectID;
+
+  const ProjectInitialEvent(this.projectID);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [projectID];
+
+  @override
+  String toString() => 'Connecting Project{project $projectID }';
 }
 
 class ProjectCheck extends ProjectEvent {
