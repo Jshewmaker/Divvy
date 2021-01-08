@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/blocs/link_account/link_account.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -18,6 +19,9 @@ class LinkAccountBloc extends Bloc<LinkAccountEvent, LinkAccountState> {
       try {
         final LinkAccountResponse response =
             await silaRepository.linkAccount(event.plaidPublicToken);
+        FirebaseService _firebaseService = FirebaseService();
+        _firebaseService.addDataToFirestoreDocument(
+            'users', {"bankAccountIsConnected": true});
         yield LinkAccountLoadSuccess(response: response);
       } catch (_) {
         yield LinkAccountLoadFailure();
