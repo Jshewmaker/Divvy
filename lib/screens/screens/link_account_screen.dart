@@ -19,29 +19,30 @@ class LinkAccountScreen extends StatelessWidget {
       create: (context) => LinkAccountBloc(silaRepository: silaRepository),
       child: Scaffold(
         body: Center(
-          child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
-            builder: (context, state) {
-              if (state is LinkAccountInitial) {
-                BlocProvider.of<LinkAccountBloc>(context)
-                    .add(LinkAccountRequest(plaidPublicToken: token));
-              }
-              if (state is LinkAccountLoadInProgress) {
-                return Center(child: CircularProgressIndicator());
-              }
+          child: BlocListener<LinkAccountBloc, LinkAccountState>(
+            listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
-                FirebaseService _firebaseService = FirebaseService();
-                _firebaseService.addDataToFirestoreDocument(
-                    'users', {"bankAccountIsConnected": true});
                 Navigator.pop(context);
               }
-              if (state is LinkAccountLoadFailure) {
-                return Text(
-                  'Failure: link account failure',
-                  style: TextStyle(color: Colors.red),
-                );
-              }
-              return CircularProgressIndicator();
             },
+            child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
+              builder: (context, state) {
+                if (state is LinkAccountInitial) {
+                  BlocProvider.of<LinkAccountBloc>(context)
+                      .add(LinkAccountRequest(plaidPublicToken: token));
+                }
+                if (state is LinkAccountLoadInProgress) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                if (state is LinkAccountLoadFailure) {
+                  return Text(
+                    'Failure: link account failure',
+                    style: TextStyle(color: Colors.red),
+                  );
+                }
+                return CircularProgressIndicator();
+              },
+            ),
           ),
         ),
       ),
