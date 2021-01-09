@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:divvy/screens/screens/account/message_attribute_model.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -76,32 +77,36 @@ class _MessagingScreenState extends State<MessagingScreen> {
 class _MessageWidget extends StatelessWidget {
   final Message message;
   final UserModel user;
+  final MessageAttributes attributes;
   //final Project project;
 
   _MessageWidget({
     Key key,
     this.message,
     this.user,
+    this.attributes,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment:
-          (user.id == message.id) ? Alignment.topRight : Alignment.topLeft,
+      alignment: attributes.messageAlignment,
       child: Wrap(
         children: [
           ConstrainedBox(
             constraints: BoxConstraints(
                 maxWidth: MediaQuery.of(context).size.width / 1.5),
             child: Card(
-              color: Colors.teal[200],
+              color: attributes.color,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30.0)),
-              elevation: 1,
+              elevation: 0,
               child: Padding(
                 padding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
-                child: Text(message.message),
+                child: Text(
+                  message.message,
+                  textAlign: attributes.textAlignment,
+                ),
               ),
             ),
           )
@@ -222,6 +227,9 @@ class _Chat extends StatelessWidget {
                     _MessageWidget(
                       message: messageList[index],
                       user: user,
+                      attributes: (user.id == messageList[index].id)
+                          ? MessageAttributes.sent
+                          : MessageAttributes.recieved,
                     ),
                     _TimestampWidget(
                       message: messageList[index],
