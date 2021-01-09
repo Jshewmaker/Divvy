@@ -26,7 +26,19 @@ class _ConnectToProjectState extends State<ConnectToProject> {
           }
           if (state is ProjectDoesNotExist) {
             SnackBar snackBar = SnackBar(
-                content: Text('Project does not Exist. Please try again'));
+                content: Text('Project does not exist. Please try again'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is HomeownerExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A homeowner has already connected to this project. Please try another ID'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is GCExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A contractor has already connected to this project. Please try another ID'));
             Scaffold.of(context).showSnackBar(snackBar);
           }
           if (state is ProjectLoadSuccess) {

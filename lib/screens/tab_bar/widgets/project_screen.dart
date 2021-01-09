@@ -1,7 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/bloc/line_items/line_item_bloc.dart';
-import 'package:divvy/screens/custome_loading_indicator.dart';
 import 'package:divvy/bloc/line_items/line_item_event.dart';
 import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
@@ -45,6 +44,18 @@ class ProjectScreen extends StatelessWidget {
             SnackBar snackBar = SnackBar(
                 content: Text(
                     'Something went wrong loading project. Please try again'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is HomeownerExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A homeowner has already connected to this project. Please try another ID'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is GCExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A contractor has already connected to this project. Please try another ID'));
             Scaffold.of(context).showSnackBar(snackBar);
           }
         },
