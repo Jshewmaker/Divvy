@@ -32,3 +32,7 @@ class ProjectLoadSuccess extends ProjectState {
 }
 
 class ProjectLoadFailure extends ProjectState {}
+
+class HomeownerExists extends ProjectState {}
+
+class GCExists extends ProjectState {}

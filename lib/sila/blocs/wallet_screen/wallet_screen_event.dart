@@ -1,12 +1,14 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/cupertino.dart';
 
 abstract class WalletScreenEvent extends Equatable {
   const WalletScreenEvent();
 }
 
 class WalletScreenCheck extends WalletScreenEvent {
-  const WalletScreenCheck();
+  final bool initial;
+  const WalletScreenCheck({@required this.initial});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [initial];
 }

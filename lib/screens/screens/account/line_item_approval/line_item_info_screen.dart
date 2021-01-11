@@ -78,13 +78,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     Center(
                       child: Column(
                         children: [
-                          Text(
-                            _lineItem.title,
-                            style: TextStyle(
-                              color: Colors.teal[400],
-                              fontSize: 36,
-                            ),
-                          ),
+                          Text(_lineItem.title,
+                              style: TextStyle(
+                                color: Colors.teal[400],
+                                fontSize: 36,
+                              ),
+                              textAlign: TextAlign.center),
                           Text(
                             _lineItem
                                 .subContractor, // '\npool & spa services inc',
@@ -104,7 +103,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    _pictureWidget(),
+                    _pictureWidget(_user),
                     SizedBox(
                       height: 40,
                     ),
@@ -162,7 +161,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _SubmitButton(_lineItem, _user),
+                  Visibility(
+                      visible: (_lineItem.datePaid == null),
+                      child: _SubmitButton(_lineItem, _user)),
+                  Visibility(
+                      visible: (_lineItem.datePaid != null),
+                      child: _approveButton('View Receipt', true)),
                 ],
               )),
           SizedBox(
@@ -190,14 +194,16 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
             : null);
   }
 
-  Widget _pictureWidget() {
+  Widget _pictureWidget(UserModel user) {
     return Container(
       height: 300,
       width: double.maxFinite,
       child: GestureDetector(
-          onTap: () {
-            _showPicker(context);
-          },
+          onTap: !user.isHomeowner
+              ? () {
+                  _showPicker(context);
+                }
+              : null,
           child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(_boraderRadius)),
@@ -212,7 +218,9 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                           ))
                       : Container(
                           child: Center(
-                            child: Text('Tap To Add Picture'),
+                            child: user.isHomeowner
+                                ? Text('No photo submitted')
+                                : Text('Tap To Add Picture'),
                           ),
                         )))),
     );

@@ -69,7 +69,7 @@ class CreateSilaUserScreen extends StatelessWidget {
                 );
               }
 
-              return Center(child: CustomProgressIndicator());
+              return Center(child: CircularProgressIndicator());
             }),
           ),
         ),

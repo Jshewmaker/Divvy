@@ -266,7 +266,7 @@ class _PaymentInfoCard extends StatelessWidget {
                 height: 10,
               ),
               Text(
-                _project.homeownerSilaHandle.substring(6),
+                _project.homeownerName,
                 style: TextStyle(fontSize: 22, color: Colors.white),
               ),
               Text(
@@ -274,7 +274,7 @@ class _PaymentInfoCard extends StatelessWidget {
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
               Text(
-                _project.generalContractorSilaHandle.substring(6),
+                _project.generalContractorName,
                 style: TextStyle(fontSize: 22, color: Colors.white),
               ),
             ],

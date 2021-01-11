@@ -17,8 +17,13 @@ class WalletScreenBloc extends Bloc<WalletScreenEvent, WalletScreenState> {
           yield WalletScreenAccountNotLinked(
               bankAccountIsLinked: false /*user.bankAccountIsConnected*/);
         } else {
-          yield WalletScreenHasAccountLinked(
-              bankAccountIsLinked: user.bankAccountIsConnected);
+          if (event.initial) {
+            yield WalletScreenInitialConnection(
+                bankAccountIsLinked: user.bankAccountIsConnected);
+          } else {
+            yield WalletScreenHasAccountLinked(
+                bankAccountIsLinked: user.bankAccountIsConnected);
+          }
         }
       } catch (_) {
         yield WalletScreenLoadFailure();

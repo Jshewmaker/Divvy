@@ -9,6 +9,16 @@ abstract class WalletScreenState extends Equatable {
 
 class WalletScreenInitialState extends WalletScreenState {}
 
+class WalletScreenInitialConnection extends WalletScreenState {
+  final bool bankAccountIsLinked;
+
+  WalletScreenInitialConnection({@required this.bankAccountIsLinked})
+      : assert(bankAccountIsLinked != null);
+
+  @override
+  List<Object> get props => [bankAccountIsLinked];
+}
+
 class WalletScreenLoadInProgress extends WalletScreenState {}
 
 class WalletScreenAccountNotLinked extends WalletScreenState {

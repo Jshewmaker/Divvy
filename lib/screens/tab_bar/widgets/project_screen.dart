@@ -1,7 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/bloc/line_items/line_item_bloc.dart';
-import 'package:divvy/screens/custome_loading_indicator.dart';
 import 'package:divvy/bloc/line_items/line_item_event.dart';
 import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
@@ -47,6 +45,18 @@ class ProjectScreen extends StatelessWidget {
                     'Something went wrong loading project. Please try again'));
             Scaffold.of(context).showSnackBar(snackBar);
           }
+          if (state is HomeownerExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A homeowner has already connected to this project. Please try another ID'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
+          if (state is GCExists) {
+            SnackBar snackBar = SnackBar(
+                content: Text(
+                    'A contractor has already connected to this project. Please try another ID'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          }
         },
         child:
             BlocBuilder<ProjectBloc, ProjectState>(builder: (context, state) {
@@ -59,7 +69,9 @@ class ProjectScreen extends StatelessWidget {
           }
           if (state is ProjectLoadInProgress) {
             return Center(
-              child: CustomProgressIndicator(),
+              child: CircularProgressIndicator(
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+              ),
             );
           }
           if (state is ProjectLoadSuccess) {
@@ -77,10 +89,18 @@ class ProjectScreen extends StatelessWidget {
               child: BlocBuilder<LineItemBloc, LineItemState>(
                   builder: (context, state) {
                 if (state is LineItemInitial) {
-                  return Center(child: CustomProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+                  ));
                 }
                 if (state is LineItemLoadInProgress) {
-                  return Center(child: CustomProgressIndicator());
+                  return Center(
+                      child: CircularProgressIndicator(
+                    valueColor:
+                        new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
+                  ));
                 }
                 if (state is LineItemLoadSuccess) {
                   final lineItems = state.lineItems;
@@ -139,7 +159,7 @@ class _CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       height: 130,
       width: double.maxFinite,
       child: Card(

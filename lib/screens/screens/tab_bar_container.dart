@@ -29,9 +29,9 @@ class TabBarContainer extends StatelessWidget {
         return Scaffold(
           appBar: AppBar(
             // title: Text(FlutterBlocLocalizations.of(context).appTitle),
-            title: Text(tabTitle(activeTab.index),
-                style: GoogleFonts.bigShouldersDisplay(
-                    textStyle: TextStyle(fontSize: 32))),
+            title: Text(
+              tabTitle(activeTab.index),
+            ),
           ),
           body: activeTabFunction(activeTab),
           bottomNavigationBar: TabSelector(

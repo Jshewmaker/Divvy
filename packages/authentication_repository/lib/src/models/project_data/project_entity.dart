@@ -10,16 +10,21 @@ class ProjectEntity extends Equatable {
   final String projectID;
   final String projectName;
   final double projectCost;
+  final String homeownerName;
+  final String generalContractorName;
 
   const ProjectEntity(
-      this.complete,
-      this.generalContractorPath,
-      this.homeownerPath,
-      this.generalContractorSilaHandle,
-      this.homeownerSilaHandle,
-      this.projectID,
-      this.projectName,
-      this.projectCost);
+    this.complete,
+    this.generalContractorPath,
+    this.homeownerPath,
+    this.generalContractorSilaHandle,
+    this.homeownerSilaHandle,
+    this.projectID,
+    this.projectName,
+    this.projectCost,
+    this.homeownerName,
+    this.generalContractorName,
+  );
 
   Map<String, Object> toJson() {
     return {
@@ -31,6 +36,8 @@ class ProjectEntity extends Equatable {
       "project_id": projectID,
       "project_name": projectName,
       "project_cost": projectCost,
+      "homeowner_name": homeownerName,
+      "general_contractor_name": generalContractorName,
     };
   }
 
@@ -43,6 +50,8 @@ class ProjectEntity extends Equatable {
         projectID,
         projectName,
         projectCost,
+        homeownerName,
+        generalContractorName,
       ];
 
   static ProjectEntity fromJson(Map<String, Object> json) {
@@ -55,6 +64,8 @@ class ProjectEntity extends Equatable {
       json["project_id"] as String,
       json["project_name"] as String,
       json["project_cost"] as double,
+      json["homeowner_name"] as String,
+      json["general_contractor_name"] as String,
     );
   }
 
@@ -68,6 +79,8 @@ class ProjectEntity extends Equatable {
       snap.documentID,
       snap.data['project_name'],
       snap.data['project_cost'],
+      snap.data['homeowner_name'],
+      snap.data['general_contractor_name'],
     );
   }
 
@@ -79,6 +92,8 @@ class ProjectEntity extends Equatable {
       "project_id": projectID,
       "project_name": projectName,
       "project_cost": projectCost,
+      "homeowner_name": homeownerName,
+      "general_contractor_name": generalContractorName,
     };
   }
 }

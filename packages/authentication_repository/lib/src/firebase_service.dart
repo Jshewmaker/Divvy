@@ -129,11 +129,13 @@ class FirebaseService {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
           "homeowner_path": 'users/' + value.uid,
           "homeowner_sila_handle": user.silaHandle,
+          "homeowner_name": user.name,
         });
       } else {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
           "general_contractor_path": 'users/' + value.uid,
-          "general_contractor_sila_handle": user.silaHandle
+          "general_contractor_sila_handle": user.silaHandle,
+          "general_contractor_name": user.name,
         });
       }
       addDataToFirestoreDocument(collection, {"project_id": projectID});
