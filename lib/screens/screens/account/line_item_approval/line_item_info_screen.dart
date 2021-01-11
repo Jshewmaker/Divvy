@@ -103,7 +103,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    _pictureWidget(),
+                    _pictureWidget(_user),
                     SizedBox(
                       height: 40,
                     ),
@@ -194,14 +194,16 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
             : null);
   }
 
-  Widget _pictureWidget() {
+  Widget _pictureWidget(UserModel user) {
     return Container(
       height: 300,
       width: double.maxFinite,
       child: GestureDetector(
-          onTap: () {
-            _showPicker(context);
-          },
+          onTap: !user.isHomeowner
+              ? () {
+                  _showPicker(context);
+                }
+              : null,
           child: Card(
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(_boraderRadius)),
@@ -216,7 +218,9 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                           ))
                       : Container(
                           child: Center(
-                            child: Text('Tap To Add Picture'),
+                            child: user.isHomeowner
+                                ? Text('No photo submitted')
+                                : Text('Tap To Add Picture'),
                           ),
                         )))),
     );
