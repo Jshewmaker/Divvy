@@ -11,16 +11,21 @@ class Project {
   final String projectID;
   final String projectName;
   final double projectCost;
+  final String homeownerName;
+  final String generalContractorName;
 
-  const Project(
-      {@required this.complete,
-      @required this.generalContractorPath,
-      @required this.homeownerPath,
-      @required this.generalContractorSilaHandle,
-      @required this.homeownerSilaHandle,
-      @required this.projectID,
-      @required this.projectName,
-      @required this.projectCost});
+  const Project({
+    @required this.complete,
+    @required this.generalContractorPath,
+    @required this.homeownerPath,
+    @required this.generalContractorSilaHandle,
+    @required this.homeownerSilaHandle,
+    @required this.projectID,
+    @required this.projectName,
+    @required this.projectCost,
+    @required this.homeownerName,
+    @required this.generalContractorName,
+  });
 
   List<Object> get props => [
         complete,
@@ -30,19 +35,24 @@ class Project {
         homeownerSilaHandle,
         projectID,
         projectName,
-        projectCost
+        projectCost,
+        homeownerName,
+        generalContractorName,
       ];
 
   ProjectEntity toEntity() {
     return ProjectEntity(
-        complete,
-        generalContractorPath,
-        homeownerPath,
-        generalContractorSilaHandle,
-        homeownerSilaHandle,
-        projectID,
-        projectName,
-        projectCost);
+      complete,
+      generalContractorPath,
+      homeownerPath,
+      generalContractorSilaHandle,
+      homeownerSilaHandle,
+      projectID,
+      projectName,
+      projectCost,
+      homeownerName,
+      generalContractorName,
+    );
   }
 
   static Project fromEntity(ProjectEntity entity) {
@@ -55,6 +65,8 @@ class Project {
       projectID: entity.projectID,
       projectName: entity.projectName,
       projectCost: entity.projectCost,
+      homeownerName: entity.homeownerName,
+      generalContractorName: entity.generalContractorName,
     );
   }
 }

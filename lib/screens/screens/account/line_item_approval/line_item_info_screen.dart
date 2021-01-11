@@ -78,13 +78,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     Center(
                       child: Column(
                         children: [
-                          Text(
-                            _lineItem.title,
-                            style: TextStyle(
-                              color: Colors.teal[400],
-                              fontSize: 36,
-                            ),
-                          ),
+                          Text(_lineItem.title,
+                              style: TextStyle(
+                                color: Colors.teal[400],
+                                fontSize: 36,
+                              ),
+                              textAlign: TextAlign.center),
                           Text(
                             _lineItem
                                 .subContractor, // '\npool & spa services inc',
@@ -162,7 +161,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _SubmitButton(_lineItem, _user),
+                  Visibility(
+                      visible: (_lineItem.datePaid == null),
+                      child: _SubmitButton(_lineItem, _user)),
+                  Visibility(
+                      visible: (_lineItem.datePaid != null),
+                      child: _approveButton('View Receipt', true)),
                 ],
               )),
           SizedBox(

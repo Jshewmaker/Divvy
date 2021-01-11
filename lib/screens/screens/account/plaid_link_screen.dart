@@ -20,7 +20,6 @@ class PlaidLinkScreen extends StatelessWidget {
       create: (context) => PlaidBloc(plaidRepository: plaidRepository),
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Colors.white,
           title: RichText(
             text: new TextSpan(
               // Note: Styles for TextSpans must be explicitly defined.
@@ -29,6 +28,7 @@ class PlaidLinkScreen extends StatelessWidget {
                 fontSize: 25.0,
                 color: Colors.black45,
               ),
+
               children: <TextSpan>[
                 new TextSpan(text: 'Welcome To '),
                 new TextSpan(
@@ -75,7 +75,7 @@ class PlaidLinkScreen extends StatelessWidget {
                                       LinkAccountScreen(token: result.token)))
                               .then((value) => {
                                     BlocProvider.of<WalletScreenBloc>(context)
-                                        .add(WalletScreenCheck())
+                                        .add(WalletScreenCheck(initial: true))
                                   });
                         }
                       }),

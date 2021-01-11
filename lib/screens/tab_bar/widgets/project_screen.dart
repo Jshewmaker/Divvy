@@ -160,7 +160,7 @@ class _CardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(10, 10, 10, 0),
+      padding: EdgeInsets.fromLTRB(10, 0, 10, 0),
       height: 130,
       width: double.maxFinite,
       child: Card(

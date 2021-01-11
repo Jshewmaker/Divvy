@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 
+import 'account/plaid_link_screen.dart';
+
 class LinkAccountScreen extends StatelessWidget {
   final String token;
   final SilaRepository silaRepository =
@@ -19,15 +21,8 @@ class LinkAccountScreen extends StatelessWidget {
       create: (context) => LinkAccountBloc(silaRepository: silaRepository),
       child: Scaffold(
         body: Center(
-          child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
-            builder: (context, state) {
-              if (state is LinkAccountInitial) {
-                BlocProvider.of<LinkAccountBloc>(context)
-                    .add(LinkAccountRequest(plaidPublicToken: token));
-              }
-              if (state is LinkAccountLoadInProgress) {
-                return Center(child: CircularProgressIndicator());
-              }
+          child: BlocListener<LinkAccountBloc, LinkAccountState>(
+            listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
                 FirebaseService _firebaseService = FirebaseService();
                 _firebaseService.addDataToFirestoreDocument(
@@ -35,13 +30,28 @@ class LinkAccountScreen extends StatelessWidget {
                 Navigator.pop(context);
               }
               if (state is LinkAccountLoadFailure) {
-                return Text(
-                  'Failure: link account failure',
-                  style: TextStyle(color: Colors.red),
-                );
+                SnackBar snackBar = SnackBar(
+                    content:
+                        Text('Unable to link bank account. Please try again.'));
+                Scaffold.of(context).showSnackBar(snackBar);
               }
-              return CircularProgressIndicator();
             },
+            child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
+              builder: (context, state) {
+                if (state is LinkAccountInitial) {
+                  BlocProvider.of<LinkAccountBloc>(context)
+                      .add(LinkAccountRequest(plaidPublicToken: token));
+                }
+                if (state is LinkAccountLoadInProgress) {
+                  return Center(child: CircularProgressIndicator());
+                }
+                //if (state is LinkAccountLoadSuccess) {}
+                if (state is LinkAccountLoadFailure) {
+                  return PlaidLinkScreen();
+                }
+                return CircularProgressIndicator();
+              },
+            ),
           ),
         ),
       ),

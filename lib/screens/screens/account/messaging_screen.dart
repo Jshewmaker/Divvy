@@ -52,19 +52,7 @@ class _MessagingScreenState extends State<MessagingScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
-        title: RichText(
-          text: new TextSpan(
-            children: <TextSpan>[
-              new TextSpan(
-                  text: lineItem.title,
-                  style: new TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.teal[400],
-                    fontSize: 24,
-                  )),
-            ],
-          ),
-        ),
+        title: Text(lineItem.title),
       ),
       body: Center(
           child: Container(
