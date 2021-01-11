@@ -24,9 +24,6 @@ class LinkAccountScreen extends StatelessWidget {
           child: BlocListener<LinkAccountBloc, LinkAccountState>(
             listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
-                FirebaseService _firebaseService = FirebaseService();
-                _firebaseService.addDataToFirestoreDocument(
-                    'users', {"bankAccountIsConnected": true});
                 Navigator.pop(context);
               }
               if (state is LinkAccountLoadFailure) {
@@ -35,6 +32,7 @@ class LinkAccountScreen extends StatelessWidget {
                         Text('Unable to link bank account. Please try again.'));
                 Scaffold.of(context).showSnackBar(snackBar);
               }
+
             },
             child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
               builder: (context, state) {

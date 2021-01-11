@@ -90,7 +90,6 @@ class _WebViewPage {
       if (eventName == 'EXIT' || (url?.contains('/exit?') ?? false)) {
         this._closeWebView();
       } else if (eventName == 'CONNECTED') {
-        debugPrint('DOG');
       } else if (eventName == 'HANDOFF') {
         this._closeWebView();
       }
