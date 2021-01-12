@@ -57,6 +57,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   @override
   Widget build(BuildContext context) {
     // PickedFile image;
+    // ignore: unnecessary_statements
     _uploadedFileURL = _lineItem.pictureUrl;
     var userProvider = context.watch<UserModelProvider>();
     _user = userProvider.user;
@@ -196,40 +197,39 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
 
   Widget _pictureWidget(UserModel user) {
     return Container(
-      height: 300,
-      width: double.maxFinite,
-      child: GestureDetector(
-          onTap: !user.isHomeowner
-              ? () {
-                  _showPicker(context);
-                }
-              : null,
-          child: Card(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(_boraderRadius)),
-              child: _uploadedFileURL != null
-                  ? Image.network(_uploadedFileURL)
-                  : (_image != null
-                      ? ClipRRect(
-                          borderRadius: BorderRadius.circular(_boraderRadius),
-                          child: Image.file(
-                            _image,
-                            fit: BoxFit.fitHeight,
-                          ))
-                      : Container(
-                          child: Center(
-                            child: user.isHomeowner
-                                ? Text('No photo submitted')
-                                : Text('Tap To Add Picture'),
-                          ),
-                        )))),
-    );
+        height: 300,
+        width: double.maxFinite,
+        child: GestureDetector(
+            onTap: !user.isHomeowner
+                ? () {
+                    _showPicker(context);
+                  }
+                : null,
+            child: Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(_boraderRadius)),
+                child: (_image != null)
+                    ? ClipRRect(
+                        borderRadius: BorderRadius.circular(_boraderRadius),
+                        child: Image.file(
+                          _image,
+                          fit: BoxFit.fitHeight,
+                        ))
+                    : (_uploadedFileURL != null)
+                        ? Image.network(_uploadedFileURL)
+                        : Container(
+                            child: Center(
+                              child: user.isHomeowner
+                                  ? Text('No photo submitted')
+                                  : Text('Tap To Add Picture'),
+                            ),
+                          ))));
   }
 
   _imgFromCamera() async {
     final picker = ImagePicker();
     final image =
-        await picker.getImage(source: ImageSource.camera, imageQuality: 100);
+        await picker.getImage(source: ImageSource.camera, imageQuality: 50);
     setState(() {
       if (image != null) _image = File(image.path);
       _addImageToFirebase(context);
@@ -239,12 +239,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   _imgFromGallery() async {
     final picker = ImagePicker();
     final image =
-        await picker.getImage(source: ImageSource.gallery, imageQuality: 100);
+        await picker.getImage(source: ImageSource.gallery, imageQuality: 50);
 
     setState(() {
       if (image != null) {
         _image = File(image.path);
-        _uploadedFileURL = null;
+        //_uploadedFileURL = _user.id/${_lineItem.title}-' + Path.basename(_image.path);
       }
 
       _addImageToFirebase(context);
