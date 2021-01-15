@@ -4,6 +4,7 @@ import 'package:divvy/bloc/project/project_event.dart';
 import 'package:divvy/bloc/project/project_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class ConnectToProject extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _ConnectToProjectState extends State<ConnectToProject> {
   UserModel user;
   @override
   Widget build(BuildContext context) {
-    //final user = context.watch<UserModelProvider>();
+    user = Provider.of<UserModel>(context);
     return Scaffold(
       body: BlocListener<ProjectBloc, ProjectState>(
         listener: (context, state) {

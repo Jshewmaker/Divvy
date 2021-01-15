@@ -69,4 +69,17 @@ class Project {
       generalContractorName: entity.generalContractorName,
     );
   }
+
+  static const empty = Project(
+    complete: null,
+    generalContractorPath: '',
+    homeownerPath: '',
+    generalContractorSilaHandle: '',
+    homeownerSilaHandle: '',
+    projectID: '',
+    projectName: '',
+    projectCost: null,
+    homeownerName: '',
+    generalContractorName: '',
+  );
 }

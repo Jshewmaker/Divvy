@@ -1,5 +1,7 @@
 import 'package:authentication_repository/src/models/project_data/project_entity.dart';
 import 'package:authentication_repository/src/models/project_data/project_model.dart';
+import 'package:authentication_repository/src/models/project_line_items/messages.dart';
+import 'package:authentication_repository/src/models/project_line_items/messages_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -238,5 +240,55 @@ class FirebaseService {
         await Firestore.instance.collection("users").document(user.uid).get();
     if (snapShot == null || !snapShot.exists) return false;
     return true;
+  }
+
+  void addMessage(String project, String lineItem, dynamic data) {
+    Firestore.instance
+        .collection(projectCollection)
+        .document(project)
+        .collection(lineItemsCollection)
+        .document(lineItem)
+        .collection('messages')
+        .add(data);
+  }
+
+  Stream<UserModel> streamRealtimeUser(String id) {
+    return Firestore.instance
+        .collection(collection)
+        .document(id)
+        .snapshots()
+        .map((snap) => UserModel.fromEntity(UserEntity.fromSnapshot(snap)));
+  }
+
+  Stream<Project> streamRealtimeProject(String id) {
+    return Firestore.instance
+        .collection(projectCollection)
+        .document(id)
+        .snapshots()
+        .map((snap) => Project.fromEntity(ProjectEntity.fromSnapshot(snap)));
+  }
+
+  Stream<LineItemListModel> streamRealtimeLineItems(String id) {
+    return Firestore.instance
+        .collection(projectCollection)
+        .document(id)
+        .collection(lineItemsCollection)
+        .snapshots()
+        .map((snap) => LineItemListModel.fromEntity(
+            LineItemListEntity.fromSnapshot(snap)));
+  }
+
+  Stream<MessageListModel> streamRealtimeMessages(
+      String project, String lineItem) {
+    return Firestore.instance
+        .collection(projectCollection)
+        .document(project)
+        .collection(lineItemsCollection)
+        .document(lineItem)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .snapshots()
+        .map((snap) =>
+            MessageListModel.fromEntity(MessageListEntity.fromSnapshot(snap)));
   }
 }

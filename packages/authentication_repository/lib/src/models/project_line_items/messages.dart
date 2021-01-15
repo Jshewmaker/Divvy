@@ -1,3 +1,4 @@
+import 'package:authentication_repository/src/models/project_line_items/messages_entity.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
@@ -12,6 +13,13 @@ class MessageListModel {
   factory MessageListModel.fromList(List<dynamic> messageList) {
     List<Message> messages = List<Message>();
     messages = messageList.map((i) => Message.fromList(i)).toList();
+
+    return MessageListModel(messages: messages);
+  }
+
+  factory MessageListModel.fromEntity(MessageListEntity entityList) {
+    List<Message> messages = List<Message>();
+    messages = entityList.messages.map((i) => Message.fromEntity(i)).toList();
 
     return MessageListModel(messages: messages);
   }
@@ -43,6 +51,14 @@ class Message extends Equatable {
     timestamp: null,
   );
 
+  static Message fromEntity(MessageEntity entity) {
+    return Message(
+      id: entity.id != null ? entity.id : '',
+      message: entity.message != null ? entity.message : '',
+      timestamp: entity.timestamp,
+    );
+  }
+
   @override
   List<Object> get props => [
         id,
@@ -65,36 +81,4 @@ class Message extends Equatable {
       "timestamp": timestamp,
     };
   }
-
-/*
-  static Message fromEntity(Map message) {
-    return Message(
-      generalContractorApprovalDate: entity.generalContractorApprovalDate,
-      cost: entity.cost,
-      homeownerApprovalDate: entity.homeownerApprovalDate,
-      datePaid: entity.datePaid,
-      phase: entity.phase,
-      title: entity.title,
-      subContractor: entity.subContractor,
-      comments: entity.comments,
-      id: entity.id,
-      expectFinishedDate: entity.expectFinishedDate,
-    );
-  }
-
-  LineItemEntity toEntity() {
-    return LineItemEntity(
-      generalContractorApprovalDate,
-      cost,
-      homeownerApprovalDate,
-      datePaid,
-      phase,
-      title,
-      subContractor,
-      comments,
-      id,
-      expectFinishedDate,
-    );
-  }
-  */
 }

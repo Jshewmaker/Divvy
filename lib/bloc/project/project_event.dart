@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class ProjectEvent extends Equatable {
@@ -9,7 +10,17 @@ abstract class ProjectEvent extends Equatable {
 
 class ProjectConnectedLoadSuccess extends ProjectEvent {}
 
-class CheckForProject extends ProjectEvent {}
+class CheckForProject extends ProjectEvent {
+  final UserModel user;
+
+  const CheckForProject(this.user);
+
+  @override
+  List<Object> get props => [user];
+
+  @override
+  String toString() => 'Connecting User{project $user }';
+}
 
 class ProjectInitialEvent extends ProjectEvent {
   final String projectID;

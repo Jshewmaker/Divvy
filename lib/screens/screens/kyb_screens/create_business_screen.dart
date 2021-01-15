@@ -37,7 +37,7 @@ class CreateSilaBusinessScreen extends StatelessWidget {
                     builder: (context, state) {
               if (state is GetUserDataForProvider) {
                 var userprovider = context.repository<UserModelProvider>();
-                userprovider.add(state.user);
+                //userprovider.add(state.user);
               }
               if (state is CreateSilaBusinessInitial) {
                 BlocProvider.of<CreateSilaBusinessCubit>(context)

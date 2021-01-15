@@ -16,6 +16,7 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class WalletScreen extends StatefulWidget {
   @override
@@ -28,7 +29,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var user = context.watch<UserModelProvider>();
+    UserModel user = Provider.of<UserModel>(context);
     return MultiBlocProvider(
       providers: [
         BlocProvider(
@@ -66,12 +67,12 @@ class _WalletScreenState extends State<WalletScreen> {
                     builder: (context, state) {
                       if (state is GetSilaBalanceInitial) {
                         BlocProvider.of<GetSilaBalanceBloc>(context)
-                            .add(GetSilaBalanceRequest(user.user));
+                            .add(GetSilaBalanceRequest(user));
                         return Container();
                       }
                       if (state is GetSilaBalanceLoadInProgress) {
                         return WalletScreenInitial(
-                          user: user.user,
+                          user: user,
                         );
                       }
                       if (state is GetSilaBalanceLoadSuccess) {
@@ -79,12 +80,12 @@ class _WalletScreenState extends State<WalletScreen> {
                           return WalletScreenPopulated(
                             userSilaResponse: state.userSilaResponse,
                             projectSilaResponse: state.projectSilaResponse,
-                            user: user.user,
+                            user: user,
                           );
                         } else {
                           return WalletScreenPopulated(
                             userSilaResponse: state.userSilaResponse,
-                            user: user.user,
+                            user: user,
                           );
                         }
                       }

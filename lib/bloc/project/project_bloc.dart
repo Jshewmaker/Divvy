@@ -48,7 +48,8 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
     if (event is CheckForProject) {
       try {
         yield CheckProjectInitial();
-        UserModel user = await firebaseService.getUserData();
+        //UserModel user = await firebaseService.getUserData();
+        UserModel user = event.user;
         if (user.projectID != null) {
           yield ProjectLoadInProgress();
           Project project = await firebaseService.getProjects(user.projectID);
