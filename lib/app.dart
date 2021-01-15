@@ -12,6 +12,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';
+import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -57,6 +58,7 @@ class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
   UserModel user;
+  FirebaseService firebaseService = FirebaseService();
 
   NavigatorState get _navigator => _navigatorKey.currentState;
 
@@ -71,8 +73,6 @@ class _AppViewState extends State<AppView> {
           listener: (context, state) {
             switch (state.status) {
               case AuthenticationStatus.authenticated:
-                var userprovider = context.repository<UserModelProvider>();
-                userprovider.add(state.user);
                 UserModel user = state.user;
 
                 if (user == null)
@@ -104,7 +104,22 @@ class _AppViewState extends State<AppView> {
                 break;
             }
           },
-          child: child,
+          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
+            builder: (context, state) {
+              if (state.status == AuthenticationStatus.authenticated) {
+                return MultiProvider(
+                  providers: [
+                    StreamProvider<UserModel>.value(
+                      initialData: state.user,
+                      value: firebaseService.streamRealtimeUser(state.user.id),
+                    ),
+                  ],
+                  child: child,
+                );
+              }
+              return child;
+            },
+          ),
         );
       },
       onGenerateRoute: (_) => SplashPage.route(),

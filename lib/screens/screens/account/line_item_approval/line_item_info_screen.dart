@@ -12,7 +12,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:authentication_repository/src/models/project_line_items/messages.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
+import '../messaging_screen.dart';
 import '../messaging_screen.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
@@ -46,21 +48,12 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
-  void sendMessage(
-      String message, UserModel user, Project project, LineItem lineItem) {
-    Message messageModel =
-        Message(id: user.id, message: message, timestamp: Timestamp.now());
-    _firebaseService.addMessageToProjectDocument(
-        messageModel.toMap(), project.projectID, lineItem.id);
-  }
-
   @override
   Widget build(BuildContext context) {
     // PickedFile image;
     // ignore: unnecessary_statements
     _uploadedFileURL = _lineItem.pictureUrl;
-    var userProvider = context.watch<UserModelProvider>();
-    _user = userProvider.user;
+    UserModel _user = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Work Submission'),

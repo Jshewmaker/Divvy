@@ -8,6 +8,7 @@ import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
@@ -34,8 +35,8 @@ class InvoiceScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cost = NumberFormat.currency(symbol: '\$').format(_lineItem.cost);
-    var userProvider = context.watch<UserModelProvider>();
-    var _user = userProvider.user;
+
+    UserModel _user = Provider.of<UserModel>(context);
     return BlocProvider(
         create: (context) => TransferSilaBloc(silaRepository: silaRepository),
         child: MultiBlocListener(
