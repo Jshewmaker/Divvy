@@ -23,7 +23,15 @@ class ProjectScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: (user.projectID == null)
-              ? ConnectToProject(user)
+              ? RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  color: Colors.teal[200],
+                  child: Text('Connect Project'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (contest) => ConnectToProject(user))),
+                )
               : ProjectWidget(user)),
     );
   }
