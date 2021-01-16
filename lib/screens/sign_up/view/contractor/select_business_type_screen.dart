@@ -54,18 +54,15 @@ class BusinessTypePopulated extends StatelessWidget {
       body: ListView.builder(
         itemCount: response.businessTypes.length,
         itemBuilder: (context, index) {
-          return Card(
-            elevation: 1,
-            child: ListTile(
-                title: Center(child: Text(response.businessTypes[index].label)),
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => NAICSCategoryScreen(
-                              response.businessTypes[index].name)));
-                }),
-          );
+          return ListTile(
+              title: Center(child: Text(response.businessTypes[index].label)),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NAICSCategoryScreen(
+                            response.businessTypes[index].name)));
+              });
         },
       ),
     );

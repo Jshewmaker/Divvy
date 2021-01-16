@@ -18,6 +18,15 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: new IconButton(
+          icon: new Icon(Icons.arrow_back),
+          onPressed: () {
+            context
+                .read<AuthenticationBloc>()
+                .add(AuthenticationLogoutRequested());
+            Navigator.of(context).pop();
+          },
+        ),
         title: Text('Welcome',
             style: GoogleFonts.bigShouldersDisplay(
                 textStyle: TextStyle(fontSize: 32))),

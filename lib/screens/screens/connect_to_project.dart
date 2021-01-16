@@ -70,6 +70,7 @@ class _ConnectToProjectState extends State<ConnectToProject> {
                     child: Padding(
                       padding: EdgeInsets.all(10.0),
                       child: TextField(
+                        keyboardType: TextInputType.number,
                         controller: _textController,
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(),

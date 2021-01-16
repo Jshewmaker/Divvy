@@ -227,6 +227,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
       ),
       onChanged: (String newValue) {
         setState(() {
+          FocusScope.of(context).requestFocus(new FocusNode());
           if (list.length > 32) {
             yearDropDown = newValue;
           } else if (list.length > 12) {

@@ -24,21 +24,17 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: AnimatedBuilder(
-          animation: _controller,
-          builder: (_, child) {
-            return Transform.rotate(
-              angle: _controller.value * 2 * math.pi,
-              child: child,
-            );
-          },
-          child: Image.asset(
-            'assets/divvy_logo.png',
-            height: 120,
-          ),
-        ),
+    return AnimatedBuilder(
+      animation: _controller,
+      builder: (_, child) {
+        return Transform.rotate(
+          angle: _controller.value * 2 * math.pi,
+          child: child,
+        );
+      },
+      child: Image.asset(
+        'assets/divvy_logo.png',
+        height: 120,
       ),
     );
   }
