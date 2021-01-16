@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/Screens/tab_bar/blocs/blocs.dart';
 import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
@@ -6,18 +7,33 @@ import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => HomeScreen());
+  final UserModel user;
+  const HomeScreen({Key key, this.user}) : super(key: key);
+
+  static Route route(UserModel user) {
+    return MaterialPageRoute<void>(
+        builder: (_) => HomeScreen(
+              user: user,
+            ));
   }
 
   @override
   Widget build(BuildContext context) {
+    FirebaseService firebaseService = FirebaseService();
     return BlocProvider(
-      create: (BuildContext context) => TabBloc(),
-      child: TabBarContainer(),
-    );
+        create: (BuildContext context) => TabBloc(),
+        child: MultiProvider(
+          providers: [
+            StreamProvider<UserModel>(
+              initialData: user,
+              create: (context) => firebaseService.streamRealtimeUser(user.id),
+            ),
+          ],
+          child: TabBarContainer(),
+        ));
   }
 }
 

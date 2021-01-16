@@ -70,57 +70,41 @@ class _AppViewState extends State<AppView> {
       debugShowCheckedModeBanner: false,
       builder: (context, child) {
         return BlocListener<AuthenticationBloc, AuthenticationState>(
-          listener: (context, state) {
-            switch (state.status) {
-              case AuthenticationStatus.authenticated:
-                UserModel user = state.user;
+            listener: (context, state) {
+              switch (state.status) {
+                case AuthenticationStatus.authenticated:
+                  UserModel user = state.user;
 
-                if (user == null)
-                  _navigator.push(MaterialPageRoute(
-                      builder: (context) => HomeownerOrBusinessScreen()));
-                else if (!user.isHomeowner &&
-                    user.businessAdminDocumentID == null) {
-                  _navigator.pushAndRemoveUntil(
-                      MaterialPageRoute(
-                          builder: (context) => BusinessAdminSignupPage1()),
-                      (route) => false);
-                } else if (user.isHomeowner && user.silaHandle == null) {
-                  _navigator.push(CreateSilaUserScreen.route());
-                } else {
+                  if (user == null)
+                    _navigator.push(MaterialPageRoute(
+                        builder: (context) => HomeownerOrBusinessScreen()));
+                  else if (!user.isHomeowner &&
+                      user.businessAdminDocumentID == null) {
+                    _navigator.pushAndRemoveUntil(
+                        MaterialPageRoute(
+                            builder: (context) => BusinessAdminSignupPage1()),
+                        (route) => false);
+                  } else if (user.isHomeowner && user.silaHandle == null) {
+                    _navigator.push(CreateSilaUserScreen.route());
+                  } else {
+                    _navigator.pushAndRemoveUntil<void>(
+                      HomeScreen.route(user),
+                      (route) => false,
+                    );
+                  }
+
+                  break;
+                case AuthenticationStatus.unauthenticated:
                   _navigator.pushAndRemoveUntil<void>(
-                    HomeScreen.route(),
+                    LoginPage.route(),
                     (route) => false,
                   );
-                }
-
-                break;
-              case AuthenticationStatus.unauthenticated:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
-                break;
-              default:
-                break;
-            }
-          },
-          child: BlocBuilder<AuthenticationBloc, AuthenticationState>(
-            builder: (context, state) {
-              if (state.status == AuthenticationStatus.authenticated) {
-                return MultiProvider(
-                  providers: [
-                    StreamProvider<UserModel>.value(
-                      initialData: state.user,
-                      value: firebaseService.streamRealtimeUser(state.user.id),
-                    ),
-                  ],
-                  child: child,
-                );
+                  break;
+                default:
+                  break;
               }
-              return child;
             },
-          ),
-        );
+            child: child);
       },
       onGenerateRoute: (_) => SplashPage.route(),
     );

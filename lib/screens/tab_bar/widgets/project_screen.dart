@@ -20,65 +20,11 @@ class ProjectScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     UserModel user = Provider.of<UserModel>(context);
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-            create: (context) =>
-                ProjectBloc(firebaseService: _firebaseService)),
-        BlocProvider(
-          create: (context) => LineItemBloc(firebaseService: _firebaseService),
-        )
-      ],
-      child: Scaffold(
-          body: Center(
-              child: BlocListener<ProjectBloc, ProjectState>(
-        listener: (context, state) {
-          if (state is ProjectDoesNotExist) {
-            SnackBar snackBar = SnackBar(
-                content: Text('Project does not Exist. Please try again'));
-            Scaffold.of(context).showSnackBar(snackBar);
-          }
-          if (state is ProjectDoesNotExist) {
-            SnackBar snackBar = SnackBar(
-                content: Text(
-                    'Something went wrong loading project. Please try again'));
-            Scaffold.of(context).showSnackBar(snackBar);
-          }
-          if (state is HomeownerExists) {
-            SnackBar snackBar = SnackBar(
-                content: Text(
-                    'A homeowner has already connected to this project. Please try another ID'));
-            Scaffold.of(context).showSnackBar(snackBar);
-          }
-          if (state is GCExists) {
-            SnackBar snackBar = SnackBar(
-                content: Text(
-                    'A contractor has already connected to this project. Please try another ID'));
-            Scaffold.of(context).showSnackBar(snackBar);
-          }
-        },
-        child:
-            BlocBuilder<ProjectBloc, ProjectState>(builder: (context, state) {
-          if (state is ProjectInitial) {
-            BlocProvider.of<ProjectBloc>(context).add(CheckForProject(user));
-            return Container();
-          }
-          if (state is CheckProjectInitial) {
-            return Container();
-          }
-          if (state is ProjectLoadInProgress) {
-            return Center(
-              child: CircularProgressIndicator(
-                valueColor: new AlwaysStoppedAnimation<Color>(Colors.teal[300]),
-              ),
-            );
-          }
-          if (state is ProjectLoadSuccess) {
-            return ProjectWidget();
-          }
-          return ConnectToProject();
-        }),
-      ))),
+    return Scaffold(
+      body: Center(
+          child: (user.projectID == null)
+              ? ConnectToProject(user)
+              : ProjectWidget(user)),
     );
   }
 }

@@ -12,17 +12,18 @@ class MessagingScreen extends StatelessWidget {
   MessagingScreen(
     this.lineItem,
     this.project,
+    this.user,
   );
 
   final LineItem lineItem;
   final Project project;
+  final UserModel user;
 
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
   @override
   Widget build(BuildContext context) {
-    UserModel _user = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -31,7 +32,7 @@ class MessagingScreen extends StatelessWidget {
       body: Center(
           child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
-              child: _Chat(lineItem, _user, project))),
+              child: _Chat(lineItem, user, project))),
     );
   }
 }

@@ -7,16 +7,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class ConnectToProject extends StatefulWidget {
+  ConnectToProject(this._user);
+
+  final UserModel _user;
+
   @override
-  State<ConnectToProject> createState() => _ConnectToProjectState();
+  State<ConnectToProject> createState() => _ConnectToProjectState(_user);
 }
 
 class _ConnectToProjectState extends State<ConnectToProject> {
+  _ConnectToProjectState(
+    this.user,
+  );
+
+  final UserModel user;
   final TextEditingController _textController = TextEditingController();
-  UserModel user;
   @override
   Widget build(BuildContext context) {
-    user = Provider.of<UserModel>(context);
     return Scaffold(
       body: BlocListener<ProjectBloc, ProjectState>(
         listener: (context, state) {

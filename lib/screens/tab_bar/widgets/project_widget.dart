@@ -5,12 +5,15 @@ import 'package:jiffy/jiffy.dart';
 import 'package:provider/provider.dart';
 
 class ProjectWidget extends StatelessWidget {
+  final UserModel user;
   final FirebaseService firebaseService = FirebaseService();
+
+  ProjectWidget(
+    this.user,
+  );
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserModel>(context);
-
     return StreamBuilder<Project>(
         stream: firebaseService.streamRealtimeProject(user.projectID),
         builder: (BuildContext context, AsyncSnapshot<Project> project) {
@@ -31,6 +34,7 @@ class ProjectWidget extends StatelessWidget {
                   return new _CardWidget(
                     lineItem: lineItem,
                     project: project.data,
+                    user: user,
                   );
                 }).toList(),
               );
@@ -43,11 +47,13 @@ class ProjectWidget extends StatelessWidget {
 class _CardWidget extends StatelessWidget {
   final LineItem lineItem;
   final Project project;
+  final UserModel user;
 
   _CardWidget({
     Key key,
     this.lineItem,
     this.project,
+    this.user,
   }) : super(key: key);
 
   Color _cardColor() {
@@ -80,7 +86,8 @@ class _CardWidget extends StatelessWidget {
         elevation: 5,
         child: InkWell(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => LineItemInfoScreen(lineItem, project))),
+              builder: (context) =>
+                  LineItemInfoScreen(lineItem, project, user))),
           child: Container(
             child: Padding(
               padding: EdgeInsets.all(7),

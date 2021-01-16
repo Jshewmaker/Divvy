@@ -39,14 +39,17 @@ class CreateSilaUserScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is CreateSilaUserSuccess) {
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (contest) => HomeScreen()),
+                    MaterialPageRoute(
+                        builder: (contest) => HomeScreen(
+                              user: state.user,
+                            )),
                     (route) => false);
               }
             },
             child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
                 builder: (context, state) {
               if (state is GetUserDataForProvider) {
-                var userprovider = context.repository<UserModelProvider>();
+                //var userprovider = context.repository<UserModelProvider>();
                 //userprovider.add(state.user);
               }
               if (state is CreateSilaUserInitial || state is HandleTaken) {
