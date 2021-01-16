@@ -58,7 +58,7 @@ class SignUpPage extends StatelessWidget {
                         // const SizedBox(height: 8.0),
                         _ConfirmPasswordInput(),
                         Text(
-                          'Passwords must be 8 characters in legnth and include numbers and letters.',
+                          'Passwords must be 8 characters in length and include numbers and letters.',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
                       ],
