@@ -24,7 +24,11 @@ class GetUserDataForProvider extends CreateSilaBusinessState {
 }
 
 //Registration states
-class RegisterBusinessLoadInProgress extends CreateSilaBusinessState {}
+class RegisterBusinessLoadInProgress extends CreateSilaBusinessState {
+  RegisterBusinessLoadInProgress({@required this.user}) : assert(user != null);
+
+  final UserModel user;
+}
 
 class RegisterBusinessSuccess extends CreateSilaBusinessState {
   RegisterBusinessSuccess(this.response);
@@ -178,7 +182,11 @@ class CertifyBusinessFailure extends CreateSilaBusinessState {
 class CreateSilaBusinessFailure extends CreateSilaBusinessState {}
 
 //Success
-class CreateSilaBusinessSuccess extends CreateSilaBusinessState {}
+class CreateSilaBusinessSuccess extends CreateSilaBusinessState {
+  CreateSilaBusinessSuccess(this.user);
+
+  final UserModel user;
+}
 
 class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
   CreateSilaBusinessCubit(this._silaBusinessRepository)
@@ -189,10 +197,10 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
   Future<void> createBusinesss() async {
     final FirebaseService _firebaseService = FirebaseService();
     UserModel user;
-    emit(RegisterBusinessLoadInProgress());
 
     try {
       user = await _firebaseService.getUserData();
+      emit(RegisterBusinessLoadInProgress(user: user));
       emit(GetUserDataForProvider(user: user));
       String username = formatUsername(user);
       Map<String, String> data = {"silaHandle": username};
@@ -261,7 +269,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
                             certifyBusinessResponse =
                             await _silaBusinessRepository.certifyBusiness();
                         emit(CertifyBusinessSuccess(certifyBusinessResponse));
-                        emit(CreateSilaBusinessSuccess());
+                        emit(CreateSilaBusinessSuccess(user));
                       } catch (_) {
                         emit(CertifyBusinessFailure(_));
                       }

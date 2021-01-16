@@ -28,7 +28,8 @@ class CreateSilaBusinessScreen extends StatelessWidget {
             listener: (context, state) {
               if (state is CreateSilaBusinessSuccess) {
                 Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(builder: (contest) => HomeScreen()),
+                    MaterialPageRoute(
+                        builder: (contest) => HomeScreen(user: state.user)),
                     (route) => false);
               }
             },
@@ -36,7 +37,7 @@ class CreateSilaBusinessScreen extends StatelessWidget {
                 BlocBuilder<CreateSilaBusinessCubit, CreateSilaBusinessState>(
                     builder: (context, state) {
               if (state is GetUserDataForProvider) {
-                var userprovider = context.repository<UserModelProvider>();
+                //var userprovider = context.repository<UserModelProvider>();
                 //userprovider.add(state.user);
               }
               if (state is CreateSilaBusinessInitial) {

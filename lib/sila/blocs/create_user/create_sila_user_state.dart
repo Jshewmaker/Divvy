@@ -148,4 +148,11 @@ class CheckKycLoadFailure extends CreateSilaUserState {
 
 //END CHECK KYC
 
-class CreateSilaUserSuccess extends CreateSilaUserState {}
+class CreateSilaUserSuccess extends CreateSilaUserState {
+  final UserModel user;
+
+  const CreateSilaUserSuccess({@required this.user}) : assert(user != null);
+
+  @override
+  List<Object> get props => [user];
+}

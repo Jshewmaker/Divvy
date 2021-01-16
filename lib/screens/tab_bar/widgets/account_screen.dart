@@ -69,8 +69,8 @@ class AccountScreen extends StatelessWidget {
             ),
             color: Colors.teal[200],
             child: Text('Connect Project'),
-            onPressed: () => Navigator.of(context).push(
-                MaterialPageRoute(builder: (contest) => ConnectToProject())),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (contest) => ConnectToProject(user))),
           ),
           RaisedButton(
             shape: RoundedRectangleBorder(

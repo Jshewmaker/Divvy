@@ -19,29 +19,31 @@ import '../messaging_screen.dart';
 //import 'package:fluttertoast/fluttertoast.dart';
 
 class LineItemInfoScreen extends StatefulWidget {
-  LineItemInfoScreen(this._lineItem, this._project);
+  LineItemInfoScreen(this._lineItem, this._project, this._user);
 
   final LineItem _lineItem;
   final Project _project;
+  final UserModel _user;
 
   @override
   State<LineItemInfoScreen> createState() =>
-      _LineItemInfoScreenState(_lineItem, _project);
+      _LineItemInfoScreenState(_lineItem, _project, _user);
 }
 
 class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   _LineItemInfoScreenState(
     this._lineItem,
     this._project,
+    this._user,
   );
 
   final LineItem _lineItem;
   final Project _project;
+  final UserModel _user;
   final FirebaseService _firebaseService = FirebaseService();
 
   File _image;
   String _uploadedFileURL;
-  UserModel _user;
 
   double _boraderRadius = 10.0;
 
@@ -53,7 +55,6 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
     // PickedFile image;
     // ignore: unnecessary_statements
     _uploadedFileURL = _lineItem.pictureUrl;
-    UserModel _user = Provider.of<UserModel>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Work Submission'),
@@ -105,7 +106,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                       onTap: () {
                         Navigator.of(context).push(MaterialPageRoute(
                             builder: (context) =>
-                                MessagingScreen(_lineItem, _project)));
+                                MessagingScreen(_lineItem, _project, _user)));
                       },
                       child: Center(
                           child: Wrap(

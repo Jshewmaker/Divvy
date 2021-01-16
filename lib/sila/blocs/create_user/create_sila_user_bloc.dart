@@ -57,15 +57,18 @@ class CreateSilaUserBloc
               try {
                 yield CheckKycLoadInProgress();
                 CheckKycResponse response = await silaRepository.checkKYC();
+
                 while (response.verificationStatus == "pending") {
                   yield CheckKycPending();
                   response = await silaRepository.checkKYC();
                 }
                 if (response.success == true) {
                   yield CheckKycVerifiationSuccess(checkKycResponse: response);
-                  yield CreateSilaUserSuccess();
+                  yield CreateSilaUserSuccess(user: user);
                 } else if (response.verificationStatus == "failed")
                   yield CheckKycVerifiationFail(checkKycResponse: response);
+                print(
+                    "Verification Status: ${response.verificationStatus} ${response.message}");
               } catch (_) {
                 yield CheckKycLoadFailure(exception: _);
               }
