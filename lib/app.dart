@@ -76,7 +76,7 @@ class _AppViewState extends State<AppView> {
                   UserModel user = state.user;
 
                   if (user == null)
-                    _navigator.push(MaterialPageRoute(
+                    _navigator.pushReplacement(MaterialPageRoute(
                         builder: (context) => HomeownerOrBusinessScreen()));
                   else if (!user.isHomeowner &&
                       user.businessAdminDocumentID == null) {

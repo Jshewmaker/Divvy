@@ -12,9 +12,28 @@ class BusinessAdminTrasitionScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                  'Any person linked to a business must be verified individually using a their residential/home address and personal phone number. An individual should not be registered using business credentials, as this can cause problems with verifying them in their own KYC process. '),
+                'Administrator Signup',
+                style: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF1E90FF)),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'On the following screens, you will signup an administrator for the business.  Any person linked to a business must be verified individually using  their residential/home address and phone number. An individual should not be registered using business credentials, as this can cause problems with verifying them in their own KYC process. This person will hold all access to the business account and have access to funds and project data.',
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(
+                height: 20.0,
+              ),
               RaisedButton(
                 child: Text('Continue to Admin Info'),
+                shape: (RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
+                color: const Color(0xFF1E90FF),
+                textColor: Colors.white,
                 onPressed: () => {
                   Navigator.push(
                     context,

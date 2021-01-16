@@ -51,27 +51,24 @@ class NaicsCategoryPopulated extends StatelessWidget {
       body: ListView.builder(
         itemCount: _response.naicsCategories.construction.length,
         itemBuilder: (context, index) {
-          return Card(
-            elevation: 1,
-            child: ListTile(
-                title: Center(
-                    child: Text(_response
-                        .naicsCategories.construction[index].subcategory)),
-                onTap: () {
-                  // Map<String, String> data = {
-                  //   "naics_code": _response
-                  //       .naicsCategories.construction[index].code
-                  //       .toString()
-                  // };
-                  // _firebaseService.addDataToFirestoreDocument('users', data);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => BusinessSignUpPage(_businessType,
-                            _response.naicsCategories.construction[index].code),
-                      ));
-                }),
-          );
+          return ListTile(
+              title: Center(
+                  child: Text(_response
+                      .naicsCategories.construction[index].subcategory)),
+              onTap: () {
+                // Map<String, String> data = {
+                //   "naics_code": _response
+                //       .naicsCategories.construction[index].code
+                //       .toString()
+                // };
+                // _firebaseService.addDataToFirestoreDocument('users', data);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => BusinessSignUpPage(_businessType,
+                          _response.naicsCategories.construction[index].code),
+                    ));
+              });
         },
       ),
     );

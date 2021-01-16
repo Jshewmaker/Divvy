@@ -31,6 +31,9 @@ class TransactionsScreen extends StatelessWidget {
               }
               if (state is GetTransactionsLoadSuccess) {
                 final apiResponse = state.response;
+                if (apiResponse.totalCount == 0) {
+                  return NoTransactions();
+                }
 
                 return PopulatedWidget(transactions: apiResponse);
               }
@@ -47,6 +50,19 @@ class TransactionsScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class NoTransactions extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+        body: Center(
+      child: Text(
+        'No Transactions',
+        style: TextStyle(color: Colors.grey[400]),
+      ),
+    ));
   }
 }
 

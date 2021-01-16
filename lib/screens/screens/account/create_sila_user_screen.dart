@@ -7,6 +7,7 @@ import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
+import 'package:marquee/marquee.dart';
 
 class CreateSilaUserScreen extends StatelessWidget {
   static Route route() {
@@ -72,11 +73,51 @@ class CreateSilaUserScreen extends StatelessWidget {
                 );
               }
 
-              return Center(child: CircularProgressIndicator());
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomProgressIndicator(),
+                  _buildComplexMarquee(),
+                ],
+              );
             }),
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildComplexMarquee() {
+    return ListView(
+        shrinkWrap: true,
+        children: [
+          Marquee(
+            text:
+                'Creating Account.                                            Checking KYC.                                            Confirming Address.                                            ',
+            style: TextStyle(fontWeight: FontWeight.bold),
+            scrollAxis: Axis.horizontal,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            blankSpace: 20.0,
+            velocity: 40.0,
+            pauseAfterRound: Duration(seconds: 0),
+            showFadingOnlyWhenScrolling: true,
+            fadingEdgeStartFraction: 0.5,
+            fadingEdgeEndFraction: 0.5,
+            numberOfRounds: 100,
+            startPadding: 50.0,
+            accelerationDuration: Duration(seconds: 1),
+            accelerationCurve: Curves.linear,
+            decelerationDuration: Duration(milliseconds: 500),
+            decelerationCurve: Curves.easeIn,
+          ),
+        ].map(_wrapWithStuff).toList());
+  }
+
+  Widget _wrapWithStuff(Widget child) {
+    return Padding(
+      padding: EdgeInsets.all(100.0),
+      child: Container(height: 50.0, width: 100, child: child),
     );
   }
 }
