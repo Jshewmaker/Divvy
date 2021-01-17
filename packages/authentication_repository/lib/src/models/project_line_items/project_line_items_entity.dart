@@ -21,7 +21,7 @@ class LineItemEntity extends Equatable {
   final int generalContractorApprovalDate;
   final double cost;
   final int homeownerApprovalDate;
-  final int datePaid;
+  final int dateDenied;
   final int phase;
   final String title;
   final String subContractor;
@@ -37,7 +37,7 @@ class LineItemEntity extends Equatable {
     this.generalContractorApprovalDate,
     this.cost,
     this.homeownerApprovalDate,
-    this.datePaid,
+    this.dateDenied,
     this.phase,
     this.title,
     this.subContractor,
@@ -56,7 +56,7 @@ class LineItemEntity extends Equatable {
       "general_contractor_approval_date": generalContractorApprovalDate,
       "cost": cost,
       "homeowner_approval_date": homeownerApprovalDate,
-      "date_paid": datePaid,
+      "date_denied": dateDenied,
       "phase": phase,
       "title": title,
       "sub_contractor": subContractor,
@@ -72,7 +72,7 @@ class LineItemEntity extends Equatable {
         generalContractorApprovalDate,
         cost,
         homeownerApprovalDate,
-        datePaid,
+        dateDenied,
         phase,
         title,
         subContractor,
@@ -91,7 +91,7 @@ class LineItemEntity extends Equatable {
       json["general_contractor_approval_date"] as int,
       json["cost"] as double,
       json["homeowner_approval_date"] as int,
-      json["date_paid"] as int,
+      json["date_denied"] as int,
       json["phase"] as int,
       json["title"] as String,
       json["sub_contractor"] as String,
@@ -111,7 +111,7 @@ class LineItemEntity extends Equatable {
       snap.data['general_contractor_approval_date'],
       snap.data['cost'].toDouble(),
       snap.data['homeowner_approval_date'],
-      snap.data['date_paid'],
+      snap.data['date_denied'],
       snap.data['phase'],
       snap.data['title'],
       snap.data['sub_contractor'],
@@ -131,7 +131,7 @@ class LineItemEntity extends Equatable {
       "general_contractor_approval_date": generalContractorApprovalDate,
       "cost": cost,
       "homeowner_approval_date": homeownerApprovalDate,
-      "date_paid": datePaid,
+      "date_denied": dateDenied,
       "phase": phase,
       "title": title,
       "sub_contractor": subContractor,

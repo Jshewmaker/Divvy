@@ -99,7 +99,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     SizedBox(
                       height: 20,
                     ),
-                    _pictureWidget(_user),
+                    _pictureWidget(_user, _lineItem),
                     SizedBox(
                       height: 30,
                     ),
@@ -115,14 +115,13 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Visibility(
-                    visible: (_lineItem.datePaid == null &&
-                        _lineItem.homeownerApprovalDate == null),
+                    visible: (_lineItem.homeownerApprovalDate == null),
                     child: _approveButton(
                         'Approve',
                         (_lineItem.generalContractorApprovalDate != null &&
                             _lineItem.homeownerApprovalDate == null))),
                 Visibility(
-                    visible: (_lineItem.datePaid != null),
+                    visible: (_lineItem.homeownerApprovalDate != null),
                     child: _approveButton('View Receipt', true)),
                 _DenyButton(_lineItem, _user),
               ],
@@ -134,10 +133,10 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Visibility(
-                      visible: (_lineItem.datePaid == null),
+                      visible: (_lineItem.homeownerApprovalDate == null),
                       child: _SubmitButton(_lineItem, _user)),
                   Visibility(
-                      visible: (_lineItem.datePaid != null),
+                      visible: (_lineItem.homeownerApprovalDate != null),
                       child: _approveButton('View Receipt', true)),
                 ],
               )),
@@ -161,17 +160,19 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
         onPressed: isEnabled
             ? () => {
                   Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => InvoiceScreen(_lineItem, _project)))
+                      builder: (context) =>
+                          InvoiceScreen(_lineItem, _project, _user)))
                 }
             : null);
   }
 
-  Widget _pictureWidget(UserModel user) {
+  Widget _pictureWidget(UserModel user, LineItem lineItem) {
     return Container(
         height: 300,
         width: double.maxFinite,
         child: GestureDetector(
-            onTap: !user.isHomeowner
+            onTap: (!user.isHomeowner &&
+                    lineItem.generalContractorApprovalDate == null)
                 ? () {
                     _showPicker(context);
                   }
@@ -281,9 +282,11 @@ class _DenyButton extends StatelessWidget {
   final UserModel user;
 
   void deny(String projectID, String lineID) {
-    Map<String, Timestamp> firebaseData;
+    int value = DateTime.now().millisecondsSinceEpoch;
+    Map<String, int> firebaseData;
     firebaseData = {
       "general_contractor_approval_date": null,
+      "date_denied": value,
     };
     FirebaseService _firebaseService = FirebaseService();
     _firebaseService.addDataToProjectDocument(firebaseData, projectID, lineID);
@@ -299,8 +302,7 @@ class _DenyButton extends StatelessWidget {
     //buildWhen: (previous, current) => previous.status != current.status,
     //builder: (context, state) {
     return Visibility(
-      visible:
-          (lineItem.datePaid == null && lineItem.homeownerApprovalDate == null),
+      visible: (lineItem.homeownerApprovalDate == null),
       child: RaisedButton(
         child: Text('Deny'),
         shape:
@@ -331,6 +333,7 @@ class _SubmitButton extends StatelessWidget {
     int date = DateTime.now().millisecondsSinceEpoch;
     firebaseData = {
       "general_contractor_approval_date": date,
+      "date_denied": null,
     };
     FirebaseService _firebaseService = FirebaseService();
     _firebaseService.addDataToProjectDocument(firebaseData, projectID, lineID);

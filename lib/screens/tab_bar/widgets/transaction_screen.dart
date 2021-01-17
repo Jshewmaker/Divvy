@@ -1,3 +1,4 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/invoice_helper.dart';
 import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:divvy/sila/blocs/get_transactions/get_transactions.dart';
@@ -8,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class TransactionsScreen extends StatelessWidget {
   final SilaRepository silaRepository =
@@ -15,6 +17,7 @@ class TransactionsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel user = Provider.of<UserModel>(context);
     return BlocProvider(
       create: (context) => GetTransactionsBloc(silaRepository: silaRepository),
       child: Scaffold(
@@ -35,7 +38,10 @@ class TransactionsScreen extends StatelessWidget {
                   return NoTransactions();
                 }
 
-                return PopulatedWidget(transactions: apiResponse);
+                return PopulatedWidget(
+                  transactions: apiResponse,
+                  user: user,
+                );
               }
               if (state is GetTransactionsLoadFailure) {
                 return Text(
@@ -68,8 +74,10 @@ class NoTransactions extends StatelessWidget {
 
 class PopulatedWidget extends StatelessWidget {
   final GetTransactionsResponse transactions;
+  final UserModel user;
 
-  PopulatedWidget({Key key, @required this.transactions}) : super(key: key);
+  PopulatedWidget({Key key, @required this.transactions, this.user})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,7 +86,7 @@ class PopulatedWidget extends StatelessWidget {
       separatorBuilder: (BuildContext context, int index) => Divider(height: 3),
       itemBuilder: (context, index) {
         var color = cardColor(transactions.transactions[index].transactionType);
-        return _Card(transactions, index, color);
+        return _Card(transactions, index, color, user);
       },
     ));
   }
@@ -96,10 +104,11 @@ class PopulatedWidget extends StatelessWidget {
 }
 
 class _Card extends StatelessWidget {
-  _Card(this._transactions, this.index, this._color);
+  _Card(this._transactions, this.index, this._color, this.user);
   final GetTransactionsResponse _transactions;
   final int index;
   final Color _color;
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -135,7 +144,7 @@ class _Card extends StatelessWidget {
         onTap: () => {
           if (_transactions.transactions[index].transactionType == 'transfer')
             Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => InvoiceHelperScreen(lineItemID)))
+                builder: (context) => InvoiceHelperScreen(lineItemID, user)))
         },
         child: Card(
           elevation: 0,

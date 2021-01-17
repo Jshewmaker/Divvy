@@ -5,12 +5,14 @@ import 'package:divvy/bloc/line_items/line_item_state.dart';
 import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:provider/provider.dart';
 
 class InvoiceHelperScreen extends StatelessWidget {
   final FirebaseService _firebaseService = FirebaseService();
-  InvoiceHelperScreen(this.lineItemID);
+  InvoiceHelperScreen(this.lineItemID, this.user);
 
   final String lineItemID;
+  final UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class InvoiceHelperScreen extends StatelessWidget {
               final LineItem lineItem = state.lineItem;
               final Project project = state.project;
 
-              return InvoiceScreen(lineItem, project);
+              return InvoiceScreen(lineItem, project, user);
             }
             if (state is LineItemLoadFailure) {
               return Text(

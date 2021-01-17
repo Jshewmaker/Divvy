@@ -13,9 +13,10 @@ import 'package:toast/toast.dart';
 import 'package:http/http.dart' as http;
 
 class InvoiceScreen extends StatelessWidget {
-  InvoiceScreen(this._lineItem, this._project);
+  InvoiceScreen(this._lineItem, this._project, this._user);
   final LineItem _lineItem;
   final Project _project;
+  final UserModel _user;
   final FirebaseService _firebaseService = FirebaseService();
 
   final SilaRepository silaRepository =
@@ -36,7 +37,6 @@ class InvoiceScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final cost = NumberFormat.currency(symbol: '\$').format(_lineItem.cost);
 
-    UserModel _user = Provider.of<UserModel>(context);
     return BlocProvider(
         create: (context) => TransferSilaBloc(silaRepository: silaRepository),
         child: MultiBlocListener(
@@ -229,11 +229,11 @@ class _Table extends StatelessWidget {
   }
 
   String paidDate() {
-    if (_lineItem.datePaid == null) {
+    if (_lineItem.homeownerApprovalDate == null) {
       DateTime date = DateTime.now();
       return DateFormat.yMMMMd('en_US').format(date);
     } else {
-      return DateFormat.yMMMMd('en_US').format(_lineItem.datePaid);
+      return DateFormat.yMMMMd('en_US').format(_lineItem.homeownerApprovalDate);
     }
   }
 }

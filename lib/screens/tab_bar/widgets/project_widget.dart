@@ -57,18 +57,13 @@ class _CardWidget extends StatelessWidget {
   }) : super(key: key);
 
   Color _cardColor() {
-    if (lineItem.generalContractorApprovalDate != null) {
+    if (lineItem.dateDenied != null) {
+      return Colors.red[400];
+    } else if (lineItem.generalContractorApprovalDate != null) {
       if (lineItem.homeownerApprovalDate != null) {
-        if (lineItem.datePaid != null) {
-          return Colors.teal[100];
-          //status = Paid
-        } else {
-          return Colors.teal[200];
-          //status = Payment Needed
-        }
+        return Colors.teal[100];
       } else {
         return Colors.amber[400];
-        //status = Approval Needed
       }
     } else {
       return Colors.teal[200];
@@ -147,13 +142,12 @@ class _CardWidget extends StatelessWidget {
 
   String getStatus() {
     String status = "";
-    if (lineItem.generalContractorApprovalDate != null) {
+
+    if (lineItem.dateDenied != null) {
+      status = "Denied";
+    } else if (lineItem.generalContractorApprovalDate != null) {
       if (lineItem.homeownerApprovalDate != null) {
-        if (lineItem.datePaid != null) {
-          status = "Paid";
-        } else {
-          status = "Payment Needed";
-        }
+        status = "Paid";
       } else {
         status = "Approval Needed";
       }
