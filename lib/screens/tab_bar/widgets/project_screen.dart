@@ -23,6 +23,7 @@ class ProjectScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: (user.projectID == null)
+              //? ConnectToProject(user)
               ? RaisedButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

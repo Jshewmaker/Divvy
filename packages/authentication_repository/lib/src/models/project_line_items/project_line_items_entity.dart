@@ -30,6 +30,8 @@ class LineItemEntity extends Equatable {
   final String pictureUrl;
   final int expectedFinishDate;
   final List<dynamic> messages;
+  final bool newMessageFromHomeowner;
+  final bool newMessageFromGC;
 
   const LineItemEntity(
     this.generalContractorApprovalDate,
@@ -44,6 +46,8 @@ class LineItemEntity extends Equatable {
     this.pictureUrl,
     this.expectedFinishDate,
     this.messages,
+    this.newMessageFromHomeowner,
+    this.newMessageFromGC,
   );
 
   Map<String, Object> toJson() {
@@ -59,6 +63,8 @@ class LineItemEntity extends Equatable {
       "comments": comments,
       "picture_url": pictureUrl,
       "expected_finish_date": expectedFinishDate,
+      "new_message_from_homeowner": newMessageFromHomeowner,
+      "new_message_from_gc": newMessageFromGC,
     };
   }
 
@@ -75,6 +81,8 @@ class LineItemEntity extends Equatable {
         pictureUrl,
         expectedFinishDate,
         messages,
+        newMessageFromHomeowner,
+        newMessageFromGC,
       ];
 
   static LineItemEntity fromJson(Map<String, Object> json) {
@@ -92,6 +100,8 @@ class LineItemEntity extends Equatable {
       json["picture_url"] as String,
       json["expected_finish_date"] as int,
       json["messages"] as List<Map>,
+      json["new_message_from_homeowner"] as bool,
+      json["new_message_from_gc"] as bool,
     );
   }
 
@@ -110,6 +120,8 @@ class LineItemEntity extends Equatable {
       snap.data['picture_url'],
       snap.data['expected_finish_date'],
       snap.data['messages'],
+      snap.data['new_message_from_homeowner'],
+      snap.data['new_message_from_gc'],
     );
   }
 
@@ -127,6 +139,8 @@ class LineItemEntity extends Equatable {
       "picture_url": pictureUrl,
       "expected_finish_date": expectedFinishDate,
       "messages": messages.toList(),
+      "new_message_from_homeowner": newMessageFromHomeowner,
+      "new_message_from_gc": newMessageFromGC,
     };
   }
 }

@@ -252,6 +252,16 @@ class FirebaseService {
         .add(data);
   }
 
+  void unreadMessage(
+      String project, String lineItem, Map<String, dynamic> data) {
+    Firestore.instance
+        .collection(projectCollection)
+        .document(project)
+        .collection(lineItemsCollection)
+        .document(lineItem)
+        .setData(data, merge: true);
+  }
+
   Stream<UserModel> streamRealtimeUser(String id) {
     return Firestore.instance
         .collection(collection)
@@ -290,5 +300,15 @@ class FirebaseService {
         .snapshots()
         .map((snap) =>
             MessageListModel.fromEntity(MessageListEntity.fromSnapshot(snap)));
+  }
+
+  Stream<LineItem> streamRealtimeLineItem(String project, String lineItem) {
+    return Firestore.instance
+        .collection(projectCollection)
+        .document(project)
+        .collection(lineItemsCollection)
+        .document(lineItem)
+        .snapshots()
+        .map((snap) => LineItem.fromEntity(LineItemEntity.fromSnapshot(snap)));
   }
 }

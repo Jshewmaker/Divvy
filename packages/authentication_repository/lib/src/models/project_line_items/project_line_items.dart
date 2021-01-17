@@ -34,6 +34,8 @@ class LineItem extends Equatable {
   final String pictureUrl;
   final DateTime expectedFinishDate;
   final MessageListModel messages;
+  final bool newMessageFromHomeowner;
+  final bool newMessageFromGC;
 
   const LineItem({
     @required this.title,
@@ -48,6 +50,8 @@ class LineItem extends Equatable {
     this.pictureUrl,
     this.expectedFinishDate,
     this.messages,
+    this.newMessageFromHomeowner,
+    this.newMessageFromGC,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -64,6 +68,8 @@ class LineItem extends Equatable {
     pictureUrl: '',
     expectedFinishDate: null,
     messages: null,
+    newMessageFromHomeowner: false,
+    newMessageFromGC: false,
   );
 
   @override
@@ -80,6 +86,8 @@ class LineItem extends Equatable {
         pictureUrl,
         expectedFinishDate,
         messages,
+        newMessageFromHomeowner,
+        newMessageFromGC,
       ];
 
   static LineItem fromEntity(LineItemEntity entity) {
@@ -110,6 +118,11 @@ class LineItem extends Equatable {
       messages: (entity.messages != null)
           ? MessageListModel.fromList(entity.messages)
           : null,
+      newMessageFromHomeowner: (entity.newMessageFromHomeowner == null)
+          ? false
+          : entity.newMessageFromHomeowner,
+      newMessageFromGC:
+          (entity.newMessageFromGC == null) ? false : entity.newMessageFromGC,
     );
   }
 
@@ -134,6 +147,8 @@ class LineItem extends Equatable {
       pictureUrl,
       expectedFinishDateToUnix,
       messages.toList(),
+      newMessageFromHomeowner,
+      newMessageFromGC,
     );
   }
 }

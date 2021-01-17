@@ -8,13 +8,13 @@ import 'package:provider/provider.dart';
 
 import 'message_attribute_model.dart';
 
-class MessagesWidget extends StatelessWidget {
+class MessagingWidget extends StatelessWidget {
   final UserModel user;
   final String lineItemID;
   final String projectID;
   final FirebaseService firebaseService = FirebaseService();
 
-  MessagesWidget(
+  MessagingWidget(
     this.user,
     this.lineItemID,
     this.projectID,
