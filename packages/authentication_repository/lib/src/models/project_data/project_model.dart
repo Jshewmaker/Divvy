@@ -66,7 +66,9 @@ class Project {
       projectName: entity.projectName,
       projectCost: entity.projectCost,
       homeownerName: entity.homeownerName,
-      generalContractorName: entity.generalContractorName,
+      generalContractorName: (entity.generalContractorName == null)
+          ? 'Contractor not listed'
+          : entity.generalContractorName,
     );
   }
 

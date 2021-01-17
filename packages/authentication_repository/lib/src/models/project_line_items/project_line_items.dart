@@ -25,7 +25,7 @@ class LineItem extends Equatable {
   final DateTime generalContractorApprovalDate;
   final double cost;
   final DateTime homeownerApprovalDate;
-  final DateTime datePaid;
+  final DateTime dateDenied;
   final int phase;
   final String title;
   final String subContractor;
@@ -41,7 +41,7 @@ class LineItem extends Equatable {
     @required this.title,
     this.generalContractorApprovalDate,
     this.cost,
-    this.datePaid,
+    this.dateDenied,
     this.phase,
     this.homeownerApprovalDate,
     this.subContractor,
@@ -59,7 +59,7 @@ class LineItem extends Equatable {
     title: '',
     generalContractorApprovalDate: null,
     cost: null,
-    datePaid: null,
+    dateDenied: null,
     phase: null,
     homeownerApprovalDate: null,
     subContractor: '',
@@ -77,7 +77,7 @@ class LineItem extends Equatable {
         generalContractorApprovalDate,
         cost,
         homeownerApprovalDate,
-        datePaid,
+        dateDenied,
         phase,
         title,
         subContractor,
@@ -101,8 +101,8 @@ class LineItem extends Equatable {
       homeownerApprovalDate: entity.homeownerApprovalDate != null
           ? DateTime.fromMillisecondsSinceEpoch(entity.homeownerApprovalDate)
           : null,
-      datePaid: entity.datePaid != null
-          ? DateTime.fromMillisecondsSinceEpoch(entity.datePaid)
+      dateDenied: entity.dateDenied != null
+          ? DateTime.fromMillisecondsSinceEpoch(entity.dateDenied)
           : null,
       phase: entity.phase,
       title: entity.title,
@@ -133,7 +133,7 @@ class LineItem extends Equatable {
         generalContractorApprovalDate.toUtc().millisecondsSinceEpoch;
     var homeownerApprovalDateToUnix =
         homeownerApprovalDate.toUtc().millisecondsSinceEpoch;
-    var datePaidToUnix = datePaid.toUtc().millisecondsSinceEpoch;
+    var datePaidToUnix = dateDenied.toUtc().millisecondsSinceEpoch;
     return LineItemEntity(
       generalContractorApprovalDateToUnix,
       cost,
