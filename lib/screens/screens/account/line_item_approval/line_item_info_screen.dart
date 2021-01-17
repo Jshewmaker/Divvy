@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:divvy/screens/screens/account/line_item_approval/chat_button.dart';
 import 'package:divvy/screens/screens/invoice_screen.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -100,33 +101,9 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                     ),
                     _pictureWidget(_user),
                     SizedBox(
-                      height: 40,
+                      height: 30,
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) =>
-                                MessagingScreen(_lineItem, _project, _user)));
-                      },
-                      child: Center(
-                          child: Wrap(
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.message,
-                            color: Colors.teal[400],
-                          ),
-                          Text(' Chat with general contractor',
-                              style: TextStyle(
-                                  color: Colors.teal[400],
-                                  fontSize: 14,
-                                  decoration: TextDecoration.underline)),
-                        ],
-                      )),
-                    ),
-                    SizedBox(
-                      height: 40,
-                    ),
+                    ChatButton(_user, _lineItem.id, _project),
                   ],
                 ),
               ),

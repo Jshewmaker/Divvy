@@ -22,17 +22,32 @@ class MessagingScreen extends StatelessWidget {
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
 
+  final FirebaseService _firebaseService = FirebaseService();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Text(lineItem.title),
+    return WillPopScope(
+      onWillPop: () {
+        print("user hit back button");
+        String field = (user.isHomeowner)
+            ? "new_message_from_gc"
+            : "new_message_from_homeowner";
+
+        Map<String, dynamic> data = {field: false};
+        _firebaseService.unreadMessage(project.projectID, lineItem.id, data);
+        Navigator.pop(context);
+        return new Future(() => false);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          title: Text(lineItem.title),
+        ),
+        body: Center(
+            child: Container(
+                width: MediaQuery.of(context).size.width / 1.1,
+                child: _Chat(lineItem, user, project))),
       ),
-      body: Center(
-          child: Container(
-              width: MediaQuery.of(context).size.width / 1.1,
-              child: _Chat(lineItem, user, project))),
     );
   }
 }
@@ -51,6 +66,12 @@ class _Chat extends StatelessWidget {
         Message(id: user.id, message: message, timestamp: Timestamp.now());
     _firebaseService.addMessage(
         project.projectID, lineItem.id, messageModel.toMap());
+    String field = (user.isHomeowner)
+        ? "new_message_from_homeowner"
+        : "new_message_from_gc";
+
+    Map<String, dynamic> data = {field: true};
+    _firebaseService.unreadMessage(project.projectID, lineItem.id, data);
   }
 
   @override
@@ -59,7 +80,7 @@ class _Chat extends StatelessWidget {
       children: [
         Expanded(
             child: Container(
-                child: MessagesWidget(user, lineItem.id, project.projectID))),
+                child: MessagingWidget(user, lineItem.id, project.projectID))),
         SizedBox(
           height: 20,
         ),
