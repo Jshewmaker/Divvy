@@ -1,23 +1,16 @@
 import 'dart:io';
-import 'package:divvy/screens/screens/account/line_item_approval/chat_button.dart';
-import 'package:divvy/screens/screens/invoice_screen.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
-import 'package:path/path.dart' as Path;
 
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:divvy/screens/screens/account/line_item_approval/chat_button.dart';
+import 'package:divvy/screens/screens/invoice_screen.dart';
+import 'package:divvy/screens/screens/work_denial_screen.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:authentication_repository/src/models/project_line_items/messages.dart';
 import 'package:http/http.dart' as http;
-import 'package:provider/provider.dart';
-
-import '../messaging_screen.dart';
-import '../messaging_screen.dart';
-//import 'package:fluttertoast/fluttertoast.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as Path;
 
 class LineItemInfoScreen extends StatefulWidget {
   LineItemInfoScreen(this._lineItem, this._project, this._user);
@@ -41,7 +34,6 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
   final LineItem _lineItem;
   final Project _project;
   final UserModel _user;
-  final FirebaseService _firebaseService = FirebaseService();
 
   File _image;
   String _uploadedFileURL;
@@ -123,7 +115,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                 Visibility(
                     visible: (_lineItem.homeownerApprovalDate != null),
                     child: _approveButton('View Receipt', true)),
-                _DenyButton(_lineItem, _user),
+                _DenyButton(_lineItem, _user, _project),
               ],
             ),
           ),
@@ -276,10 +268,11 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
 }
 
 class _DenyButton extends StatelessWidget {
-  _DenyButton(this.lineItem, this.user);
+  _DenyButton(this.lineItem, this.user, this.project);
 
   final LineItem lineItem;
   final UserModel user;
+  final Project project;
 
   void deny(String projectID, String lineID) {
     int value = DateTime.now().millisecondsSinceEpoch;
@@ -311,8 +304,11 @@ class _DenyButton extends StatelessWidget {
         textColor: Colors.white,
         onPressed: isEnabled
             ? () => {
-                  deny(user.projectID, lineItem.id),
-                  Navigator.pop(context),
+                  Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) =>
+                          WorkDenialScreen(lineItem, project, user)))
+                  //deny(user.projectID, lineItem.id),
+                  //Navigator.pop(context),
                 }
             : null,
       ),
