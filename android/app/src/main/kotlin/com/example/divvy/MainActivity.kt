@@ -1,4 +1,4 @@
-package com.example.divvy
+package com.frequency.divvysafe
 
 import android.content.Context
 import android.content.ContextWrapper
