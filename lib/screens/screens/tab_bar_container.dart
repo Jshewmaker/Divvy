@@ -2,12 +2,10 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/Screens/tab_bar/blocs/blocs.dart';
 import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
-import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -41,6 +39,15 @@ class HomeScreen extends StatelessWidget {
 class TabBarContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    UserModel user;
+    try {
+      user = (Provider.of<UserModel>(context) == null)
+          ? UserModel.empty
+          : Provider.of<UserModel>(context);
+    } catch (_) {
+      user = UserModel.empty;
+    }
+
     return BlocBuilder<TabBloc, AppTab>(
       builder: (context, activeTab) {
         return Scaffold(
@@ -50,9 +57,12 @@ class TabBarContainer extends StatelessWidget {
               tabTitle(activeTab.index),
             ),
             actions: [
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => _settingModalBottomSheet(context),
+              Visibility(
+                visible: user.isHomeowner == false,
+                child: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () => _settingModalBottomSheet(context),
+                ),
               )
             ],
           ),
