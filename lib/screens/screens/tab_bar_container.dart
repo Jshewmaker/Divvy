@@ -3,6 +3,7 @@ import 'package:divvy/Screens/tab_bar/blocs/blocs.dart';
 import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
+import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -48,6 +49,12 @@ class TabBarContainer extends StatelessWidget {
             title: Text(
               tabTitle(activeTab.index),
             ),
+            actions: [
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () => _settingModalBottomSheet(context),
+              )
+            ],
           ),
           body: activeTabFunction(activeTab),
           bottomNavigationBar: TabSelector(
@@ -79,5 +86,37 @@ class TabBarContainer extends StatelessWidget {
     if (activeTab == AppTab.wallet) return WalletScreen();
     if (activeTab == AppTab.account) return AccountScreen();
     return Container();
+  }
+
+  void _settingModalBottomSheet(context) {
+    UserModel user;
+    try {
+      user = (Provider.of<UserModel>(context) == null)
+          ? UserModel.empty
+          : Provider.of<UserModel>(context);
+    } catch (_) {
+      user = UserModel.empty;
+    }
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext bc) {
+          return Container(
+            child: new Wrap(
+              children: <Widget>[
+                new ListTile(
+                    leading: new Icon(Icons.add_circle),
+                    title: new Text('Add New Project'),
+                    onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                        builder: (contest) => ConnectToProject(user)))),
+                new ListTile(
+                  leading: new Icon(Icons.carpenter_outlined),
+                  title: new Text('View Your Projects'),
+                  onTap: () => {},
+                ),
+                ListTile(),
+              ],
+            ),
+          );
+        });
   }
 }
