@@ -13,6 +13,7 @@ class Project {
   final double projectCost;
   final String homeownerName;
   final String generalContractorName;
+  final String address;
 
   const Project({
     @required this.complete,
@@ -25,6 +26,7 @@ class Project {
     @required this.projectCost,
     @required this.homeownerName,
     @required this.generalContractorName,
+    @required this.address,
   });
 
   List<Object> get props => [
@@ -38,6 +40,7 @@ class Project {
         projectCost,
         homeownerName,
         generalContractorName,
+        address,
       ];
 
   ProjectEntity toEntity() {
@@ -52,6 +55,7 @@ class Project {
       projectCost,
       homeownerName,
       generalContractorName,
+      address,
     );
   }
 
@@ -69,6 +73,7 @@ class Project {
       generalContractorName: (entity.generalContractorName == null)
           ? 'Contractor not listed'
           : entity.generalContractorName,
+      address: entity.address,
     );
   }
 
@@ -83,5 +88,6 @@ class Project {
     projectCost: null,
     homeownerName: '',
     generalContractorName: '',
+    address: '',
   );
 }

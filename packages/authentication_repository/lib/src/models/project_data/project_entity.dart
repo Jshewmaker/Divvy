@@ -12,6 +12,7 @@ class ProjectEntity extends Equatable {
   final double projectCost;
   final String homeownerName;
   final String generalContractorName;
+  final String address;
 
   const ProjectEntity(
     this.complete,
@@ -24,6 +25,7 @@ class ProjectEntity extends Equatable {
     this.projectCost,
     this.homeownerName,
     this.generalContractorName,
+    this.address,
   );
 
   Map<String, Object> toJson() {
@@ -38,6 +40,7 @@ class ProjectEntity extends Equatable {
       "project_cost": projectCost,
       "homeowner_name": homeownerName,
       "general_contractor_name": generalContractorName,
+      "address": address,
     };
   }
 
@@ -52,6 +55,7 @@ class ProjectEntity extends Equatable {
         projectCost,
         homeownerName,
         generalContractorName,
+        address,
       ];
 
   static ProjectEntity fromJson(Map<String, Object> json) {
@@ -66,6 +70,7 @@ class ProjectEntity extends Equatable {
       json["project_cost"] as double,
       json["homeowner_name"] as String,
       json["general_contractor_name"] as String,
+      json["address"] as String,
     );
   }
 
@@ -81,6 +86,7 @@ class ProjectEntity extends Equatable {
       snap.data['project_cost'],
       snap.data['homeowner_name'],
       snap.data['general_contractor_name'],
+      snap.data['address'],
     );
   }
 
@@ -94,6 +100,7 @@ class ProjectEntity extends Equatable {
       "project_cost": projectCost,
       "homeowner_name": homeownerName,
       "general_contractor_name": generalContractorName,
+      "address": address,
     };
   }
 }

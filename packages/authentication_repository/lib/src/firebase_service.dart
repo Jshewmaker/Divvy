@@ -125,6 +125,19 @@ class FirebaseService {
     }
   }
 
+  Future<List<Project>> getProjectList(List<dynamic> docIDs) async {
+    List<Project> projects = [];
+    // docIDs.forEach((id) async =>
+    //     await getProjects(id).then((value) => projects.add(value)));
+    //return projects;
+
+    for (int i = 0; i < docIDs.length; i++) {
+      Project project = await getProjects(docIDs[i]);
+      projects.add(project);
+    }
+    return projects;
+  }
+
   Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
       if (user.isHomeowner == true) {

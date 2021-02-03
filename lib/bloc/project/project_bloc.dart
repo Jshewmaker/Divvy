@@ -61,20 +61,13 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         yield ProjectLoadFailure();
       }
     }
-    if (event is ProjectRequested) {
+    if (event is ProjectListRequested) {
       yield ProjectLoadInProgress();
       try {
-        bool projectExists =
-            await firebaseService.projectExists(event.projectID);
-        if (projectExists) {
-          UserModel user = await firebaseService.getUserData();
-          final Project project =
-              await firebaseService.addUserDataToProject(event.projectID, user);
-          if (project == null) {
-            yield ProjectNotConnected();
-          } else {
-            yield ProjectLoadSuccess(project: project);
-          }
+        List<Project> projects =
+            await firebaseService.getProjectList(event.projectIDs);
+        if (projects.isNotEmpty) {
+          yield ProjectListLoadSuccess(projects: projects);
         } else {
           yield ProjectDoesNotExist();
         }
