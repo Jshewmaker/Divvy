@@ -8,6 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ConnectedProjectsScreen extends StatelessWidget {
   final UserModel user;
 
+  void switchProject(String projectID) {
+    FirebaseService firebaseService = FirebaseService();
+    firebaseService
+        .addDataToFirestoreDocument("users", {"project_id": projectID});
+  }
+
   const ConnectedProjectsScreen({Key key, this.user}) : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -32,7 +38,7 @@ class ConnectedProjectsScreen extends StatelessWidget {
                     return ListView.builder(
                         itemCount: state.projects.length,
                         itemBuilder: (context, index) {
-                          return _projectCard(state.projects[index]);
+                          return _projectCard(state.projects[index], context);
                         });
                   } else
                     return Container();
@@ -43,25 +49,31 @@ class ConnectedProjectsScreen extends StatelessWidget {
         ));
   }
 
-  Widget _projectCard(Project project) {
+  Widget _projectCard(Project project, BuildContext context) {
     return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(children: [
-          Text(project.address,
-              style: TextStyle(
-                color: Colors.teal[400],
-                fontSize: 30,
-              )),
-          Text("${project.homeownerName.split(" ")[1]} Project",
-              style: TextStyle(
-                fontSize: 22,
-              )),
-          SizedBox(
-            height: 20,
-          ),
-          Text(project.homeownerName),
-        ]),
+      child: InkWell(
+        onTap: () {
+          switchProject(project.projectID);
+          Navigator.of(context).pop();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(children: [
+            Text(project.address,
+                style: TextStyle(
+                  color: Colors.teal[400],
+                  fontSize: 30,
+                )),
+            Text("${project.homeownerName.split(" ")[1]} Project",
+                style: TextStyle(
+                  fontSize: 22,
+                )),
+            SizedBox(
+              height: 20,
+            ),
+            Text(project.homeownerName),
+          ]),
+        ),
       ),
     );
   }
