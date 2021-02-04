@@ -125,7 +125,7 @@ class WalletScreenInitial extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 1.1,
               child: BalanceCard(
                   amountSila: 0,
-                  title: "Project",
+                  title: "${user.projectName} Project",
                   buttonVisible: user.isHomeowner,
                   user: user))),
       Visibility(
@@ -182,7 +182,7 @@ class WalletScreenPopulated extends StatelessWidget {
               width: MediaQuery.of(context).size.width / 1.1,
               child: BalanceCard(
                   amountSila: amountProjectSila,
-                  title: "Project",
+                  title: "${user.projectName} Project",
                   buttonVisible: user.isHomeowner,
                   user: user))),
       Visibility(
@@ -241,14 +241,13 @@ class BalanceCard extends StatelessWidget {
             SizedBox(
               height: 20,
             ),
-            Text(
-              title + ' Balance',
-              style: TextStyle(
-                color: Colors.teal[400],
-                fontSize: 30,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
+            Text(title + ' Balance',
+                style: TextStyle(
+                  color: Colors.teal[400],
+                  fontSize: 30,
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center),
             SizedBox(
               height: 20,
             ),
