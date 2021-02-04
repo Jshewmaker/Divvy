@@ -8,10 +8,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 class ConnectedProjectsScreen extends StatelessWidget {
   final UserModel user;
 
-  void switchProject(String projectID) {
+  void switchProject(Project project) {
     FirebaseService firebaseService = FirebaseService();
     firebaseService
-        .addDataToFirestoreDocument("users", {"project_id": projectID});
+        .addDataToFirestoreDocument("users", {"project_id": project.projectID});
+    firebaseService.addDataToFirestoreDocument(
+        "users", {"project_name": project.homeownerName.split(" ")[1]});
   }
 
   const ConnectedProjectsScreen({Key key, this.user}) : super(key: key);
@@ -53,7 +55,7 @@ class ConnectedProjectsScreen extends StatelessWidget {
     return Card(
       child: InkWell(
         onTap: () {
-          switchProject(project.projectID);
+          switchProject(project);
           Navigator.of(context).pop();
         },
         child: Padding(

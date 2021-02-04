@@ -55,7 +55,7 @@ class TabBarContainer extends StatelessWidget {
           appBar: AppBar(
             // title: Text(FlutterBlocLocalizations.of(context).appTitle),
             title: Text(
-              tabTitle(activeTab.index),
+              appBarTitle(activeTab.index, user),
             ),
             actions: [
               Visibility(
@@ -81,6 +81,19 @@ class TabBarContainer extends StatelessWidget {
   String tabTitle(int activeTab) {
     if (activeTab == 0) {
       return 'Project';
+    } else if (activeTab == 1) {
+      return 'Transactions';
+    } else if (activeTab == 2) {
+      return 'Divvy Digital Safe';
+    } else if (activeTab == 3) {
+      return 'Account';
+    }
+    return "";
+  }
+
+  String appBarTitle(int activeTab, UserModel user) {
+    if (activeTab == 0) {
+      return '${user.projectName} Project';
     } else if (activeTab == 1) {
       return 'Transactions';
     } else if (activeTab == 2) {
