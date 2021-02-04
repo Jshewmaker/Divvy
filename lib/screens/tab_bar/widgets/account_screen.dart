@@ -92,15 +92,18 @@ class AccountScreen extends StatelessWidget {
                 .read<AuthenticationBloc>()
                 .add(AuthenticationLogoutRequested()),
           ),
-          RaisedButton(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            color: Colors.teal[200],
-            child: Text('View Projects'),
-            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (contest) => ConnectedProjectsScreen(user: user))),
-          ),
+          (!user.isHomeowner)
+              ? RaisedButton(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                  ),
+                  color: Colors.teal[200],
+                  child: Text('View Projects'),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (contest) =>
+                          ConnectedProjectsScreen(user: user))),
+                )
+              : Container(),
           // RaisedButton(
           //   child: Text('Issue Sila'),
           //   onPressed: () => Navigator.of(context).push(
