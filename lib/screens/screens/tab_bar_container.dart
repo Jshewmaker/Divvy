@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/Screens/tab_bar/blocs/blocs.dart';
 import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
+import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:flutter/material.dart';
@@ -61,7 +62,7 @@ class TabBarContainer extends StatelessWidget {
                 visible: user.isHomeowner == false,
                 child: IconButton(
                   icon: Icon(Icons.add),
-                  onPressed: () => _settingModalBottomSheet(context),
+                  onPressed: () => _settingModalBottomSheet(context, user),
                 ),
               )
             ],
@@ -98,15 +99,7 @@ class TabBarContainer extends StatelessWidget {
     return Container();
   }
 
-  void _settingModalBottomSheet(context) {
-    UserModel user;
-    try {
-      user = (Provider.of<UserModel>(context) == null)
-          ? UserModel.empty
-          : Provider.of<UserModel>(context);
-    } catch (_) {
-      user = UserModel.empty;
-    }
+  void _settingModalBottomSheet(context, UserModel user) {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext bc) {
@@ -121,7 +114,11 @@ class TabBarContainer extends StatelessWidget {
                 new ListTile(
                   leading: new Icon(Icons.carpenter_outlined),
                   title: new Text('View Your Projects'),
-                  onTap: () => {},
+                  onTap: () => {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (contest) =>
+                            ConnectedProjectsScreen(user: user))),
+                  },
                 ),
                 ListTile(),
               ],
