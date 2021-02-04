@@ -1,5 +1,6 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
+import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/screens/contact_divvy_screen.dart';
 import 'package:flutter/material.dart';
@@ -90,6 +91,15 @@ class AccountScreen extends StatelessWidget {
             onPressed: () => context
                 .read<AuthenticationBloc>()
                 .add(AuthenticationLogoutRequested()),
+          ),
+          RaisedButton(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            color: Colors.teal[200],
+            child: Text('View Projects'),
+            onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                builder: (contest) => ConnectedProjectsScreen(user: user))),
           ),
           // RaisedButton(
           //   child: Text('Issue Sila'),

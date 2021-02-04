@@ -125,6 +125,19 @@ class FirebaseService {
     }
   }
 
+  Future<List<Project>> getProjectList(List<dynamic> docIDs) async {
+    List<Project> projects = [];
+    // docIDs.forEach((id) async =>
+    //     await getProjects(id).then((value) => projects.add(value)));
+    //return projects;
+
+    for (int i = 0; i < docIDs.length; i++) {
+      Project project = await getProjects(docIDs[i]);
+      projects.add(project);
+    }
+    return projects;
+  }
+
   Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
       if (user.isHomeowner == true) {
@@ -139,6 +152,7 @@ class FirebaseService {
           "general_contractor_sila_handle": user.silaHandle,
           "general_contractor_name": user.name,
         });
+        addDataToArray(value.uid, projectID);
       }
       addDataToFirestoreDocument(collection, {"project_id": projectID});
     });
@@ -149,6 +163,17 @@ class FirebaseService {
         .get();
 
     return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
+  }
+
+  void addDataToArray(String userID, String projectID) {
+    Map<String, dynamic> firebaseData = {
+      "project_list": FieldValue.arrayUnion([projectID]),
+    };
+
+    Firestore.instance
+        .collection(collection)
+        .document(userID)
+        .updateData(firebaseData);
   }
 
   void addDataToProjectFirestoreDocument(

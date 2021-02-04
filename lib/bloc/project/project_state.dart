@@ -31,6 +31,18 @@ class ProjectLoadSuccess extends ProjectState {
   String toString() => 'ProjectConnected { projects: $project}';
 }
 
+class ProjectListLoadSuccess extends ProjectState {
+  final List<Project> projects;
+
+  const ProjectListLoadSuccess({@required this.projects});
+
+  @override
+  List<Object> get props => [projects];
+
+  @override
+  String toString() => 'ProjectConnected { projects: $projects}';
+}
+
 class ProjectLoadFailure extends ProjectState {}
 
 class HomeownerExists extends ProjectState {}

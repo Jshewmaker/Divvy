@@ -32,31 +32,34 @@ class UserModel extends Equatable {
   final String businessAdminDocumentID;
   final String projectID;
   final bool bankAccountIsConnected;
+  final List<dynamic> projectList;
 
-  const UserModel(
-      {this.name,
-      this.id,
-      this.dateOfBirthYYYYMMDD,
-      this.identityValue,
-      this.streetAddress,
-      this.city,
-      this.state,
-      this.country,
-      this.postalCode,
-      this.phone,
-      this.email,
-      this.doingBusinessAsName,
-      this.businessType,
-      this.naicsCode,
-      this.website,
-      this.privateKey,
-      this.silaEntityName,
-      this.silaHandle,
-      this.isHomeowner,
-      this.wallet,
-      this.businessAdminDocumentID,
-      this.projectID,
-      this.bankAccountIsConnected});
+  const UserModel({
+    this.name,
+    this.id,
+    this.dateOfBirthYYYYMMDD,
+    this.identityValue,
+    this.streetAddress,
+    this.city,
+    this.state,
+    this.country,
+    this.postalCode,
+    this.phone,
+    this.email,
+    this.doingBusinessAsName,
+    this.businessType,
+    this.naicsCode,
+    this.website,
+    this.privateKey,
+    this.silaEntityName,
+    this.silaHandle,
+    this.isHomeowner,
+    this.wallet,
+    this.businessAdminDocumentID,
+    this.projectID,
+    this.bankAccountIsConnected,
+    this.projectList,
+  });
 
   /// Empty user which represents an unauthenticated user.
   static const empty = UserModel(
@@ -83,6 +86,7 @@ class UserModel extends Equatable {
     businessAdminDocumentID: null,
     projectID: null,
     bankAccountIsConnected: null,
+    projectList: null,
   );
 
   @override
@@ -110,6 +114,7 @@ class UserModel extends Equatable {
         businessAdminDocumentID,
         projectID,
         bankAccountIsConnected,
+        projectList,
       ];
 
   static UserModel fromEntity(UserEntity entity) {
@@ -137,6 +142,7 @@ class UserModel extends Equatable {
       businessAdminDocumentID: entity.businessAdminDocumentID,
       projectID: entity.projectID,
       bankAccountIsConnected: entity.bankAccountIsConnected,
+      projectList: entity.projectList,
     );
   }
 
@@ -165,6 +171,7 @@ class UserModel extends Equatable {
       businessAdminDocumentID,
       projectID,
       bankAccountIsConnected,
+      projectList,
     );
   }
 }

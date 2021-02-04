@@ -52,3 +52,15 @@ class ProjectRequested extends ProjectEvent {
   @override
   String toString() => 'Connecting Project{project $projectID }';
 }
+
+class ProjectListRequested extends ProjectEvent {
+  final List<dynamic> projectIDs;
+
+  const ProjectListRequested(this.projectIDs);
+
+  @override
+  List<Object> get props => [projectIDs];
+
+  @override
+  String toString() => 'Connecting Project{project ${projectIDs.toString()} }';
+}

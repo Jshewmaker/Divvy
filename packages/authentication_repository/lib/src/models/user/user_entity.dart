@@ -25,6 +25,7 @@ class UserEntity extends Equatable {
   final String businessAdminDocumentID;
   final String projectID;
   final bool bankAccountIsConnected;
+  final List<dynamic> projectList;
 
   const UserEntity(
     this.id,
@@ -50,6 +51,7 @@ class UserEntity extends Equatable {
     this.businessAdminDocumentID,
     this.projectID,
     this.bankAccountIsConnected,
+    this.projectList,
   );
 
   Map<String, Object> toJson() {
@@ -77,6 +79,7 @@ class UserEntity extends Equatable {
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
       "bankAccountIsConnected": bankAccountIsConnected,
+      "project_list": projectList,
     };
   }
 
@@ -104,6 +107,7 @@ class UserEntity extends Equatable {
         businessAdminDocumentID,
         projectID,
         bankAccountIsConnected,
+        projectList,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -131,6 +135,7 @@ class UserEntity extends Equatable {
       json["businessAdminDocumentID"] as String,
       json["project_id"] as String,
       json["bankAccountIsConnected"] as bool,
+      json["project_list"] as List<dynamic>,
     );
   }
 
@@ -160,6 +165,7 @@ class UserEntity extends Equatable {
       snap.data['businessAdminDocumentID'],
       snap.data['project_id'],
       snap.data['bankAccountIsConnected'],
+      snap.data['project_list'],
     );
   }
 
@@ -188,6 +194,7 @@ class UserEntity extends Equatable {
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
       "bankAccountIsConnected": bankAccountIsConnected,
+      "project_list": projectList,
     };
   }
 
