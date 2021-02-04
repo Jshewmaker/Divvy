@@ -73,7 +73,7 @@ class Project {
       generalContractorName: (entity.generalContractorName == null)
           ? 'Contractor not listed'
           : entity.generalContractorName,
-      address: entity.address,
+      address: (entity.address == null) ? '' : entity.address,
     );
   }
 

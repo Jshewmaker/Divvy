@@ -152,6 +152,7 @@ class FirebaseService {
           "general_contractor_sila_handle": user.silaHandle,
           "general_contractor_name": user.name,
         });
+        addDataToArray(value.uid, projectID);
       }
       addDataToFirestoreDocument(collection, {"project_id": projectID});
     });
@@ -162,6 +163,17 @@ class FirebaseService {
         .get();
 
     return Project.fromEntity(ProjectEntity.fromSnapshot(_docSnapshot));
+  }
+
+  void addDataToArray(String userID, String projectID) {
+    Map<String, dynamic> firebaseData = {
+      "project_list": FieldValue.arrayUnion([projectID]),
+    };
+
+    Firestore.instance
+        .collection(collection)
+        .document(userID)
+        .updateData(firebaseData);
   }
 
   void addDataToProjectFirestoreDocument(
