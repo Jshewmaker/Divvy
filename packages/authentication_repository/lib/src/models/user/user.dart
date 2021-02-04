@@ -33,6 +33,7 @@ class UserModel extends Equatable {
   final String projectID;
   final bool bankAccountIsConnected;
   final List<dynamic> projectList;
+  final String projectName;
 
   const UserModel({
     this.name,
@@ -59,6 +60,7 @@ class UserModel extends Equatable {
     this.projectID,
     this.bankAccountIsConnected,
     this.projectList,
+    this.projectName,
   });
 
   /// Empty user which represents an unauthenticated user.
@@ -87,6 +89,7 @@ class UserModel extends Equatable {
     projectID: null,
     bankAccountIsConnected: null,
     projectList: null,
+    projectName: null,
   );
 
   @override
@@ -115,6 +118,7 @@ class UserModel extends Equatable {
         projectID,
         bankAccountIsConnected,
         projectList,
+        projectName,
       ];
 
   static UserModel fromEntity(UserEntity entity) {
@@ -143,6 +147,7 @@ class UserModel extends Equatable {
       projectID: entity.projectID,
       bankAccountIsConnected: entity.bankAccountIsConnected,
       projectList: entity.projectList,
+      projectName: (entity.projectName == null) ? "" : entity.projectName,
     );
   }
 
@@ -172,6 +177,7 @@ class UserModel extends Equatable {
       projectID,
       bankAccountIsConnected,
       projectList,
+      projectName,
     );
   }
 }
