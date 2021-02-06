@@ -1,4 +1,4 @@
-import 'package:divvy/sila/blocs/redeem_sila_cubit.dart';
+import 'package:divvy/sila/blocs/redeem_sila/redeem_sila.dart';
 import 'package:divvy/sila/models/redeem_sila_model.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
@@ -15,11 +15,12 @@ class RedeemSilaScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => RedeemSilaCubit(_silaRepository),
-      child: BlocBuilder<RedeemSilaCubit, RedeemSilaState>(
+      create: (context) => RedeemSilaBloc(silaRepository: _silaRepository),
+      child: BlocBuilder<RedeemSilaBloc, RedeemSilaState>(
         builder: (context, state) {
           if (state is RedeemSilaInitial) {
-            context.watch<RedeemSilaCubit>().redeemSila(amount);
+            BlocProvider.of<RedeemSilaBloc>(context)
+                .add(RedeemSilaRequest(amount: amount));
             return const EmptyWidget();
           } else if (state is RedeemSilaLoadInProgress) {
             return const LoadingWidget();
@@ -32,6 +33,28 @@ class RedeemSilaScreen extends StatelessWidget {
       ),
     );
   }
+
+  // @override
+  // Widget build(BuildContext context) {
+  //   return BlocProvider(
+  //     create: (context) => RedeemSilaCubit(_silaRepository),
+  //     child: BlocBuilder<RedeemSilaCubit, RedeemSilaState>(
+  //       builder: (context, state) {
+  //         if (state is RedeemSilaInitial) {
+  //           context.watch<RedeemSilaCubit>().redeemSila(amount);
+  //           return const EmptyWidget();
+  //         } else if (state is RedeemSilaLoadInProgress) {
+  //           return const LoadingWidget();
+  //         } else if (state is RedeemSilaLoadSuccess) {
+  //           return PopulatedWidget(response: state.response);
+  //         } else {
+  //           return const ErrorWidget();
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
+
 }
 
 class PopulatedWidget extends StatelessWidget {
