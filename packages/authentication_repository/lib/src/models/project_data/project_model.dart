@@ -69,7 +69,9 @@ class Project {
       projectID: entity.projectID,
       projectName: entity.projectName,
       projectCost: entity.projectCost,
-      homeownerName: entity.homeownerName,
+      homeownerName: (entity.homeownerName == null)
+          ? ' Homeowner has not connected to the project.'
+          : entity.homeownerName,
       generalContractorName: (entity.generalContractorName == null)
           ? 'Contractor not listed'
           : entity.generalContractorName,
