@@ -25,7 +25,7 @@ class LoginForm extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/divvy.png',
+                'assets/divvy_full_logo.png',
                 height: 120,
               ),
               const SizedBox(height: 16.0),

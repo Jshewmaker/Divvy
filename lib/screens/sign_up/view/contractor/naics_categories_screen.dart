@@ -56,12 +56,6 @@ class NaicsCategoryPopulated extends StatelessWidget {
                   child: Text(_response
                       .naicsCategories.construction[index].subcategory)),
               onTap: () {
-                // Map<String, String> data = {
-                //   "naics_code": _response
-                //       .naicsCategories.construction[index].code
-                //       .toString()
-                // };
-                // _firebaseService.addDataToFirestoreDocument('users', data);
                 Navigator.push(
                     context,
                     MaterialPageRoute(

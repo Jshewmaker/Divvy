@@ -33,7 +33,7 @@ class _CustomProgressIndicatorState extends State<CustomProgressIndicator>
         );
       },
       child: Image.asset(
-        'assets/divvy_logo.png',
+        'assets/divvy_icon.png',
         height: 120,
       ),
     );

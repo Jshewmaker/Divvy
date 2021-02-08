@@ -44,8 +44,8 @@ dependencies:
     path: packages/authentication_repository
 
 flutter_icons:
-  image_path: "assets/divvy_logo.png"
-  image_path_android: "assets/divvy_logo.png"
+  image_path: "assets/divvy_icon.png"
+  image_path_android: "assets/divvy_icon.png"
   android: true
   ios: false
 

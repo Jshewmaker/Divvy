@@ -40,7 +40,7 @@ class SignUpPage extends StatelessWidget {
           child: Column(
             children: [
               Image.asset(
-                'assets/divvy.png',
+                'assets/divvy_full_logo.png',
                 height: 120,
               ),
               Form(
