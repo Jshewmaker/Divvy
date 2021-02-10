@@ -22,10 +22,9 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
       MaskedTextController(mask: '000-00-0000');
   final MaskedTextController _confirmSsnController =
       MaskedTextController(mask: '000-00-0000');
-  final TextEditingController _birthdayController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
-  String yearDropDown = '1900';
+  String yearDropDown = '1950';
   String monthDropDown = '1';
   String dayDropDown = '1';
 
@@ -143,7 +142,7 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
 
   Widget _birthdayInput() {
     var yearList =
-        new List<String>.generate(103, (i) => (1899 + i + 1).toString());
+        new List<String>.generate(103, (i) => (1949 + i + 1).toString());
     var monthList = new List<String>.generate(12, (i) => (i + 1).toString());
 
     var dayList = new List<String>.generate(31, (i) => (i + 1).toString());
