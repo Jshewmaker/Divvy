@@ -16,28 +16,32 @@ class RedeemSilaScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => RedeemSilaBloc(silaRepository: _silaRepository),
-      child: BlocListener<RedeemSilaBloc, RedeemSilaState>(
-        listener: (context, state) {
-          if (state is RedeemSilaLoadSuccess) {
-            Navigator.pop(context,
-                'Transfer requested. The funds can take up to 72 hours to deposit into your bank account.');
-          }
-          if (state is RedeemSilaLoadFailure) {
-            Navigator.pop(context, 'Request failed. Please try again.');
-          }
-        },
-        child: BlocBuilder<RedeemSilaBloc, RedeemSilaState>(
-          builder: (context, state) {
-            if (state is RedeemSilaInitial) {
-              BlocProvider.of<RedeemSilaBloc>(context)
-                  .add(RedeemSilaRequest(amount: amount));
-              return const EmptyWidget();
-            } else if (state is RedeemSilaLoadInProgress) {
-              return const LoadingWidget();
-            } else {
-              return Container();
-            }
-          },
+      child: Scaffold(
+        body: Center(
+          child: BlocListener<RedeemSilaBloc, RedeemSilaState>(
+            listener: (context, state) {
+              if (state is RedeemSilaLoadSuccess) {
+                Navigator.pop(context,
+                    'Transfer requested. The funds can take up to 72 hours to deposit into your bank account.');
+              }
+              if (state is RedeemSilaLoadFailure) {
+                Navigator.pop(context, 'Request failed. Please try again.');
+              }
+            },
+            child: BlocBuilder<RedeemSilaBloc, RedeemSilaState>(
+              builder: (context, state) {
+                if (state is RedeemSilaInitial) {
+                  BlocProvider.of<RedeemSilaBloc>(context)
+                      .add(RedeemSilaRequest(amount: amount));
+                  return const EmptyWidget();
+                } else if (state is RedeemSilaLoadInProgress) {
+                  return const Center(child: CircularProgressIndicator());
+                } else {
+                  return Container();
+                }
+              },
+            ),
+          ),
         ),
       ),
     );
