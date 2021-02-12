@@ -226,12 +226,12 @@ class BalanceCard extends StatelessWidget {
         if (state is IssueSilaLoadSuccess) {
           final snackBar = SnackBar(
               content: Text(
-                  'Deposit success! The funds can take up to 72 hours to deposite into your Divvy Safe.'));
+                  'Deposit success! The funds can take up to 72 hours to deposit into your Divvy Safe.'));
           Scaffold.of(context).showSnackBar(snackBar);
         }
         if (state is IssueSilaLoadFailure) {
           final snackBar =
-              SnackBar(content: Text('Deposite failed. Please try again.'));
+              SnackBar(content: Text('Deposit failed. Please try again.'));
           Scaffold.of(context).showSnackBar(snackBar);
         }
       },
@@ -299,23 +299,26 @@ class BalanceCard extends StatelessWidget {
       );
     } else {
       return RaisedButton(
-          child: Text('Transfer to Bank'),
-          shape:
-              (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
-          color: const Color(0xFF1E90FF),
-          textColor: Colors.white,
-          onPressed: (amountSila > 0)
-              ? () => {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                          builder: (context) => RedeemSilaScreen(
+        child: Text('Transfer to Bank'),
+        shape:
+            (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
+        color: const Color(0xFF1E90FF),
+        textColor: Colors.white,
+        onPressed: (amountSila > 0)
+            ? () async {
+                final message = await Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => RedeemSilaScreen(
+                            amount: (amountSila * 100).round())));
 
-                              //TODO: where do we wanna do all of the sila converting
-
-                              amount: (amountSila * 100).round())),
-                    )
-                  }
-              : null);
+                if (message != null) {
+                  final snackBar = SnackBar(content: Text(message));
+                  Scaffold.of(context).showSnackBar(snackBar);
+                }
+              }
+            : null,
+      );
     }
   }
 }

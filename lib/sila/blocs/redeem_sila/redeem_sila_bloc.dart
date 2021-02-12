@@ -21,12 +21,12 @@ class RedeemSilaBloc extends Bloc<RedeemSilaEvent, RedeemSilaState> {
   @override
   Stream<RedeemSilaState> mapEventToState(RedeemSilaEvent event) async* {
     if (event is RedeemSilaRequest) {
-      yield (RedeemSilaLoadInProgress());
+      yield RedeemSilaLoadInProgress();
       try {
         final response = await silaRepository.redeemSila(event.amount);
-        yield (RedeemSilaLoadSuccess(response));
+        yield RedeemSilaLoadSuccess(response);
       } catch (_) {
-        yield (RedeemSilaLoadFailure());
+        yield RedeemSilaLoadFailure();
       }
     }
   }

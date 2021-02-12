@@ -1,6 +1,12 @@
 import 'package:divvy/sila/models/redeem_sila_model.dart';
+import 'package:equatable/equatable.dart';
 
-abstract class RedeemSilaState {}
+abstract class RedeemSilaState extends Equatable {
+  const RedeemSilaState();
+
+  @override
+  List<Object> get props => [];
+}
 
 class RedeemSilaInitial extends RedeemSilaState {}
 
