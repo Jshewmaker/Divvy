@@ -78,11 +78,11 @@ class InvoiceScreen extends StatelessWidget {
                                   thickness: 3,
                                 ),
                                 SizedBox(
-                                  height: 20,
+                                  height: 10,
                                 ),
                                 _PaymentInfoCard(_project, _lineItem.cost),
                                 SizedBox(
-                                  height: 30,
+                                  height: 10,
                                 ),
                                 Text(
                                   'I authorize Divvy to debit my Divvy Digital Safe and send money to the Contractor in my agreement. Once the funds have been sent Divvy can not refund you or dictate what the funds are used for',
@@ -130,7 +130,7 @@ class _Header extends StatelessWidget {
           fit: BoxFit.fitWidth,
           child: Text(
             _lineItem.title,
-            style: TextStyle(fontSize: 42, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 34, fontWeight: FontWeight.bold),
           ),
         ),
         SizedBox(
@@ -140,7 +140,7 @@ class _Header extends StatelessWidget {
           cost,
           style: TextStyle(
               color: Colors.teal[400],
-              fontSize: 48,
+              fontSize: 38,
               fontWeight: FontWeight.bold),
         ),
         SizedBox(
@@ -161,6 +161,7 @@ class _Table extends StatelessWidget {
   _Table(this._lineItem);
 
   final LineItem _lineItem;
+  double fontSize = 14;
 
   @override
   Widget build(BuildContext context) {
@@ -171,13 +172,13 @@ class _Table extends StatelessWidget {
         TableRow(children: [
           Text(
             'Expected Finish Date: ',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: fontSize),
           ),
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
               DateFormat.yMMMMd('en_US').format(_lineItem.expectedFinishDate),
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: fontSize),
             ),
           ),
         ]),
@@ -192,14 +193,14 @@ class _Table extends StatelessWidget {
         TableRow(children: [
           Text(
             'Work Submission Date: ',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: fontSize),
           ),
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
               DateFormat.yMMMMd('en_US')
                   .format(_lineItem.generalContractorApprovalDate),
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: fontSize),
             ),
           ),
         ]),
@@ -214,13 +215,13 @@ class _Table extends StatelessWidget {
         TableRow(children: [
           Text(
             'Payment & Approval Date: ',
-            style: TextStyle(fontSize: 18),
+            style: TextStyle(fontSize: fontSize),
           ),
           FittedBox(
             fit: BoxFit.fitWidth,
             child: Text(
               paidDate(),
-              style: TextStyle(fontSize: 18),
+              style: TextStyle(fontSize: fontSize),
             ),
           ),
         ])
@@ -247,7 +248,7 @@ class _PaymentInfoCard extends StatelessWidget {
     final cost = NumberFormat.currency(symbol: '\$').format(_cost);
     return Container(
       padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-      height: 200,
+      height: 188,
       width: double.maxFinite,
       child: Card(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8.0)),
@@ -260,7 +261,7 @@ class _PaymentInfoCard extends StatelessWidget {
                 fit: BoxFit.fitWidth,
                 child: Text(
                   'Payment of $cost from ',
-                  style: TextStyle(fontSize: 30, color: Colors.white),
+                  style: TextStyle(fontSize: 24, color: Colors.white),
                 ),
               ),
               SizedBox(
@@ -268,15 +269,22 @@ class _PaymentInfoCard extends StatelessWidget {
               ),
               Text(
                 _project.homeownerName,
-                style: TextStyle(fontSize: 22, color: Colors.white),
-              ),
-              Text(
-                ' to ',
                 style: TextStyle(fontSize: 18, color: Colors.white),
               ),
               Text(
+                ' to ',
+                style: TextStyle(fontSize: 16, color: Colors.white),
+              ),
+              Text(
                 _project.generalContractorName,
-                style: TextStyle(fontSize: 22, color: Colors.white),
+                style: TextStyle(fontSize: 18, color: Colors.white),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Text(
+                'Project ID: ${_project.projectID}',
+                style: TextStyle(color: Colors.grey[200]),
               ),
             ],
           ),
