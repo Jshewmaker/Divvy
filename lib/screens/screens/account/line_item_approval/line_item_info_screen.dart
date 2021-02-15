@@ -85,11 +85,18 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                               fontSize: 30,
                             ),
                           ),
+                          SizedBox(
+                            height: 5,
+                          ),
+                          Text(
+                            'Project ID: ${_project.projectID}',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                         ],
                       ),
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
                     ),
                     _pictureWidget(_user, _lineItem),
                     SizedBox(
