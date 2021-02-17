@@ -46,15 +46,27 @@ class MessagingScreen extends StatelessWidget {
         body: Center(
             child: Container(
                 width: MediaQuery.of(context).size.width / 1.1,
-                child: _Chat(lineItem, user, project))),
+                child: Chat(lineItem, user, project))),
       ),
     );
   }
 }
 
-class _Chat extends StatelessWidget {
-  _Chat(this.lineItem, this.user, this.project);
+class Chat extends StatefulWidget {
+  final LineItem lineItem;
+  final UserModel user;
+  final Project project;
 
+  Chat(this.lineItem, this.user, this.project);
+
+  @override
+  State<Chat> createState() => _ChatState(lineItem, user, project);
+}
+
+class _ChatState extends State<Chat> {
+  _ChatState(this.lineItem, this.user, this.project);
+
+  final TextEditingController _controller = TextEditingController();
   final LineItem lineItem;
   final UserModel user;
   final Project project;
@@ -93,7 +105,6 @@ class _Chat extends StatelessWidget {
   }
 
   Container _textField(BuildContext context) {
-    final TextEditingController _controller = TextEditingController();
     return Container(
       child: TextField(
         controller: _controller,
