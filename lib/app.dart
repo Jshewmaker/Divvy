@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';
-import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -85,6 +84,8 @@ class _AppViewState extends State<AppView> {
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
                   } else if (user.isHomeowner && user.silaHandle == null) {
+                    _navigator.push(CreateSilaUserScreen.route());
+                  } else if (user.isHomeowner && user.kyc_status == 'failed') {
                     _navigator.push(CreateSilaUserScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(

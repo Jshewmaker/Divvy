@@ -270,6 +270,10 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
                             await _silaBusinessRepository.certifyBusiness();
                         emit(CertifyBusinessSuccess(certifyBusinessResponse));
                         emit(CreateSilaBusinessSuccess(user));
+                        _firebaseService.addDataToBusinessUserDocument(
+                            'users', {"kyc_status": 'passed'});
+                        _firebaseService.addDataToFirestoreDocument(
+                            'users', {"kyc_status": 'passed'});
                       } catch (_) {
                         emit(CertifyBusinessFailure(_));
                       }

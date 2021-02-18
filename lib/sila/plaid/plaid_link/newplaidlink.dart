@@ -9,7 +9,7 @@ class PlaidLink {
   Configuration _configuration;
 
   PlaidLink() {
-    bool plaidSandbox = true;
+    bool plaidSandbox = false;
     // String clientID = "5cb68305fede9b00136aebb1";
     // String secret = "54621c4436011f708c7916587c6fa8";
 
@@ -18,7 +18,7 @@ class PlaidLink {
         plaidBaseUrl: 'https://cdn.plaid.com/link/v2/stable/link.html',
         plaidEnvironment: plaidSandbox ? 'sandbox' : 'production',
         environmentPlaidPathAccessToken:
-            'https://sandbox.plaid.com/item/public_token/exchange',
+            'https://production.plaid.com/item/public_token/exchange',
         // plaidClientId: clientID,
         // secret: plaidSandbox ? secret : '',
         clientName: 'ClientName',
@@ -66,7 +66,7 @@ class _WebViewPage {
         config.plaidPublicKey +
         '&product=auth' +
         '&language=en' +
-        '&countryCodes=US,CA' +
+        '&countryCodes=US' +
         '&webhook=https://requestb.in' +
         '&linkCustomizationName=default';
     //  debugPrint('init plaid: ' + _url);

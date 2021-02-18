@@ -259,6 +259,7 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
             phone: _phoneNumberController.text,
             isHomeowner: true,
             bankAccountIsConnected: false,
+            kyc_status: 'failed',
           ).toEntity().toDocumentPersonalInfo());
       Navigator.push(
         context,

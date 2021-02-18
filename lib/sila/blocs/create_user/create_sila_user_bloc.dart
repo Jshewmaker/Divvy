@@ -14,8 +14,10 @@ class CreateSilaUserBloc
   final SilaRepository silaRepository;
   FirebaseService _firebaseService = FirebaseService();
   FirebaseAuth firebaseAuth;
+
   String collection = "users";
   Random random = Random();
+
   String handle = "";
 
   CreateSilaUserBloc({@required this.silaRepository})
@@ -63,12 +65,14 @@ class CreateSilaUserBloc
                   response = await silaRepository.checkKYC();
                 }
                 if (response.success == true) {
+                  _firebaseService.addDataToFirestoreDocument(
+                      'users', {"kyc_status": 'passed'});
                   yield CheckKycVerifiationSuccess(checkKycResponse: response);
                   yield CreateSilaUserSuccess(user: user);
                 } else if (response.verificationStatus == "failed")
                   yield CheckKycVerifiationFail(checkKycResponse: response);
                 print(
-                    "Verification Status: ${response.verificationStatus} ${response.message}");
+                    "Verification Status: ${response.verificationStatus} ${response.verificationHistory[0].tags[0]}");
               } catch (_) {
                 yield CheckKycLoadFailure(exception: _);
               }

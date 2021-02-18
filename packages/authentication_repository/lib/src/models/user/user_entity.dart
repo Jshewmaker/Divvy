@@ -27,6 +27,7 @@ class UserEntity extends Equatable {
   final bool bankAccountIsConnected;
   final List<dynamic> projectList;
   final String projectName;
+  final String kyc_status;
 
   const UserEntity(
     this.id,
@@ -54,6 +55,7 @@ class UserEntity extends Equatable {
     this.bankAccountIsConnected,
     this.projectList,
     this.projectName,
+    this.kyc_status,
   );
 
   Map<String, Object> toJson() {
@@ -83,6 +85,7 @@ class UserEntity extends Equatable {
       "bankAccountIsConnected": bankAccountIsConnected,
       "project_list": projectList,
       "project_name": projectName,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -112,6 +115,7 @@ class UserEntity extends Equatable {
         bankAccountIsConnected,
         projectList,
         projectName,
+        kyc_status,
       ];
 
   static UserEntity fromJson(Map<String, Object> json) {
@@ -141,6 +145,7 @@ class UserEntity extends Equatable {
       json["bankAccountIsConnected"] as bool,
       json["project_list"] as List<dynamic>,
       json["project_name"] as String,
+      json["kyc_status"] as String,
     );
   }
 
@@ -172,6 +177,7 @@ class UserEntity extends Equatable {
       snap.data['bankAccountIsConnected'],
       snap.data['project_list'],
       snap.data['project_name'],
+      snap.data['kyc_status'],
     );
   }
 
@@ -202,6 +208,7 @@ class UserEntity extends Equatable {
       "bankAccountIsConnected": bankAccountIsConnected,
       "project_list": projectList,
       "project_name": projectName,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -213,6 +220,7 @@ class UserEntity extends Equatable {
       "phone": phone,
       "isHomeowner": isHomeowner,
       "bankAccountIsConnected": bankAccountIsConnected,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -223,6 +231,7 @@ class UserEntity extends Equatable {
       "state": state,
       "country": country,
       "postal_code": postalCode,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -234,6 +243,7 @@ class UserEntity extends Equatable {
       "identity_value": identityValue,
       "phone": phone,
       "isHomeowner": isHomeowner,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -248,6 +258,7 @@ class UserEntity extends Equatable {
       "phone": phone,
       "isHomeowner": isHomeowner,
       "bankAccountIsConnected": bankAccountIsConnected,
+      "kyc_status": kyc_status,
     };
   }
 }

@@ -190,16 +190,18 @@ class _SignupFormState extends State<BusinessSignUpPage> {
       _firebaseService.userSetupCreateFirestore(
           'users',
           UserModel(
-            name: _businessNameController.text,
-            doingBusinessAsName: _aliasController.text,
-            website: 'https://www.' + _websiteController.text,
-            identityValue: _einController.text,
-            phone: _phoneNumberController.text,
-            businessType: businessType,
-            naicsCode: naicsCode,
-            isHomeowner: false,
-            bankAccountIsConnected: false,
-          ).toEntity().toDocumentBusinessInfo());
+                  name: _businessNameController.text,
+                  doingBusinessAsName: _aliasController.text,
+                  website: 'https://www.' + _websiteController.text,
+                  identityValue: _einController.text,
+                  phone: _phoneNumberController.text,
+                  businessType: businessType,
+                  naicsCode: naicsCode,
+                  isHomeowner: false,
+                  bankAccountIsConnected: false,
+                  kyc_status: 'failed')
+              .toEntity()
+              .toDocumentBusinessInfo());
       Navigator.push(
         context,
         MaterialPageRoute(
