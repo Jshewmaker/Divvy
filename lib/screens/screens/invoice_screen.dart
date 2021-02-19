@@ -85,7 +85,7 @@ class InvoiceScreen extends StatelessWidget {
                                   height: 10,
                                 ),
                                 Text(
-                                  'I authorize Divvy to debit my Divvy Digital Safe and send money to the Contractor in my agreement. Once the funds have been sent Divvy can not refund you or dictate what the funds are used for',
+                                  'I authorize DivvySafe to debit my DivvySafe Digital Safe and send money to the Contractor in my agreement. Once the funds have been sent DivvySafe can not refund you or dictate what the funds are used for',
                                   style: TextStyle(color: Colors.grey[400]),
                                   textAlign: TextAlign.center,
                                 ),

@@ -84,7 +84,7 @@ class TabBarContainer extends StatelessWidget {
     } else if (activeTab == 1) {
       return 'Transactions';
     } else if (activeTab == 2) {
-      return 'Divvy Digital Safe';
+      return 'Digital Safe';
     } else if (activeTab == 3) {
       return 'Account';
     }
@@ -97,7 +97,7 @@ class TabBarContainer extends StatelessWidget {
     } else if (activeTab == 1) {
       return 'Transactions';
     } else if (activeTab == 2) {
-      return 'Divvy Digital Safe';
+      return 'Digital Safe';
     } else if (activeTab == 3) {
       return 'Account';
     }

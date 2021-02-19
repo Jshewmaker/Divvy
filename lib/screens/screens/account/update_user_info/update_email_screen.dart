@@ -16,7 +16,7 @@ class UpdateEmailScreen extends StatelessWidget {
       create: (context) => UpdateEmailBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocBuilder<UpdateEmailBloc, UpdateEmailState>(

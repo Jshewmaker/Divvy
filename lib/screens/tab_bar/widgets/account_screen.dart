@@ -78,7 +78,7 @@ class AccountScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(30.0),
             ),
             color: Colors.teal[200],
-            child: Text('Contact Divvy'),
+            child: Text('Contact DivvySafe'),
             onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (contest) => ContactDivvyScreen())),
           ),

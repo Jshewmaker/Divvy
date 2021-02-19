@@ -71,7 +71,7 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
                                 child: Column(
                                   children: [
                                     Text(
-                                        "I understand I am about to add money to my Divvy Safe. Once I have added money to the Safe, the money is there until the job is done. I can not withdraw the money or change who the money is going to. Divvy NEVER has access to this money and neither does the contractor until I have approved that the work was done."),
+                                        "I understand I am about to add money to my DivvySafe. Once I have added money to the Safe, the money is there until the job is done. I can not withdraw the money or change who the money is going to. DivvySafe NEVER has access to this money and neither does the contractor until I have approved that the work was done."),
                                   ],
                                 ),
                               ),

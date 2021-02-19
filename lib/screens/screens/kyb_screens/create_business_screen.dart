@@ -21,7 +21,7 @@ class CreateSilaBusinessScreen extends StatelessWidget {
       create: (context) => CreateSilaBusinessCubit(silaBusinessRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocListener<CreateSilaBusinessCubit, CreateSilaBusinessState>(

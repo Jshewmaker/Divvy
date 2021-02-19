@@ -20,7 +20,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
       try {
         final RegisterResponse handle =
             await silaRepository.register(event.handle);
-        Map<String, String> data = {"silaHandle": "divvy-$handle"};
+        Map<String, String> data = {"silaHandle": "divvysafe-$handle"};
         _firebaseService.addDataToFirestoreDocument('users', data);
         yield RegisterLoadSuccess(handle: handle);
       } catch (_) {

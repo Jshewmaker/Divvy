@@ -21,7 +21,7 @@ class UpdateEntityScreen extends StatelessWidget {
       create: (context) => UpdateEntityBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocBuilder<UpdateEntityBloc, UpdateEntityState>(

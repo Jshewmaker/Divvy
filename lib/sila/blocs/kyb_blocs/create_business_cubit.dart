@@ -305,7 +305,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
   String formatUsername(UserModel user) {
     Random random = Random();
     String handle;
-    handle = "divvy-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
+    handle = "divvysafe-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
     for (int i = 0; i < 5; i++) {
       handle += random.nextInt(10).toString();
     }
