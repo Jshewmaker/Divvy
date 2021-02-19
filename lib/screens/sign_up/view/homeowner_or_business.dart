@@ -60,7 +60,7 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
                 children: <TextSpan>[
                   new TextSpan(text: 'Welcome To '),
                   new TextSpan(
-                      text: 'Divvy!',
+                      text: 'DivvySafe!',
                       style: new TextStyle(
                           fontWeight: FontWeight.bold,
                           color: Color(0xFF3665FF))),
