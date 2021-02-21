@@ -144,7 +144,7 @@ class UserModel extends Equatable {
       isHomeowner: entity.isHomeowner,
       wallet: entity.wallet,
       businessAdminDocumentID: entity.businessAdminDocumentID,
-      projectID: entity.projectID,
+      projectID: (entity.projectID == null) ? "" : entity.projectID,
       bankAccountIsConnected: entity.bankAccountIsConnected,
       projectList: entity.projectList,
       projectName: (entity.projectName == null) ? "" : entity.projectName,

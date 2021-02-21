@@ -44,6 +44,10 @@ class AccountScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
+          Text(
+            'Project ID: ${user.projectID}',
+            style: TextStyle(color: Colors.grey),
+          ),
           // RaisedButton(
           //   shape: RoundedRectangleBorder(
           //     borderRadius: BorderRadius.circular(30.0),
