@@ -326,6 +326,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
             identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
             isHomeowner: false,
+            kyc_status: 'failed',
           ).toEntity().toDocumentAdminInfo());
       Navigator.push(
         context,

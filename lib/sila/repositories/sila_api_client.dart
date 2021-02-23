@@ -22,8 +22,10 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class SilaApiClient {
+
   http.Client httpClient;
   EthereumService eth = EthereumService();
+
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({

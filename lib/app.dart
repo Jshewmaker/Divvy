@@ -85,6 +85,8 @@ class _AppViewState extends State<AppView> {
                         (route) => false);
                   } else if (user.isHomeowner && user.silaHandle == null) {
                     _navigator.push(CreateSilaUserScreen.route());
+                  } else if (user.isHomeowner && user.kyc_status == 'failed') {
+                    _navigator.push(CreateSilaUserScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(
                       HomeScreen.route(user),

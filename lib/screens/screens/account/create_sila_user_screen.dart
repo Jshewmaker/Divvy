@@ -1,4 +1,3 @@
-import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/screens/custome_loading_indicator.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
@@ -68,7 +67,14 @@ class CreateSilaUserScreen extends StatelessWidget {
 
               if (state is CheckKycLoadFailure) {
                 return Text(
-                  "KYC Failure: " + state.message,
+                  "KYC Failure: " + state.exception,
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+              if (state is CheckKycVerifiationFail) {
+                return Text(
+                  "KYC Failure: " +
+                      state.checkKycResponse.verificationHistory[0].tags[1],
                   style: TextStyle(color: Colors.red),
                 );
               }
