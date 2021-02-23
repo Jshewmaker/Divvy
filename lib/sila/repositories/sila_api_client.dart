@@ -21,12 +21,11 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class SilaApiClient {
-  String baseUrl = 'https://api.silamoney.com';
+  String baseUrl = '';
   http.Client httpClient;
   EthereumService eth = EthereumService();
-  final String divvyPrivateKey =
-      '9cfde5bac8d13e2a1a7fa0d21d8dedaf30899d02f219497f56f726a31bb61aa4';
-  String authHandle = "divvy_safe.silamoney.eth";
+  final String divvyPrivateKey = '';
+  String authHandle = "";
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({
