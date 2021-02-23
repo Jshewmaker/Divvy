@@ -226,7 +226,7 @@ class BalanceCard extends StatelessWidget {
         if (state is IssueSilaLoadSuccess) {
           final snackBar = SnackBar(
               content: Text(
-                  'Deposit success! The funds can take up to 72 hours to deposit into your Divvy Safe.'));
+                  'Deposit success! The funds can take up to 72 hours to deposit into your DivvySafe.'));
           Scaffold.of(context).showSnackBar(snackBar);
         }
         if (state is IssueSilaLoadFailure) {

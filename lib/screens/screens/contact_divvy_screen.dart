@@ -16,7 +16,7 @@ class ContactDivvyScreen extends StatelessWidget {
                 child: Text('Phone: 123-123-1234'),
                 // onPressed: UrlLauncher.launch("tel://<phone_number>"),
               ),
-              Text('Email: info@divvy.com')
+              Text('Email: info@divvysafe.com')
             ],
           ),
         ));

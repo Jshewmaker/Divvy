@@ -32,7 +32,7 @@ class PlaidLinkScreen extends StatelessWidget {
               children: <TextSpan>[
                 new TextSpan(text: 'Welcome To '),
                 new TextSpan(
-                    text: 'Divvy!',
+                    text: 'DivvySafe!',
                     style: new TextStyle(
                         fontWeight: FontWeight.bold, color: blueHighlight)),
               ],
@@ -62,7 +62,7 @@ class PlaidLinkScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30))),
                       color: const Color(0xFF1E90FF),
                       child: Text(
-                        "Connect Bank Account To Divvy",
+                        "Connect Bank Account To DivvySafe",
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 16),
                       ),

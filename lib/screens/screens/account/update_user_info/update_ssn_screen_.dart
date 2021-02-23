@@ -21,7 +21,7 @@ class UpdateSsnScreen extends StatelessWidget {
       create: (context) => UpdateSsnBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocBuilder<UpdateSsnBloc, UpdateSsnState>(

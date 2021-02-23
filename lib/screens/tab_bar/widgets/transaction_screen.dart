@@ -230,7 +230,7 @@ class _Card extends StatelessWidget {
       return 'Transfered Funds To Bank';
     }
     if (transaction.transactionType == 'issue') {
-      return 'Deposit into Divvy Digital Wallet';
+      return 'Deposit into DivvySafe Digital Wallet';
     }
     if (transaction.transactionType == 'transfer') {
       if (transaction.descriptor.contains('-')) {

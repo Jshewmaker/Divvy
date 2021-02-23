@@ -70,7 +70,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
-                  'Divvy must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
+                  'DivvySafe must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
                   style: TextStyle(color: Colors.grey),
                 ),
               ),

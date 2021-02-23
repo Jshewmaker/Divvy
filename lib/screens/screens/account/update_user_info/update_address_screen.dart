@@ -23,7 +23,7 @@ class UpdateAddressScreen extends StatelessWidget {
       create: (context) => UpdateAddressBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocBuilder<UpdateAddressBloc, UpdateAddressState>(

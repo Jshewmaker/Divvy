@@ -19,7 +19,7 @@ class UpdatePhoneScreen extends StatelessWidget {
       create: (context) => UpdatePhoneBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
         ),
         body: Center(
           child: BlocBuilder<UpdatePhoneBloc, UpdatePhoneState>(

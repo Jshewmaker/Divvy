@@ -10,7 +10,7 @@ class RegisterHandleScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Divvy'),
+        title: Text('DivvySafe'),
       ),
       body: Center(
         child: BlocBuilder<CheckHandleBloc, CheckHandleState>(
@@ -26,7 +26,7 @@ class RegisterHandleScreen extends StatelessWidget {
                         decoration: InputDecoration(
                           border: UnderlineInputBorder(),
                           labelText: 'Username',
-                          hintText: 'Divvy',
+                          hintText: 'DivvySafe',
                         ),
                       ),
                     ),

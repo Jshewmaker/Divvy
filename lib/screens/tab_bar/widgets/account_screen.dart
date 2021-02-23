@@ -44,6 +44,10 @@ class AccountScreen extends StatelessWidget {
           SizedBox(
             height: 20,
           ),
+          Text(
+            'Project ID: ${user.projectID}',
+            style: TextStyle(color: Colors.grey),
+          ),
           // RaisedButton(
           //   shape: RoundedRectangleBorder(
           //     borderRadius: BorderRadius.circular(30.0),
@@ -78,7 +82,7 @@ class AccountScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(30.0),
             ),
             color: Colors.teal[200],
-            child: Text('Contact Divvy'),
+            child: Text('Contact DivvySafe'),
             onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (contest) => ContactDivvyScreen())),
           ),

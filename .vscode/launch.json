@@ -5,9 +5,13 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "divvy",
+            "name": "divvy prod",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "args": [
+                "--flavor",
+                "prod"
+              ]
         },
         {
             "name": "authentication_repository",

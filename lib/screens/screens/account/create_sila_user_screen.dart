@@ -23,7 +23,7 @@ class CreateSilaUserScreen extends StatelessWidget {
       create: (context) => CreateSilaUserBloc(silaRepository: silaRepository),
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Divvy'),
+          title: Text('DivvySafe'),
           actions: [
             IconButton(
               key: const Key('homePage_logout_iconButton'),

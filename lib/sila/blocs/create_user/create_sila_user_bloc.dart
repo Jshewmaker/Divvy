@@ -96,7 +96,7 @@ class CreateSilaUserBloc
   }
 
   void createHandle(UserModel user) {
-    handle += "divvy-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
+    handle += "divvysafe-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
     for (int i = 0; i < 5; i++) {
       handle += random.nextInt(10).toString();
     }

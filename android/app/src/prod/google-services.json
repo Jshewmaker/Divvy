@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "1015370273342",
+    "project_id": "divvysafe-prod",
+    "storage_bucket": "divvysafe-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1015370273342:android:b5ec054b6ebd551ebff76f",
+        "android_client_info": {
+          "package_name": "com.frequency.divvysafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1015370273342-c44s28313vtni9d39s86t9rrfagn3bqf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.frequency.divvysafe",
+            "certificate_hash": "c221a2c47cf50ee9b2b48e43f5618e0961b65c8d"
+          }
+        },
+        {
+          "client_id": "1015370273342-grkflfmjc5v7hclsc4il6bpb4sudctft.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCir_QWiGfEEXldo8syaN2zQyLFRajYQF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1015370273342-grkflfmjc5v7hclsc4il6bpb4sudctft.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1015370273342-3hclhakeg76tasm9v6qg91th67p4kqjo.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.divvyrlease",
+                "app_store_id": "1543767526"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
