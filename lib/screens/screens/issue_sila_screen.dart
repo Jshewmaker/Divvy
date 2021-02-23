@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class IssueSilaScreen extends StatefulWidget {
   @override
@@ -33,6 +34,11 @@ class _IssueSilaScreenState extends State<IssueSilaScreen> {
                               padding: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: TextFormField(
                                 controller: _textController,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.allow(
+                                      RegExp(r'^\d+\.?\d{0,2}'))
+                                ],
                                 decoration: InputDecoration(
                                   prefix: Text('\$'),
                                   labelText: 'Amount',
