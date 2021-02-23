@@ -68,6 +68,21 @@ android {
        }
    }
 
+   flavorDimensions "app"
+
+    productFlavors {
+        dev {
+            dimension "app"
+            resValue "string", "app_name", "TEST DivvySafe"
+            applicationId "com.frequency.divvysafe.dev"
+        }
+        prod {
+            dimension "app"
+            resValue "string", "app_name", "DivvySafe"
+            versionNameSuffix "-prod"
+        }
+    }
+
 }
 
 flutter {

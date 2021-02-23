@@ -12,7 +12,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:divvy/authentication/authentication.dart';
 import 'package:divvy/splash/splash.dart';
 import 'package:divvy/theme.dart';
-import 'package:provider/provider.dart';
 
 class App extends StatelessWidget {
   const App({

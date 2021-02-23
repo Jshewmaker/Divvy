@@ -22,7 +22,7 @@ class ProjectScreen extends StatelessWidget {
     UserModel user = Provider.of<UserModel>(context);
     return Scaffold(
       body: Center(
-          child: (user.projectID == null)
+          child: (user.projectID == null || user.projectID == "")
               //? ConnectToProject(user)
               ? RaisedButton(
                   shape: RoundedRectangleBorder(

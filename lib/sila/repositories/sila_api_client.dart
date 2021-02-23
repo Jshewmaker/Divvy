@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
@@ -21,41 +22,45 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class SilaApiClient {
-  String baseUrl = 'https://api.silamoney.com';
   http.Client httpClient;
   EthereumService eth = EthereumService();
-  final String divvyPrivateKey =
-      '9cfde5bac8d13e2a1a7fa0d21d8dedaf30899d02f219497f56f726a31bb61aa4';
-  String authHandle = "divvy_safe.silamoney.eth";
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({
     @required this.httpClient,
   }) : assert(httpClient != null);
 
+  Future<Keys> getKeys() async {
+    DocumentSnapshot _documentSnapshot =
+        await Firestore.instance.collection('keys').document('sila').get();
+    return Keys.fromEntity(KeysEntity.fromSnapshot(_documentSnapshot));
+  }
+
   /// Check if a SILA hande is avaible
   ///
   /// This does not regiester the handle, just makes sure it is avaible
   Future<RegisterResponse> checkHandle(String handle) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       },
     };
-    String authsignature = await eth.signing(body, divvyPrivateKey);
+    String authsignature = await eth.signing(body, _keys.privateKey);
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authsignature,
     };
 
-    final silaURL = '$baseUrl/0.2/check_handle';
+    final silaURL = '${_keys.baseUrl}/0.2/check_handle';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -77,6 +82,8 @@ class SilaApiClient {
   ///
   Future<RegisterResponse> register(String handle, UserModel user,
       {bool isbusinessUser = false}) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     String address = await eth.createEthWallet(isBusinessUser: isbusinessUser);
@@ -85,7 +92,7 @@ class SilaApiClient {
       "header": {
         "reference": '1',
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         //"user_handle": user.silaHandle,
         "user_handle": handle,
         "version": "0.2",
@@ -123,14 +130,14 @@ class SilaApiClient {
       }
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/register';
+    final silaURL = '${_keys.baseUrl}/0.2/register';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -147,19 +154,21 @@ class SilaApiClient {
 
   Future<RegisterResponse> requestKYC(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       }
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -168,7 +177,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/request_kyc';
+    final silaURL = '${_keys.baseUrl}/0.2/request_kyc';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -185,19 +194,21 @@ class SilaApiClient {
 
   Future<RegisterResponse> requestKYB(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle,
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       }
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -206,7 +217,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/request_kyc';
+    final silaURL = '${_keys.baseUrl}/0.2/request_kyc';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -223,26 +234,28 @@ class SilaApiClient {
 
   Future<CheckKybResponse> checkKYB(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
         "reference": "ref"
       }
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/check_kyc';
+    final silaURL = '${_keys.baseUrl}/0.2/check_kyc';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -259,12 +272,14 @@ class SilaApiClient {
 
   Future<CheckKycResponse> checkKYC(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -272,7 +287,7 @@ class SilaApiClient {
       },
       "message": "header_msg"
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -281,7 +296,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/check_kyc';
+    final silaURL = '${_keys.baseUrl}/0.2/check_kyc';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -298,12 +313,14 @@ class SilaApiClient {
 
   Future<BankAccountBalanceResponse> getBankAccountBalance(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -311,7 +328,7 @@ class SilaApiClient {
       },
       "account_name": "$handle plaid account"
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -320,7 +337,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_account_balance';
+    final silaURL = '${_keys.baseUrl}/0.2/get_account_balance';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -337,11 +354,13 @@ class SilaApiClient {
 
   Future<LinkAccountResponse> linkAccount(
       String handle, String userPrivateKey, String plaidPublicToken) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -351,7 +370,7 @@ class SilaApiClient {
       "public_token": plaidPublicToken,
       "account_name": "$handle plaid account",
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -360,7 +379,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/link_account';
+    final silaURL = '${_keys.baseUrl}/0.2/link_account';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -377,12 +396,14 @@ class SilaApiClient {
 
   Future<IssueSilaResponse> issueSila(
       String handle, String userPrivateKey, double amount) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -393,7 +414,7 @@ class SilaApiClient {
       "account_name": "$handle plaid account",
       "processing_type": "STANDARD_ACH"
     };
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -402,7 +423,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/issue_sila';
+    final silaURL = '${_keys.baseUrl}/0.2/issue_sila';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -418,13 +439,15 @@ class SilaApiClient {
   }
 
   Future<GetSilaBalanceResponse> getSilaBalance(String address) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     Map body = {"address": address};
 
     Map<String, String> header = {
       "Content-Type": "application/json",
     };
 
-    final silaURL = '$baseUrl/0.2/get_sila_balance';
+    final silaURL = '${_keys.baseUrl}/0.2/get_sila_balance';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -441,12 +464,16 @@ class SilaApiClient {
 
   Future<GetTransactionsResponse> getTransactions(
       String handle, userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
-
+    print(_keys.baseUrl);
+    print(_keys.privateKey);
+    print(_keys.authHandle);
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": "$handle.silamoney.eth",
         "version": "0.2",
         "crypto": "ETH",
@@ -455,7 +482,7 @@ class SilaApiClient {
       "message": "get_transactions_msg",
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -464,13 +491,13 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_transactions';
+    final silaURL = '${_keys.baseUrl}/0.2/get_transactions';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
           body: json.encode(body),
         );
-
+    print('ehllo' + silaResponse.body);
     if (silaResponse.statusCode != 200) {
       throw Exception('error connecting to SILA /get_transactions');
     }
@@ -481,17 +508,19 @@ class SilaApiClient {
 
   Future<GetEntityResponse> getEntity(
       String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle.split(" ")[0]
       }
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -500,7 +529,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_entity';
+    final silaURL = '${_keys.baseUrl}/0.2/get_entity';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -517,19 +546,21 @@ class SilaApiClient {
 
   Future<UpdateUserInfo> updateEmail(String handle, String userPrivateKey,
       String uuid, String newEmail) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
       "uuid": uuid,
       "email": newEmail,
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -538,7 +569,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/email';
+    final silaURL = '${_keys.baseUrl}/0.2/update/email';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -555,19 +586,21 @@ class SilaApiClient {
 
   Future<UpdateUserInfo> updatePhone(String handle, String userPrivateKey,
       String uuid, String newPhone) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
       "uuid": uuid,
       "phone": newPhone
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -576,7 +609,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/phone';
+    final silaURL = '${_keys.baseUrl}/0.2/update/phone';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -597,12 +630,14 @@ class SilaApiClient {
   ///or KYC has failed
   Future<UpdateUserInfo> updateIdentity(
       String handle, String userPrivateKey, String uuid, String ssn) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
       "uuid": uuid,
@@ -610,7 +645,7 @@ class SilaApiClient {
       "identity_value": ssn
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -619,7 +654,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/identity';
+    final silaURL = '${_keys.baseUrl}/0.2/update/identity';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -636,12 +671,14 @@ class SilaApiClient {
 
   Future<UpdateUserInfo> updateAddress(String handle, String userPrivateKey,
       String uuid, Map<String, String> address) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     var _addressList = address.values.toList();
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
       "uuid": uuid,
@@ -654,7 +691,7 @@ class SilaApiClient {
       "postal_code": _addressList[5],
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -663,7 +700,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/address';
+    final silaURL = '${_keys.baseUrl}/0.2/update/address';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -685,13 +722,15 @@ class SilaApiClient {
   ///Entity Info: first_name, last_name, entity_name, birthdate
   Future<UpdateUserInfo> updateEntity(
       String handle, String userPrivateKey, Map<String, String> entity) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     var _listEntity = entity.values.toList();
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
       "first_name": _listEntity[0],
@@ -700,7 +739,7 @@ class SilaApiClient {
       "birthdate": _listEntity[3]
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
 
     Map<String, String> header = {
@@ -709,7 +748,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/update/entity';
+    final silaURL = '${_keys.baseUrl}/0.2/update/entity';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -725,23 +764,25 @@ class SilaApiClient {
   }
 
   Future<GetBusinessTypeResponse> getBusinessTypes() async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
       }
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_business_types';
+    final silaURL = '${_keys.baseUrl}/0.2/get_business_types';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -757,20 +798,22 @@ class SilaApiClient {
   }
 
   Future<GetNaicsCategoriesResponse> getNaicsCategories() async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {"created": utcTime, "auth_handle": authHandle}
+      "header": {"created": utcTime, "auth_handle": _keys.authHandle}
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_naics_categories';
+    final silaURL = '${_keys.baseUrl}/0.2/get_naics_categories';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -792,13 +835,15 @@ class SilaApiClient {
   Future<KYBRegisterResponse> registerBusiness(
     UserModel user,
   ) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
     String address = await eth.createEthWallet(isBusinessUser: false);
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": user.silaHandle + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
@@ -832,14 +877,14 @@ class SilaApiClient {
       }
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/register';
+    final silaURL = '${_keys.baseUrl}/0.2/register';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -855,20 +900,22 @@ class SilaApiClient {
   }
 
   Future<GetBusinessRolesResponse> getBusinessRoles() async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {"created": utcTime, "auth_handle": authHandle}
+      "header": {"created": utcTime, "auth_handle": _keys.authHandle}
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
 
     Map<String, String> header = {
       "Content-Type": "application/json",
       "authsignature": authSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/get_business_roles';
+    final silaURL = '${_keys.baseUrl}/0.2/get_business_roles';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -886,6 +933,8 @@ class SilaApiClient {
   Future<LinkBusinessMemberResponse> linkBusinessMember(
       String role, UserModel businessUser, UserModel user,
       {double ownershipStake = 100}) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     Map body;
 
@@ -893,7 +942,7 @@ class SilaApiClient {
       body = {
         "header": {
           "created": utcTime,
-          "auth_handle": authHandle,
+          "auth_handle": _keys.authHandle,
           "user_handle": user.silaHandle,
           "business_handle": businessUser.silaHandle
         },
@@ -904,7 +953,7 @@ class SilaApiClient {
       body = {
         "header": {
           "created": utcTime,
-          "auth_handle": authHandle,
+          "auth_handle": _keys.authHandle,
           "user_handle": user.silaHandle,
           "business_handle": businessUser.silaHandle
         },
@@ -912,7 +961,7 @@ class SilaApiClient {
       };
     }
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, user.privateKey);
     String businessSignature = await eth.signing(body, businessUser.privateKey);
 
@@ -923,7 +972,7 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/link_business_member';
+    final silaURL = '${_keys.baseUrl}/0.2/link_business_member';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -940,12 +989,14 @@ class SilaApiClient {
 
   Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(
       UserModel user, UserModel businessUser, String token) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": user.silaHandle,
         "business_handle": businessUser.silaHandle
       },
@@ -953,7 +1004,7 @@ class SilaApiClient {
       "certification_token": token,
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, user.privateKey);
     String businessSignature = await eth.signing(body, businessUser.privateKey);
 
@@ -964,7 +1015,7 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/certify_beneficial_owner';
+    final silaURL = '${_keys.baseUrl}/0.2/certify_beneficial_owner';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -981,18 +1032,20 @@ class SilaApiClient {
 
   Future<CertifyBeneficialOwnerResponse> certifyBusiness(
       UserModel user, UserModel businessUser) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": user.silaHandle,
         "business_handle": businessUser.silaHandle,
       }
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, user.privateKey);
     String businessSignature = await eth.signing(body, businessUser.privateKey);
 
@@ -1003,7 +1056,7 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/certify_business';
+    final silaURL = '${_keys.baseUrl}/0.2/certify_business';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -1019,12 +1072,14 @@ class SilaApiClient {
   }
 
   Future<RedeemSilaModel> redeemSila(UserModel user, int amount) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": user.silaHandle,
         "version": "0.2",
         "crypto": "ETH",
@@ -1036,7 +1091,7 @@ class SilaApiClient {
       "processing_type": "STANDARD_ACH"
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, user.privateKey);
 
     Map<String, String> header = {
@@ -1045,7 +1100,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/redeem_sila';
+    final silaURL = '${_keys.baseUrl}/0.2/redeem_sila';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -1062,13 +1117,15 @@ class SilaApiClient {
 
   Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
       String receiverHandle, String transferMessage) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
     Random _random = Random();
 
     Map body = {
       "header": {
         "created": utcTime,
-        "auth_handle": authHandle,
+        "auth_handle": _keys.authHandle,
         "user_handle": sender.silaHandle,
         "version": "0.2",
         "crypto": "ETH",
@@ -1080,7 +1137,7 @@ class SilaApiClient {
       "descriptor": transferMessage,
     };
 
-    String authSignature = await eth.signing(body, divvyPrivateKey);
+    String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, sender.privateKey);
 
     Map<String, String> header = {
@@ -1089,7 +1146,7 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '$baseUrl/0.2/transfer_sila';
+    final silaURL = '${_keys.baseUrl}/0.2/transfer_sila';
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
