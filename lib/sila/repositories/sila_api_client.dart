@@ -22,10 +22,8 @@ import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 
 class SilaApiClient {
-
   http.Client httpClient;
   EthereumService eth = EthereumService();
-
 
   // TODO: this needs to be singleton someday.
   SilaApiClient({
@@ -370,7 +368,7 @@ class SilaApiClient {
       },
       "message": "link_account_msg",
       "public_token": plaidPublicToken,
-      "account_name": "$handle plaid account",
+      "account_name": "$handle",
     };
     String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
@@ -389,7 +387,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /link_account');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final response = jsonDecode(silaResponse.body);
@@ -413,7 +411,7 @@ class SilaApiClient {
       },
       "message": "issue_msg",
       "amount": amount,
-      "account_name": "$handle plaid account",
+      "account_name": "$handle",
       "processing_type": "STANDARD_ACH"
     };
     String authSignature = await eth.signing(body, _keys.privateKey);
@@ -426,6 +424,7 @@ class SilaApiClient {
     };
 
     final silaURL = '${_keys.baseUrl}/0.2/issue_sila';
+    print(_keys.baseUrl);
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -433,7 +432,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /issue_sila');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -457,7 +456,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_sila_balance');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

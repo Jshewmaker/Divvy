@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:bloc/bloc.dart';
 import 'package:divvy/sila/blocs/link_account/link_account.dart';
@@ -24,6 +26,7 @@ class LinkAccountBloc extends Bloc<LinkAccountEvent, LinkAccountState> {
             'users', {"bankAccountIsConnected": true});
         yield LinkAccountLoadSuccess(response: response);
       } catch (_) {
+        print('error caught: $_');
         yield LinkAccountLoadFailure();
       }
     }

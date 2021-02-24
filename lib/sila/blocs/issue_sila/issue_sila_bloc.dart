@@ -21,6 +21,7 @@ class IssueSilaBloc extends Bloc<IssueSilaEvent, IssueSilaState> {
         yield IssueSilaLoadSuccess(response: response);
       } catch (_) {
         yield IssueSilaLoadFailure();
+        print('error caught: $_');
       }
     }
   }
