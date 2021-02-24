@@ -22,7 +22,7 @@ class GetSilaBalanceBloc
       try {
         final GetSilaBalanceResponse userSilaResponse =
             await silaRepository.getSilaBalance();
-        if (event.user.projectID != null) {
+        if (event.user.projectID != null && event.user.projectID != "") {
           Project project =
               await _firebaseService.getProjects(event.user.projectID);
           UserModel homeowner =
@@ -36,6 +36,7 @@ class GetSilaBalanceBloc
           yield GetSilaBalanceLoadSuccess(userSilaResponse: userSilaResponse);
         }
       } catch (_) {
+        print('error caught: $_');
         yield GetSilaBalanceLoadFailure();
       }
     }

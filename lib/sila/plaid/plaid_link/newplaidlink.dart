@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:divvy/flavor_config.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -9,16 +10,15 @@ class PlaidLink {
   Configuration _configuration;
 
   PlaidLink() {
-    bool plaidSandbox = false;
-    // String clientID = "5cb68305fede9b00136aebb1";
-    // String secret = "54621c4436011f708c7916587c6fa8";
+    bool plaidSandbox = FlavorConfig.instance.values.isPlaidSandbox;
 
     Configuration configuration = Configuration(
         plaidPublicKey: 'fa9dd19eb40982275785b09760ab79',
         plaidBaseUrl: 'https://cdn.plaid.com/link/v2/stable/link.html',
         plaidEnvironment: plaidSandbox ? 'sandbox' : 'production',
-        environmentPlaidPathAccessToken:
-            'https://production.plaid.com/item/public_token/exchange',
+        environmentPlaidPathAccessToken: plaidSandbox
+            ? 'https://sandbox.plaid.com/item/public_token/exchange'
+            : 'https://production.plaid.com/item/public_token/exchange',
         // plaidClientId: clientID,
         // secret: plaidSandbox ? secret : '',
         clientName: 'ClientName',
