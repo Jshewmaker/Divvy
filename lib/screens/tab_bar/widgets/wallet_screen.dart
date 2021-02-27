@@ -181,7 +181,8 @@ class WalletScreenPopulated extends StatelessWidget {
           child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
               child: BalanceCard(
-                  amountSila: amountProjectSila,
+                  amountSila:
+                      (user.isHomeowner) ? amountUserSila : amountProjectSila,
                   title: "${user.projectName} Project",
                   buttonVisible: user.isHomeowner,
                   user: user))),
