@@ -8,9 +8,20 @@
             "name": "divvy prod",
             "request": "launch",
             "type": "dart",
+            "program": "lib/main_prod.dart",
             "args": [
                 "--flavor",
                 "prod"
+              ]
+        },
+        {
+            "name": "divvy dev",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main_dev.dart",
+            "args": [
+                "--flavor",
+                "dev"
               ]
         },
         {
