@@ -2,7 +2,7 @@ name: divvy
 description: A new Flutter project.
 publish_to: none
 
-version: 2.0.0+25
+version: 2.0.01+27
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
@@ -47,15 +47,16 @@ flutter_icons:
   image_path: "assets/divvy_icon.png"
   image_path_android: "assets/divvy_icon.png"
   android: true
-  ios: false
+  ios: true
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+ flutter_launcher_icons: "^0.8.0"
+
+flutter_test:
+  sdk: flutter
   bloc_test: ^7.0.0
   mockito: ^4.0.0
 
-  flutter_launcher_icons: "^0.8.0"
 
   
 flutter:
