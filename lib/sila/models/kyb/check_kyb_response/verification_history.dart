@@ -8,7 +8,7 @@ class VerificationHistory extends Equatable {
   final int updatedAt;
   final List<Null> reasons;
   final List<String> tags;
-  final int score;
+  final double score;
   final String parentVerification;
 
   VerificationHistory(
@@ -30,7 +30,7 @@ class VerificationHistory extends Equatable {
       requestedAt: json['requested_at'],
       updatedAt: json['updated_at'],
       tags: json['tags'].cast<String>(),
-      score: json['score'],
+      score: json['score'] as double,
       parentVerification: json['parent_verification'],
     );
   }

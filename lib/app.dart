@@ -2,6 +2,7 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/bloc/project/project_bloc.dart';
 import 'package:divvy/screens/login/login.dart';
 import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
+import 'package:divvy/screens/screens/kyb_screens/create_business_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_1.dart';
 import 'package:divvy/screens/sign_up/view/homeowner_or_business.dart';
@@ -83,6 +84,8 @@ class _AppViewState extends State<AppView> {
                         MaterialPageRoute(
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
+                  } else if (!user.isHomeowner && user.kyc_status == 'failed') {
+                    _navigator.push(CreateSilaBusinessScreen.route());
                   } else if (user.isHomeowner && user.silaHandle == null) {
                     _navigator.push(CreateSilaUserScreen.route());
                   } else if (user.isHomeowner && user.kyc_status == 'failed') {
