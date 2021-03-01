@@ -51,8 +51,8 @@ class PlaidLinkScreen extends StatelessWidget {
                           text: TextSpan(
                               style: TextStyle(color: Colors.black),
                               text:
-                                  'We use Plaid to help track your expenses and and '
-                                  'get you in tune with your finances. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi eget posuere dolor. Mauris imperdiet ac arcu sed accumsan. Nam congue sapien a feugiat facilisis. '),
+                                  'We use Plaid to verify you are who you say you are and to fund your project! None of your bank account information is ever shared with DivvySafe or Pliad.'
+                                  'DivvySafe does not have access to any of the funds in your bank account at any time. Once you have connected your bank accuont to DivvySafe you will be able to add the funds needed to start your home renovation project!'),
                         )),
                     SizedBox(
                       height: 50,
