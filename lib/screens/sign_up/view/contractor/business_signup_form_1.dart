@@ -197,7 +197,7 @@ class _SignupFormState extends State<BusinessSignUpPage> {
                   phone: _phoneNumberController.text,
                   businessType: businessType,
                   naicsCode: naicsCode,
-                  isHomeowner: false,
+                  accountType: 'business',
                   bankAccountIsConnected: false,
                   kyc_status: 'failed')
               .toEntity()

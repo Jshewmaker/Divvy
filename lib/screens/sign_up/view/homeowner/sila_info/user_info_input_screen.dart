@@ -1,5 +1,7 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/homeowner/sila_info/homeowner_signup_page_2.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
@@ -7,21 +9,23 @@ import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:intl/intl.dart';
 
-class HomeownerSignupPage1 extends StatefulWidget {
-  HomeownerSignupPage1({Key key}) : super(key: key);
+class UserInfoInputScreen extends StatefulWidget {
+  final String accountType;
+  UserInfoInputScreen({Key key, this.accountType}) : super(key: key);
 
   @override
-  _SignUpFormState createState() => _SignUpFormState();
+  _UserInputState createState() => _UserInputState();
 }
 
 // ignore: must_be_immutable
-class _SignUpFormState extends State<HomeownerSignupPage1> {
+class _UserInputState extends State<UserInfoInputScreen> {
   FirebaseService _firebaseService = FirebaseService();
-  final TextEditingController _nameController = TextEditingController();
-  final MaskedTextController _ssnController =
-      MaskedTextController(mask: '000-00-0000');
-  final MaskedTextController _confirmSsnController =
-      MaskedTextController(mask: '000-00-0000');
+  final TextEditingController _firstNameController = TextEditingController();
+  // final MaskedTextController _ssnController =
+  //     MaskedTextController(mask: '000-00-0000');
+  // final MaskedTextController _confirmSsnController =
+  //     MaskedTextController(mask: '000-00-0000');
+  final TextEditingController _lastNameController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
   String yearDropDown = '1950';
@@ -38,15 +42,24 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
         title: FittedBox(
             fit: BoxFit.fitWidth, child: Text('Homeowner Personal Info')),
         actions: [
-          TextButton(
-              child: Text(
-                'Next',
-                style: TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.normal,
-                    fontSize: 18),
-              ),
-              onPressed: () => _signUpButton(context)),
+          FutureBuilder(
+            future: FirebaseAuth.instance.currentUser(),
+            builder: (context, AsyncSnapshot<FirebaseUser> snapshot) {
+              if (snapshot.hasData) {
+                return TextButton(
+                    child: Text(
+                      'Next',
+                      style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.normal,
+                          fontSize: 18),
+                    ),
+                    onPressed: () => _signUpButton(context, snapshot.data.uid));
+              } else {
+                return Container();
+              }
+            },
+          ),
         ],
       ),
       body: Form(
@@ -56,28 +69,29 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
           child: ListView(
             shrinkWrap: true,
             children: [
-              _nameInput(),
+              _firstNameInput(),
               const SizedBox(height: 8.0),
-              _ssnInput(context),
+              _lastNameInput(),
+              // _ssnInput(context),
               const SizedBox(height: 8.0),
-              _confirmSsn(),
-              const SizedBox(height: 8.0),
+              // _confirmSsn(),
+              // const SizedBox(height: 8.0),
               _birthdayInput(),
               const SizedBox(height: 8.0),
               Text(
-                'YYYY      MM     DD',
+                'MM      DD     YYYY',
                 style: TextStyle(color: Colors.grey),
               ),
               const SizedBox(height: 8.0),
               _phoneNumberInput(),
               const SizedBox(height: 30.0),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  'DivvySafe must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
-                  style: TextStyle(color: Colors.grey),
-                ),
-              ),
+              // Padding(
+              //   padding: const EdgeInsets.all(20.0),
+              //   child: Text(
+              //     'DivvySafe must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
+              //     style: TextStyle(color: Colors.grey),
+              //   ),
+              // ),
             ],
           ),
         ),
@@ -85,60 +99,75 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
     );
   }
 
-  Widget _nameInput() {
+  Widget _firstNameInput() {
     return TextFormField(
-      controller: _nameController,
+      controller: _firstNameController,
       validator: (value) {
-        if (value.isEmpty || !value.contains(' ')) {
-          return 'Please Enter First And Last Name.';
+        if (value.isEmpty) {
+          return 'Please Enter First Name.';
         }
         return null;
       },
       decoration: InputDecoration(
-        hintText: "Jane Doe",
         border: UnderlineInputBorder(),
-        labelText: 'Full Name',
+        labelText: 'First Name',
       ),
     );
   }
 
-  Widget _ssnInput(BuildContext context) {
-    return Container(
-      width: 200,
-      child: TextFormField(
-        validator: (value) {
-          if (value.length != 11) {
-            return 'Please Enter Valid Social Security Number';
-          }
-          return null;
-        },
-        controller: _ssnController,
-        decoration: InputDecoration(
-          border: UnderlineInputBorder(),
-          hintText: "xxx-xx-xxxx",
-          labelText: 'Social Security Number',
-        ),
-        keyboardType: TextInputType.number,
-      ),
-    );
-  }
-
-  Widget _confirmSsn() {
+  Widget _lastNameInput() {
     return TextFormField(
-      controller: _confirmSsnController,
-      validator: (val) {
-        if (val.isEmpty) return "";
-        if (val != _ssnController.text) return 'SSNs Do Not Match';
+      controller: _lastNameController,
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please Enter Last Name.';
+        }
         return null;
       },
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        labelText: 'Confirm SSN',
-        hintText: 'xxx-xx-xxxx',
+        labelText: 'Last Name',
       ),
-      keyboardType: TextInputType.number,
     );
   }
+
+  // Widget _ssnInput(BuildContext context) {
+  //   return Container(
+  //     width: 200,
+  //     child: TextFormField(
+  //       validator: (value) {
+  //         if (value.length != 11) {
+  //           return 'Please Enter Valid Social Security Number';
+  //         }
+  //         return null;
+  //       },
+  //       controller: _ssnController,
+  //       decoration: InputDecoration(
+  //         border: UnderlineInputBorder(),
+  //         hintText: "xxx-xx-xxxx",
+  //         labelText: 'Social Security Number',
+  //       ),
+  //       keyboardType: TextInputType.number,
+  //     ),
+  //   );
+  // }
+
+  // Widget _confirmSsn() {
+  //   return TextFormField(
+  //     controller: _confirmSsnController,
+  //     validator: (val) {
+  //       if (val.isEmpty) return "";
+  //       if (val != _ssnController.text) return 'SSNs Do Not Match';
+  //       return null;
+  //     },
+  //     decoration: InputDecoration(
+  //       border: UnderlineInputBorder(),
+  //       labelText: 'Confirm SSN',
+  //       hintText: 'xxx-xx-xxxx',
+  //     ),
+  //     keyboardType: TextInputType.number,
+  //   );
+  // }
 
   Widget _birthdayInput() {
     var yearList =
@@ -150,13 +179,13 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
     return Row(
       children: [
         customDropDown(
-          yearList,
-        ),
-        customDropDown(
           monthList,
         ),
         customDropDown(
           dayList,
+        ),
+        customDropDown(
+          yearList,
         )
       ],
     );
@@ -247,26 +276,27 @@ class _SignUpFormState extends State<HomeownerSignupPage1> {
     );
   }
 
-  void _signUpButton(BuildContext context) {
+  void _signUpButton(BuildContext context, String userID) {
     if (_formKey.currentState.validate()) {
+      ;
       _firebaseService.addUserEmailToFirebaseDocument();
       _firebaseService.userSetupCreateFirestore(
           'users',
           UserModel(
-            name: _nameController.text,
+            name: "${_firstNameController.text} ${_lastNameController.text}",
             dateOfBirthYYYYMMDD: '$yearDropDown-$monthDropDown-$dayDropDown',
-            identityValue: _ssnController.text,
+            // identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
-            isHomeowner: true,
+            accountType: widget.accountType,
             bankAccountIsConnected: false,
             kyc_status: 'failed',
           ).toEntity().toDocumentPersonalInfo());
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HomeownerSignupPage2(),
-        ),
-      );
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => HomeScreen(
+                    userID: userID,
+                  )),
+          (route) => false);
     }
   }
 }

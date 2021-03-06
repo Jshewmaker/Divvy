@@ -78,21 +78,24 @@ class _AppViewState extends State<AppView> {
                   if (user == null)
                     _navigator.pushReplacement(MaterialPageRoute(
                         builder: (context) => HomeownerOrBusinessScreen()));
-                  else if (!user.isHomeowner &&
+                  else if (user.accountType == 'business' &&
                       user.businessAdminDocumentID == null) {
                     _navigator.pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
-                  } else if (!user.isHomeowner && user.kyc_status == 'failed') {
+                  } else if (user.accountType == 'business' &&
+                      user.kyc_status == 'failed') {
                     _navigator.push(CreateSilaBusinessScreen.route());
-                  } else if (user.isHomeowner && user.silaHandle == null) {
+                  } else if (user.accountType == 'homeowner' &&
+                      user.silaHandle == null) {
                     _navigator.push(CreateSilaUserScreen.route());
-                  } else if (user.isHomeowner && user.kyc_status == 'failed') {
+                  } else if (user.accountType == 'homeowner' &&
+                      user.kyc_status == 'failed') {
                     _navigator.push(CreateSilaUserScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(
-                      HomeScreen.route(user),
+                      HomeScreen.route(user.id),
                       (route) => false,
                     );
                   }

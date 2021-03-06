@@ -19,8 +19,10 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
         Project project = await firebaseService.getProjects(event.projectID);
         if (project != null) {
           UserModel user = await firebaseService.getUserData();
-          if ((user.isHomeowner && project.homeownerPath == null) ||
-              (!user.isHomeowner && project.generalContractorPath == null)) {
+          if ((user.accountType == 'homeowner' &&
+                  project.homeownerPath == null) ||
+              (user.accountType == 'business' &&
+                  project.generalContractorPath == null)) {
             final Project updatedProject = await firebaseService
                 .addUserDataToProject(event.projectID, user);
             if (updatedProject == null) {
@@ -29,7 +31,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
               yield ProjectLoadSuccess(project: updatedProject);
             }
           } else {
-            if (user.isHomeowner) {
+            if (user.accountType == 'homeowner') {
               yield HomeownerExists();
             } else {
               yield GCExists();

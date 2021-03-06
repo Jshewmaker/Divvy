@@ -35,11 +35,12 @@ class ChatButton extends StatelessWidget {
   }
 
   FlatButton _chatButton(BuildContext context, LineItem lineItem) {
-    ChatButtonAttributes chatButtonAttributes = (user.isHomeowner)
-        ? HomeownerChatButtonAttributes(
-            user, project, lineItem.newMessageFromGC)
-        : GCChatButtonAttributes(
-            user, project, lineItem.newMessageFromHomeowner);
+    ChatButtonAttributes chatButtonAttributes =
+        (user.accountType == 'homeowner')
+            ? HomeownerChatButtonAttributes(
+                user, project, lineItem.newMessageFromGC)
+            : GCChatButtonAttributes(
+                user, project, lineItem.newMessageFromHomeowner);
     return FlatButton(
       color: Colors.transparent,
       onPressed: () {
