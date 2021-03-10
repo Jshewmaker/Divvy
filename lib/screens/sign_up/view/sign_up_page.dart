@@ -1,17 +1,25 @@
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/Screens/sign_up/sign_up.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:flutter/services.dart';
 import 'package:formz/formz.dart';
+import 'package:url_launcher/url_launcher.dart';
+
+class SignUpPage extends StatefulWidget {
+  @override
+  State<SignUpPage> createState() => _SignUpPageState();
+
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => SignUpPage());
+  }
+}
 
 // ignore: must_be_immutable
-class SignUpPage extends StatelessWidget {
-  const SignUpPage({Key key}) : super(key: key);
-  static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => const SignUpPage());
-  }
+class _SignUpPageState extends State<SignUpPage> {
+  bool accepted = false;
 
   // final TextEditingController _passwordValidatorController =
   //     TextEditingController();
@@ -61,6 +69,57 @@ class SignUpPage extends StatelessWidget {
                           'Passwords must be 8 characters in length and include numbers and letters.',
                           style: TextStyle(color: Colors.grey, fontSize: 12),
                         ),
+                        const SizedBox(height: 8.0),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: Checkbox(
+                                value: accepted,
+                                activeColor: Colors.teal[200],
+                                onChanged: (bool value) {
+                                  setState(() {
+                                    this.accepted = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            Expanded(
+                              flex: 7,
+                              child: Container(
+                                padding: EdgeInsets.all(5),
+                                child: Column(
+                                  children: [
+                                    RichText(
+                                      text: new TextSpan(
+                                        children: [
+                                          new TextSpan(
+                                            text:
+                                                'I have read and agree to the ',
+                                            style: new TextStyle(
+                                                color: Colors.black),
+                                          ),
+                                          new TextSpan(
+                                            text:
+                                                'Terms and Conditions and the Privacy Policy',
+                                            style: new TextStyle(
+                                                color: Colors.blue),
+                                            recognizer:
+                                                new TapGestureRecognizer()
+                                                  ..onTap = () {
+                                                    launch(
+                                                        'https://www.divvysafe.com/terms-and-conditions');
+                                                  },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   ),
@@ -85,7 +144,7 @@ class SignUpPage extends StatelessWidget {
                   'Next',
                   style: TextStyle(fontSize: 18),
                 ),
-                onPressed: state.status.isValidated
+                onPressed: (state.status.isValidated && accepted)
                     ? () => context.read<SignUpCubit>().signUpFormSubmitted()
                     : null,
               );
