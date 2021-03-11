@@ -85,11 +85,11 @@ class _AppViewState extends State<AppView> {
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
                   } else if (!user.isHomeowner && user.kyc_status == 'failed') {
-                    _navigator.push(CreateSilaBusinessScreen.route());
+                    _navigator.push(HomeownerOrBusinessScreen.route());
                   } else if (user.isHomeowner && user.silaHandle == null) {
-                    _navigator.push(CreateSilaUserScreen.route());
+                    _navigator.push(HomeownerOrBusinessScreen.route());
                   } else if (user.isHomeowner && user.kyc_status == 'failed') {
-                    _navigator.push(CreateSilaUserScreen.route());
+                    _navigator.push(HomeownerOrBusinessScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(
                       HomeScreen.route(user),
