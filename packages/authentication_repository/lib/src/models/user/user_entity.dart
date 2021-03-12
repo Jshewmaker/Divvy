@@ -231,7 +231,6 @@ class UserEntity extends Equatable {
       "state": state,
       "country": country,
       "postal_code": postalCode,
-      "kyc_status": kyc_status,
     };
   }
 
