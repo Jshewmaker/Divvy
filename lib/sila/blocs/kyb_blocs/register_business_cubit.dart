@@ -36,7 +36,7 @@ class RegisterBusinessCubit extends Cubit<RegisterBusinessState> {
       String username = formatUsername(user);
       Map<String, String> data = {"silaHandle": username};
       _firebaseService.addDataToFirestoreDocument('users', data);
-      final response = await _silaBusinessRepository.registerKYB();
+      final response = await _silaBusinessRepository.registerKYB(username);
 
       emit(RegisterBusinessLoadSuccess(response));
     } catch (_) {

@@ -206,7 +206,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
       Map<String, String> data = {"silaHandle": username};
       _firebaseService.addDataToFirestoreDocument('users', data);
 
-      final response = await _silaBusinessRepository.registerKYB();
+      final response = await _silaBusinessRepository.registerKYB(username);
       emit(RegisterBusinessSuccess(response));
 
       try {
@@ -218,7 +218,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
         _firebaseService.addDataToBusinessUserDocument('users', data);
 
         final response =
-            await _silaBusinessRepository.registerBusinessAdmin(businessAdmin);
+            await _silaBusinessRepository.registerBusinessAdmin(username);
         emit(RegisterBusinessRoleLoadSuccess(response));
 
         try {

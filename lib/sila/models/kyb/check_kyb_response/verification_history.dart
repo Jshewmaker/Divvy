@@ -30,7 +30,7 @@ class VerificationHistory extends Equatable {
       requestedAt: json['requested_at'],
       updatedAt: json['updated_at'],
       tags: json['tags'].cast<String>(),
-      score: json['score'] as int,
+      score: (json['score'] != null) ? json['score'].toDouble() : null,
       parentVerification: json['parent_verification'],
     );
   }
