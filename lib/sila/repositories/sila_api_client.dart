@@ -834,8 +834,7 @@ class SilaApiClient {
   /// Requires the user handle and the UserModel to fill out body
   ///
   Future<KYBRegisterResponse> registerBusiness(
-    UserModel user,
-  ) async {
+      UserModel user, String handle) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -845,7 +844,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle + ".silamoney.eth",
+        "user_handle": handle + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
         "version": "0.2"
