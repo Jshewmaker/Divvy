@@ -96,7 +96,7 @@ class AccountScreen extends StatelessWidget {
                 .read<AuthenticationBloc>()
                 .add(AuthenticationLogoutRequested()),
           ),
-          (!user.isHomeowner)
+          (user.accountType == ' business')
               ? RaisedButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30.0),

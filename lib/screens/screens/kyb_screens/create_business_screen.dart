@@ -29,7 +29,8 @@ class CreateSilaBusinessScreen extends StatelessWidget {
               if (state is CreateSilaBusinessSuccess) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (contest) => HomeScreen(user: state.user)),
+                        builder: (contest) =>
+                            HomeScreen(userID: state.user.id)),
                     (route) => false);
               }
             },
@@ -111,7 +112,8 @@ class CreateSilaBusinessScreen extends StatelessWidget {
 
               if (state is CheckKybNotPassed) {
                 return Text(
-                  "Register Business Role Failure" + state.response,
+                  "Register Business Role Failure: " +
+                      state.response.verificationHistory[0].tags[1],
                   style: TextStyle(color: Colors.red),
                 );
               }

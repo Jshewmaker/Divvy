@@ -41,7 +41,7 @@ class CreateSilaUserScreen extends StatelessWidget {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (contest) => HomeScreen(
-                              user: state.user,
+                              userID: state.user.id,
                             )),
                     (route) => false);
               }

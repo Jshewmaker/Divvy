@@ -140,7 +140,7 @@ class FirebaseService {
 
   Future<Project> addUserDataToProject(String projectID, UserModel user) async {
     FirebaseAuth.instance.currentUser().then((value) {
-      if (user.isHomeowner == true) {
+      if (user.accountType == 'homeowner') {
         addDataToProjectFirestoreDocument(projectID, projectCollection, {
           "homeowner_path": 'users/' + value.uid,
           "homeowner_sila_handle": user.silaHandle,

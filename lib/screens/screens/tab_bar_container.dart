@@ -10,26 +10,27 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  final UserModel user;
-  const HomeScreen({Key key, this.user}) : super(key: key);
+  final String userID;
+  const HomeScreen({Key key, this.userID}) : super(key: key);
 
-  static Route route(UserModel user) {
+  static Route route(String userID) {
     return MaterialPageRoute<void>(
         builder: (_) => HomeScreen(
-              user: user,
+              userID: userID,
             ));
   }
 
   @override
   Widget build(BuildContext context) {
     FirebaseService firebaseService = FirebaseService();
+
     return BlocProvider(
         create: (BuildContext context) => TabBloc(),
         child: MultiProvider(
           providers: [
             StreamProvider<UserModel>(
-              initialData: user,
-              create: (context) => firebaseService.streamRealtimeUser(user.id),
+              initialData: UserModel.empty,
+              create: (context) => firebaseService.streamRealtimeUser(userID),
             ),
           ],
           child: TabBarContainer(),
@@ -59,7 +60,7 @@ class TabBarContainer extends StatelessWidget {
             ),
             actions: [
               Visibility(
-                visible: user.isHomeowner == false,
+                visible: user.accountType == 'business',
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () => _settingModalBottomSheet(context, user),
