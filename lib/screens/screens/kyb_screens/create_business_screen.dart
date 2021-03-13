@@ -33,7 +33,8 @@ class CreateSilaBusinessScreen extends StatelessWidget {
               if (state is CreateSilaBusinessSuccess) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (contest) => HomeScreen(user: state.user)),
+                        builder: (contest) =>
+                            HomeScreen(userID: state.user.id)),
                     (route) => false);
               }
             },

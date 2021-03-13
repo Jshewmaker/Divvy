@@ -43,6 +43,10 @@ class SignUpPage extends StatelessWidget {
                 'assets/divvy_full_logo.png',
                 height: 120,
               ),
+              Text(
+                'Create Your Account!',
+                style: TextStyle(fontSize: 24),
+              ),
               Form(
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -121,30 +125,71 @@ class _EmailInput extends StatelessWidget {
   // get email => email1;
 }
 
-class _PasswordInput extends StatelessWidget {
+class _PasswordInput extends StatefulWidget {
+  @override
+  _PasswordInputState createState() => new _PasswordInputState();
+}
+
+class _PasswordInputState extends State<_PasswordInput> {
+  // Initially password is obscure
+  bool _obscureText = true;
+
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
       buildWhen: (previous, current) => previous.password != current.password,
       builder: (context, state) {
-        return TextField(
-          key: const Key('signUpForm_passwordInput_textField'),
-          onChanged: (value) =>
-              context.read<SignUpCubit>().passwordChanged(value),
-          obscureText: true,
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'password',
-            helperText: '',
-            errorText: state.password.invalid ? 'invalid password' : null,
-          ),
+        return Row(
+          children: [
+            Flexible(
+              child: TextField(
+                key: const Key('signUpForm_passwordInput_textField'),
+                onChanged: (value) =>
+                    context.read<SignUpCubit>().passwordChanged(value),
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'password',
+                  helperText: '',
+                  errorText: state.password.invalid ? 'invalid password' : null,
+                ),
+              ),
+            ),
+            new IconButton(
+              onPressed: _toggle,
+              icon:
+                  Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+            )
+          ],
         );
       },
     );
   }
 }
 
-class _ConfirmPasswordInput extends StatelessWidget {
+class _ConfirmPasswordInput extends StatefulWidget {
+  @override
+  _ConfirmPasswordInputState createState() => new _ConfirmPasswordInputState();
+}
+
+class _ConfirmPasswordInputState extends State<_ConfirmPasswordInput> {
+  // Initially password is obscure
+  bool _obscureText = true;
+
+  // Toggles the password show status
+  void _toggle() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SignUpCubit, SignUpState>(
@@ -152,20 +197,31 @@ class _ConfirmPasswordInput extends StatelessWidget {
           previous.password != current.password ||
           previous.confirmedPassword != current.confirmedPassword,
       builder: (context, state) {
-        return TextField(
-          key: const Key('signUpForm_confirmedPasswordInput_textField'),
-          onChanged: (confirmPassword) => context
-              .read<SignUpCubit>()
-              .confirmedPasswordChanged(confirmPassword),
-          obscureText: true,
-          decoration: InputDecoration(
-            border: UnderlineInputBorder(),
-            labelText: 'confirm password',
-            helperText: '',
-            errorText: state.confirmedPassword.invalid
-                ? 'passwords do not match'
-                : null,
-          ),
+        return Row(
+          children: [
+            Flexible(
+              child: TextField(
+                key: const Key('signUpForm_confirmedPasswordInput_textField'),
+                onChanged: (confirmPassword) => context
+                    .read<SignUpCubit>()
+                    .confirmedPasswordChanged(confirmPassword),
+                obscureText: _obscureText,
+                decoration: InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: 'confirm password',
+                  helperText: '',
+                  errorText: state.confirmedPassword.invalid
+                      ? 'passwords do not match'
+                      : null,
+                ),
+              ),
+            ),
+            new IconButton(
+              onPressed: _toggle,
+              icon:
+                  Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+            )
+          ],
         );
       },
     );

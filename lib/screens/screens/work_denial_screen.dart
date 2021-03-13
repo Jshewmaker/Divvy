@@ -7,7 +7,6 @@ import 'package:divvy/sila/repositories/sila_api_client.dart';
 import 'package:divvy/sila/repositories/sila_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 
 class WorkDenialScreen extends StatefulWidget {
   WorkDenialScreen(this._lineItem, this._project, this._user);
@@ -38,7 +37,7 @@ class _WorkDenialState extends State<WorkDenialScreen> {
         Message(id: user.id, message: message, timestamp: Timestamp.now());
     _firebaseService.addMessage(
         project.projectID, lineItem.id, messageModel.toMap());
-    String field = (user.isHomeowner)
+    String field = (user.accountType == 'homeowner')
         ? "new_message_from_homeowner"
         : "new_message_from_gc";
 
@@ -176,7 +175,7 @@ class DenyButton extends StatelessWidget {
         Message(id: user.id, message: message, timestamp: Timestamp.now());
     _firebaseService.addMessage(
         project.projectID, lineItem.id, messageModel.toMap());
-    String field = (user.isHomeowner)
+    String field = (user.accountType == 'homeowner')
         ? "new_message_from_homeowner"
         : "new_message_from_gc";
 

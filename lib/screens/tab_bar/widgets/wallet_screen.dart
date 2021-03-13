@@ -126,10 +126,10 @@ class WalletScreenInitial extends StatelessWidget {
               child: BalanceCard(
                   amountSila: 0,
                   title: "${user.projectName} Project",
-                  buttonVisible: user.isHomeowner,
+                  buttonVisible: user.accountType == 'homeowner',
                   user: user))),
       Visibility(
-        visible: !user.isHomeowner,
+        visible: user.accountType == 'business',
         child: Column(
           children: [
             SizedBox(
@@ -181,13 +181,14 @@ class WalletScreenPopulated extends StatelessWidget {
           child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
               child: BalanceCard(
-                  amountSila:
-                      (user.isHomeowner) ? amountUserSila : amountProjectSila,
+                  amountSila: (user.accountType == 'homeowner')
+                      ? amountUserSila
+                      : amountProjectSila,
                   title: "${user.projectName} Project",
-                  buttonVisible: user.isHomeowner,
+                  buttonVisible: user.accountType == 'homeowner',
                   user: user))),
       Visibility(
-        visible: !user.isHomeowner,
+        visible: user.accountType == 'business',
         child: Column(
           children: [
             SizedBox(
@@ -264,7 +265,7 @@ class BalanceCard extends StatelessWidget {
             ),
             Visibility(
               visible: buttonVisible,
-              child: _button(context, user.isHomeowner, amountSila),
+              child: _button(context, user.accountType, amountSila),
             ),
             SizedBox(
               height: 20,
@@ -276,8 +277,8 @@ class BalanceCard extends StatelessWidget {
   }
 
   RaisedButton _button(
-      BuildContext context, bool isHomeowner, double amountSila) {
-    if (isHomeowner) {
+      BuildContext context, String accountType, double amountSila) {
+    if (accountType == 'homeowner') {
       return RaisedButton(
         child: Text("Add Money"),
         shape:

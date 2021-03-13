@@ -8,7 +8,7 @@ class VerificationHistory extends Equatable {
   final int updatedAt;
   final List<Null> reasons;
   final List<String> tags;
-  final double score;
+  final int score;
   final String parentVerification;
 
   VerificationHistory(
