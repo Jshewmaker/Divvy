@@ -68,12 +68,18 @@ class CreateSilaUserScreen extends StatelessWidget {
                 BlocProvider.of<CreateSilaUserBloc>(context)
                     .add(SilaRequestKYC());
               } else if (state is RegisterFailure) {
-                //TODO: Uh oh page
+                return Text(
+                  "Reqgistration Failure: " + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
               } else if (state is RequestKYCSuccess) {
                 BlocProvider.of<CreateSilaUserBloc>(context)
                     .add(SilaCheckKYC());
               } else if (state is RequestKYCFailure) {
-                //TODO: Uh oh page
+                return Text(
+                  "Request KYC Failure: " + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
               } else if (state is CheckKycVerifiationFail) {
                 //TODO: put in list view for all tags to show
                 return Text(
@@ -83,7 +89,7 @@ class CreateSilaUserScreen extends StatelessWidget {
                 );
               } else if (state is CheckKycFailure) {
                 return Text(
-                  "KYC Failure: " + state.exception,
+                  "KYC Failure: " + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
