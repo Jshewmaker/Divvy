@@ -345,7 +345,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_account_balance');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -386,12 +386,15 @@ class SilaApiClient {
           body: json.encode(body),
         );
 
+    final response = jsonDecode(silaResponse.body);
+    final LinkAccountResponse linkAccountResponse =
+        LinkAccountResponse.fromJson(response);
+
     if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+      throw Exception(linkAccountResponse.message);
     }
 
-    final response = jsonDecode(silaResponse.body);
-    return LinkAccountResponse.fromJson(response);
+    return linkAccountResponse;
   }
 
   Future<IssueSilaResponse> issueSila(
@@ -500,7 +503,7 @@ class SilaApiClient {
         );
     print('ehllo' + silaResponse.body);
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_transactions');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -1109,7 +1112,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /redeem_sila');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
