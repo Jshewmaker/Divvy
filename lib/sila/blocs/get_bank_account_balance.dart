@@ -16,7 +16,11 @@ class BankAccountBalanceLoadSuccess extends BankAccountBalanceState {
   final BankAccountBalanceResponse bankAccountBalanceResponse;
 }
 
-class BankAccountBalanceLoadFailure extends BankAccountBalanceState {}
+class BankAccountBalanceLoadFailure extends BankAccountBalanceState {
+  BankAccountBalanceLoadFailure(this.exception);
+
+  final Exception exception;
+}
 
 class BankAccountBalanceCubit extends Cubit<BankAccountBalanceState> {
   BankAccountBalanceCubit(this.silaRepository)
@@ -30,7 +34,7 @@ class BankAccountBalanceCubit extends Cubit<BankAccountBalanceState> {
       final bankAccountBalance = await silaRepository.getBankAccountBalance();
       emit(BankAccountBalanceLoadSuccess(bankAccountBalance));
     } catch (_) {
-      emit(BankAccountBalanceLoadFailure());
+      emit(BankAccountBalanceLoadFailure(_));
     }
   }
 }

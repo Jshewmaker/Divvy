@@ -22,7 +22,7 @@ class GetTransactionsBloc
             await silaRepository.getTransactions();
         yield GetTransactionsLoadSuccess(response: response);
       } catch (_) {
-        yield GetTransactionsLoadFailure();
+        yield GetTransactionsLoadFailure(exception: _);
       }
     }
   }
