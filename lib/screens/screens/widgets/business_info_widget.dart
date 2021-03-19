@@ -2,19 +2,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class BusinessInfoWidget extends StatefulWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
+  final TextEditingController businessNameController;
+  final TextEditingController aliasController;
+  final TextEditingController websiteController;
+  MaskedTextController einController = MaskedTextController(mask: '00-0000000');
+  MaskedTextController confirmEinController =
+      MaskedTextController(mask: '00-0000000');
   MaskedTextController phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
-  TextEditingController birthdayController;
   final GlobalKey<FormState> formKey;
 
   BusinessInfoWidget(
       {Key key,
-      this.firstNameController,
-      this.lastNameController,
+      this.businessNameController,
+      this.aliasController,
+      this.websiteController,
+      this.einController,
+      this.confirmEinController,
       this.phoneNumberController,
-      this.birthdayController,
       this.formKey})
       : super(key: key);
 
@@ -23,78 +28,77 @@ class BusinessInfoWidget extends StatefulWidget {
 }
 
 class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
-  String yearDropDown = '1950';
-  String monthDropDown = '1';
-  String dayDropDown = '1';
-
   @override
   Widget build(BuildContext context) {
     final _formKey = widget.formKey;
     return Form(
       key: _formKey,
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            _firstNameInput(),
-            const SizedBox(height: 8.0),
-            _lastNameInput(),
-            // _ssnInput(context),
-            const SizedBox(height: 8.0),
-            // _confirmSsn(),
-            // const SizedBox(height: 8.0),
-            _birthdayInput(),
-            const SizedBox(height: 8.0),
-            Text(
-              'MM      DD     YYYY',
-              style: TextStyle(color: Colors.grey),
-            ),
-            const SizedBox(height: 8.0),
-            _phoneNumberInput(),
-            const SizedBox(height: 30.0),
-            // Padding(
-            //   padding: const EdgeInsets.all(20.0),
-            //   child: Text(
-            //     'DivvySafe must obtian, verify and record information that identifies each customer who opens an account with us. when you open an account with us, we will ask for your name, physical address and other information that assists us in verifying your identity. Additional information or documentation may be requested.',
-            //     style: TextStyle(color: Colors.grey),
-            //   ),
-            // ),
-          ],
-        ),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          _nameInput(),
+          const SizedBox(height: 8.0),
+          _doingBusinessAsInput(),
+          const SizedBox(height: 8.0),
+          _websiteInput(),
+          const SizedBox(height: 8.0),
+          _einInput(),
+          const SizedBox(height: 8.0),
+          _confirmEin(),
+          const SizedBox(height: 8.0),
+          _phoneNumberInput(),
+        ],
       ),
     );
   }
 
-  Widget _firstNameInput() {
+  Widget _nameInput() {
     return TextFormField(
-      controller: widget.firstNameController,
       validator: (value) {
         if (value.isEmpty) {
-          return 'Please Enter First Name.';
+          return 'Please Enter Business Name';
         }
         return null;
       },
+      controller: widget.businessNameController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        labelText: 'First Name',
+        labelText: 'Business Name',
       ),
     );
   }
 
-  Widget _lastNameInput() {
+  Widget _doingBusinessAsInput() {
     return TextFormField(
-      controller: widget.lastNameController,
       validator: (value) {
         if (value.isEmpty) {
-          return 'Please Enter Last Name.';
+          return 'Please Enter \'Your Doing Business As\' Name';
         }
         return null;
       },
+      controller: widget.aliasController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
-        labelText: 'Last Name',
+        labelText: 'Doing Business As Name',
       ),
+    );
+  }
+
+  Widget _websiteInput() {
+    return TextFormField(
+      validator: (value) {
+        if (value.isEmpty) {
+          return 'Please Enter Website';
+        }
+        return null;
+      },
+      controller: widget.websiteController,
+      decoration: InputDecoration(
+        prefixText: 'https://www.',
+        border: UnderlineInputBorder(),
+        labelText: 'Website',
+      ),
+      keyboardType: TextInputType.url,
     );
   }
 
@@ -110,72 +114,43 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Phone Number',
-        hintText: '(xxx)xxx-xxxx',
       ),
       keyboardType: TextInputType.phone,
     );
   }
 
-  Widget _birthdayInput() {
-    var yearList =
-        new List<String>.generate(103, (i) => (1949 + i + 1).toString());
-    var monthList = new List<String>.generate(12, (i) => (i + 1).toString());
-
-    var dayList = new List<String>.generate(31, (i) => (i + 1).toString());
-
-    return Row(
-      children: [
-        customDropDown(
-          monthList,
-        ),
-        customDropDown(
-          dayList,
-        ),
-        customDropDown(
-          yearList,
-        )
-      ],
+  Widget _einInput() {
+    return TextFormField(
+      validator: (value) {
+        if (value.length != 10) {
+          return 'Please Enter Valid EIN';
+        }
+        return null;
+      },
+      controller: widget.einController,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'EIN',
+        hintText: '12-1234567',
+      ),
+      keyboardType: TextInputType.number,
     );
   }
 
-  Widget customDropDown(
-    List<String> list,
-  ) {
-    var startingValue;
-    if (list.length > 32) {
-      startingValue = yearDropDown;
-    } else if (list.length > 12) {
-      startingValue = dayDropDown;
-    } else {
-      startingValue = monthDropDown;
-    }
-    return DropdownButton<String>(
-      value: startingValue,
-      underline: Container(
-        height: 1.5,
-        color: Colors.grey[400],
-      ),
-      onChanged: (String newValue) {
-        setState(() {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          if (list.length > 32) {
-            yearDropDown = newValue;
-          } else if (list.length > 12) {
-            dayDropDown = newValue;
-          } else {
-            monthDropDown = newValue;
-          }
-          widget.birthdayController.text =
-              '$yearDropDown-$monthDropDown-$dayDropDown';
-        });
+  Widget _confirmEin() {
+    return TextFormField(
+      controller: widget.confirmEinController,
+      validator: (val) {
+        if (val.isEmpty) return "";
+        if (val != widget.einController.text) return 'EINs Do Not Match';
+        return null;
       },
-      items: list.map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
-      iconEnabledColor: Colors.white,
+      decoration: InputDecoration(
+        border: UnderlineInputBorder(),
+        labelText: 'Confirm EIN',
+        hintText: '12-1234567',
+      ),
+      keyboardType: TextInputType.number,
     );
   }
 }

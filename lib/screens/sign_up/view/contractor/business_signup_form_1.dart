@@ -54,25 +54,7 @@ class _SignupFormState extends State<BusinessSignUpPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                _nameInput(),
-                const SizedBox(height: 8.0),
-                _doingBusinessAsInput(),
-                const SizedBox(height: 8.0),
-                _websiteInput(),
-                const SizedBox(height: 8.0),
-                _einInput(),
-                const SizedBox(height: 8.0),
-                _confirmEin(),
-                const SizedBox(height: 8.0),
-                _phoneNumberInput(),
-              ],
-            ),
-          ),
+          child: 
         ),
       ),
     );
@@ -80,107 +62,7 @@ class _SignupFormState extends State<BusinessSignUpPage> {
     // );
   }
 
-  Widget _nameInput() {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please Enter Business Name';
-        }
-        return null;
-      },
-      controller: _businessNameController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'Business Name',
-      ),
-    );
-  }
-
-  Widget _doingBusinessAsInput() {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please Enter \'Your Doing Business As\' Name';
-        }
-        return null;
-      },
-      controller: _aliasController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'Doing Business As Name',
-      ),
-    );
-  }
-
-  Widget _websiteInput() {
-    return TextFormField(
-      validator: (value) {
-        if (value.isEmpty) {
-          return 'Please Enter Website';
-        }
-        return null;
-      },
-      controller: _websiteController,
-      decoration: InputDecoration(
-        prefixText: 'https://www.',
-        border: UnderlineInputBorder(),
-        labelText: 'Website',
-      ),
-      keyboardType: TextInputType.url,
-    );
-  }
-
-  Widget _phoneNumberInput() {
-    return TextFormField(
-      validator: (value) {
-        if (value.length != 12) {
-          return 'Please Enter Valid Phone Number With Area Code.';
-        }
-        return null;
-      },
-      controller: _phoneNumberController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'Phone Number',
-      ),
-      keyboardType: TextInputType.phone,
-    );
-  }
-
-  Widget _einInput() {
-    return TextFormField(
-      validator: (value) {
-        if (value.length != 10) {
-          return 'Please Enter Valid EIN';
-        }
-        return null;
-      },
-      controller: _einController,
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'EIN',
-        hintText: '12-1234567',
-      ),
-      keyboardType: TextInputType.number,
-    );
-  }
-
-  Widget _confirmEin() {
-    return TextFormField(
-      controller: _confirmEinController,
-      validator: (val) {
-        if (val.isEmpty) return "";
-        if (val != _einController.text) return 'EINs Do Not Match';
-        return null;
-      },
-      decoration: InputDecoration(
-        border: UnderlineInputBorder(),
-        labelText: 'Confirm EIN',
-        hintText: '12-1234567',
-      ),
-      keyboardType: TextInputType.number,
-    );
-  }
+  
 
   void _signUpButton(BuildContext context, String businessType, int naicsCode) {
     FirebaseService _firebaseService = FirebaseService();
