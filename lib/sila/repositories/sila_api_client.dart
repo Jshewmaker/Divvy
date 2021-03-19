@@ -345,7 +345,48 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_account_balance');
+      throw Exception(jsonDecode(silaResponse.body));
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+  }
+
+  Future<BankAccountBalanceResponse> getBankAccounts(
+      String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": _keys.authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "get_accounts_msg"
+    };
+    String authSignature = await eth.signing(body, _keys.privateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '${_keys.baseUrl}/0.2/get_accounts';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_Accounts');
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -386,12 +427,15 @@ class SilaApiClient {
           body: json.encode(body),
         );
 
+    final response = jsonDecode(silaResponse.body);
+    final LinkAccountResponse linkAccountResponse =
+        LinkAccountResponse.fromJson(response);
+
     if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+      throw Exception(linkAccountResponse.message);
     }
 
-    final response = jsonDecode(silaResponse.body);
-    return LinkAccountResponse.fromJson(response);
+    return linkAccountResponse;
   }
 
   Future<IssueSilaResponse> issueSila(
@@ -424,7 +468,6 @@ class SilaApiClient {
     };
 
     final silaURL = '${_keys.baseUrl}/0.2/issue_sila';
-    print(_keys.baseUrl);
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -468,9 +511,7 @@ class SilaApiClient {
     Keys _keys = Keys();
     _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
-    print(_keys.baseUrl);
-    print(_keys.privateKey);
-    print(_keys.authHandle);
+
     Map body = {
       "header": {
         "created": utcTime,
@@ -498,9 +539,8 @@ class SilaApiClient {
           headers: header,
           body: json.encode(body),
         );
-    print('ehllo' + silaResponse.body);
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_transactions');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -1087,7 +1127,7 @@ class SilaApiClient {
       },
       "message": "redeem_msg",
       "amount": amount,
-      "account_name": user.silaHandle + " plaid account",
+      "account_name": user.silaHandle,
       "processing_type": "STANDARD_ACH"
     };
 
@@ -1108,7 +1148,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /redeem_sila');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

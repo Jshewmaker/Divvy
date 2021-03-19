@@ -48,36 +48,83 @@ class CreateSilaUserScreen extends StatelessWidget {
             },
             child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
                 builder: (context, state) {
-              if (state is GetUserDataForProvider) {
-                //var userprovider = context.repository<UserModelProvider>();
-                //userprovider.add(state.user);
-              }
-              if (state is CreateSilaUserInitial || state is HandleTaken) {
+              if (state is CreateSilaUserInitial) {
                 BlocProvider.of<CreateSilaUserBloc>(context)
-                    .add(CreateSilaUserRequest(handle: _textController.text));
-              }
-
-              if (state is CheckHandleLoadFailure ||
-                  state is RegisterLoadFailure) {
+                    .add(DivvyCheckForHandle());
+              } else if (state is SilaHandleExists) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(SilaRequestKYC());
+              } else if (state is SilaHandleDoesNotExist ||
+                  state is HandleTaken) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(CreateHandle());
+              } else if (state is CreateHandleSuccess) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(SilaCheckHandle(handle: state.handle));
+              } else if (state is CheckHandleSuccess) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(SilaRegisterHandle(handle: state.handle));
+              } else if (state is RegisterSuccess) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(SilaRequestKYC());
+              } else if (state is RegisterFailure) {
                 return Text(
-                  "RegisterLoadFailure: " + state.toString(),
+                  "Reqgistration Failure: " + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
-              }
-
-              if (state is CheckKycLoadFailure) {
+              } else if (state is RequestKYCSuccess) {
+                BlocProvider.of<CreateSilaUserBloc>(context)
+                    .add(SilaCheckKYC());
+              } else if (state is RequestKYCFailure) {
                 return Text(
-                  "KYC Failure: " + state.exception,
+                  "Request KYC Failure: " + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
-              }
-              if (state is CheckKycVerifiationFail) {
+              } else if (state is CheckKycVerifiationFail) {
+                //TODO: put in list view for all tags to show
                 return Text(
                   "KYC Failure: " +
                       state.checkKycResponse.verificationHistory[0].tags[1],
                   style: TextStyle(color: Colors.red),
                 );
+              } else if (state is CheckKycFailure) {
+                return Text(
+                  "KYC Failure: " + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
               }
+
+              ////////////////////////////////////////////////////
+
+              // if (state is GetUserDataForProvider) {
+              //   //var userprovider = context.repository<UserModelProvider>();
+              //   //userprovider.add(state.user);
+              // }
+              // if (state is CreateSilaUserInitial || state is HandleTaken) {
+              //   BlocProvider.of<CreateSilaUserBloc>(context)
+              //       .add(CreateSilaUserRequest(handle: _textController.text));
+              // }
+
+              // if (state is CheckHandleFailure || state is RegisterFailure) {
+              //   return Text(
+              //     "RegisterLoadFailure: " + state.toString(),
+              //     style: TextStyle(color: Colors.red),
+              //   );
+              // }
+
+              // if (state is CheckKycFailure) {
+              //   return Text(
+              //     "KYC Failure: " + state.exception,
+              //     style: TextStyle(color: Colors.red),
+              //   );
+              // }
+              // if (state is CheckKycVerifiationFail) {
+              //   return Text(
+              //     "KYC Failure: " +
+              //         state.checkKycResponse.verificationHistory[0].tags[1],
+              //     style: TextStyle(color: Colors.red),
+              //   );
+              // }
 
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
