@@ -352,6 +352,47 @@ class SilaApiClient {
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
+  Future<BankAccountBalanceResponse> getBankAccounts(
+      String handle, String userPrivateKey) async {
+    Keys _keys = Keys();
+    _keys = await getKeys();
+    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
+    Map body = {
+      "header": {
+        "created": utcTime,
+        "auth_handle": _keys.authHandle,
+        "user_handle": "$handle.silamoney.eth",
+        "version": "0.2",
+        "crypto": "ETH",
+        "reference": "ref"
+      },
+      "message": "get_accounts_msg"
+    };
+    String authSignature = await eth.signing(body, _keys.privateKey);
+    String userSignature = await eth.signing(body, userPrivateKey);
+
+    Map<String, String> header = {
+      "Content-Type": "application/json",
+      "authsignature": authSignature,
+      "usersignature": userSignature,
+    };
+
+    final silaURL = '${_keys.baseUrl}/0.2/get_accounts';
+    final silaResponse = await this.httpClient.post(
+          silaURL,
+          headers: header,
+          body: json.encode(body),
+        );
+
+    if (silaResponse.statusCode != 200) {
+      throw Exception('error connecting to SILA /get_Accounts');
+    }
+
+    final silaHandleResponse = jsonDecode(silaResponse.body);
+    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+  }
+
   Future<LinkAccountResponse> linkAccount(
       String handle, String userPrivateKey, String plaidPublicToken) async {
     Keys _keys = Keys();
@@ -427,7 +468,6 @@ class SilaApiClient {
     };
 
     final silaURL = '${_keys.baseUrl}/0.2/issue_sila';
-    print(_keys.baseUrl);
     final silaResponse = await this.httpClient.post(
           silaURL,
           headers: header,
@@ -471,9 +511,7 @@ class SilaApiClient {
     Keys _keys = Keys();
     _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
-    print(_keys.baseUrl);
-    print(_keys.privateKey);
-    print(_keys.authHandle);
+
     Map body = {
       "header": {
         "created": utcTime,
@@ -501,7 +539,6 @@ class SilaApiClient {
           headers: header,
           body: json.encode(body),
         );
-    print('ehllo' + silaResponse.body);
     if (silaResponse.statusCode != 200) {
       throw Exception(jsonDecode(silaResponse.body));
     }
@@ -1090,7 +1127,7 @@ class SilaApiClient {
       },
       "message": "redeem_msg",
       "amount": amount,
-      "account_name": user.silaHandle + " plaid account",
+      "account_name": user.silaHandle,
       "processing_type": "STANDARD_ACH"
     };
 

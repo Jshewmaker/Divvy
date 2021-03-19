@@ -2,7 +2,7 @@ name: divvy
 description: A new Flutter project.
 publish_to: none
 
-version: 2.0.01+27
+version: 2.1.01+29
 
 environment:
   sdk: ">=2.6.0 <3.0.0"
