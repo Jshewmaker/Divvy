@@ -28,6 +28,13 @@ class _NameAndBdayWidgetState extends State<NameAndBdayWidget> {
   String dayDropDown = '1';
 
   @override
+  void initState() {
+    super.initState();
+    widget.birthdayController.text =
+        '$yearDropDown-$monthDropDown-$dayDropDown';
+  }
+
+  @override
   Widget build(BuildContext context) {
     final _formKey = widget.formKey;
     return Form(

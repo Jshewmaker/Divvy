@@ -216,7 +216,6 @@ class UserEntity extends Equatable {
     return {
       "name": name,
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
-      "identity_value": identityValue,
       "phone": phone,
       "account_type": accountType,
       "bankAccountIsConnected": bankAccountIsConnected,
@@ -231,6 +230,12 @@ class UserEntity extends Equatable {
       "state": state,
       "country": country,
       "postal_code": postalCode,
+    };
+  }
+
+  Map<String, Object> toDocumentIdentityValue() {
+    return {
+      "identity_value": identityValue,
     };
   }
 
