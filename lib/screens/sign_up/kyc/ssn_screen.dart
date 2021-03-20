@@ -3,7 +3,6 @@ import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/widgets/address_widget.dart';
 import 'package:divvy/screens/screens/widgets/name_and_bday_widget.dart';
 import 'package:divvy/screens/screens/widgets/ssn_widget.dart';
-import 'package:divvy/screens/sign_up/kyc/personal_info_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
