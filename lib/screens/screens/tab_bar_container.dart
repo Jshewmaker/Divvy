@@ -4,7 +4,7 @@ import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
-import 'package:divvy/screens/sign_up/kyc/address_screen.dart';
+import 'package:divvy/screens/sign_up/kyc/sign_up/address_screen.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
 import 'package:divvy/sila/models/update_user_info/address.dart';
 import 'package:flutter/material.dart';
