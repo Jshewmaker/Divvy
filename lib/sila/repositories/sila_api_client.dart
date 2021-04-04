@@ -84,63 +84,12 @@ class SilaApiClient {
       {bool isbusinessUser = false}) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    String address = await eth.createEthWallet(isBusinessUser: isbusinessUser);
+    Map body = {"user_id": user.id};
 
-    Map body = {
-      "header": {
-        "reference": '1',
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        //"user_handle": user.silaHandle,
-        "user_handle": handle,
-        "version": "0.2",
-        "crypto": "ETH",
-      },
-      "message": "entity_msg",
-      "address": {
-        "address_alias": "home",
-        "street_address_1": user.streetAddress,
-        "city": user.city,
-        "state": user.state,
-        "country": user.country,
-        "postal_code": user.postalCode,
-      },
-      "identity": {
-        "identity_alias": "SSN",
-        "identity_value": user.identityValue.replaceAll(r'-', '')
-      },
-      "contact": {
-        "phone": user.phone,
-        "contact_alias": "",
-        "email": user.email,
-      },
-      "crypto_entry": {
-        "crypto_alias": "Address 1",
-        "crypto_address": "$address",
-        "crypto_code": "ETH"
-      },
-      "entity": {
-        "birthdate": user.dateOfBirthYYYYMMDD,
-        "entity_name": "",
-        "first_name": user.name.split(" ")[0],
-        "last_name": user.name.split(" ")[1],
-        "relationship": "user"
-      }
-    };
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/register';
+    final silaURL = '${_keys.baseUrl}/register_user';
     final silaResponse = await this.httpClient.post(
           silaURL,
-          headers: header,
           body: json.encode(body),
         );
 
