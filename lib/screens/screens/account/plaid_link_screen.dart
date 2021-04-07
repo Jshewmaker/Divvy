@@ -68,12 +68,31 @@ class PlaidLinkScreen extends StatelessWidget {
                       ),
                       textColor: Colors.white,
                       onPressed: () => plaidLink.launch(context, (result) {
+                        SnackBar snackBar;
                         if (result.token != null) {
                           Navigator.of(context)
                               .push(MaterialPageRoute(
-                                  builder: (contest) =>
-                                      LinkAccountScreen(token: result.token)))
+                                  builder: (contest) => LinkAccountScreen(
+                                        token: result.token,
+                                        accountID: result.accountId,
+                                      )))
                               .then((value) => {
+                                    if (value)
+                                      {
+                                        snackBar = SnackBar(
+                                            content:
+                                                Text('Bank account linked.')),
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar),
+                                      }
+                                    else
+                                      {
+                                        snackBar = SnackBar(
+                                            content: Text(
+                                                'Unable to link bank account. Please try again.')),
+                                        Scaffold.of(context)
+                                            .showSnackBar(snackBar),
+                                      },
                                     BlocProvider.of<WalletScreenBloc>(context)
                                         .add(WalletScreenCheck(initial: true))
                                   });

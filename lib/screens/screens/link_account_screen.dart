@@ -12,9 +12,11 @@ import 'account/plaid_link_screen.dart';
 
 class LinkAccountScreen extends StatelessWidget {
   final String token;
+  final String accountID;
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
-  LinkAccountScreen({Key key, @required this.token}) : super(key: key);
+  LinkAccountScreen({Key key, @required this.token, @required this.accountID})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     return BlocProvider<LinkAccountBloc>(
@@ -24,28 +26,22 @@ class LinkAccountScreen extends StatelessWidget {
           child: BlocListener<LinkAccountBloc, LinkAccountState>(
             listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
-                Navigator.pop(context);
+                Navigator.pop(context, true);
+                ;
               }
               if (state is LinkAccountLoadFailure) {
-                SnackBar snackBar = SnackBar(
-                    content:
-                        Text('Unable to link bank account. Please try again.'));
-                Scaffold.of(context).showSnackBar(snackBar);
+                Navigator.pop(context, false);
               }
-
             },
             child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
               builder: (context, state) {
                 if (state is LinkAccountInitial) {
-                  BlocProvider.of<LinkAccountBloc>(context)
-                      .add(LinkAccountRequest(plaidPublicToken: token));
+                  BlocProvider.of<LinkAccountBloc>(context).add(
+                      LinkAccountRequest(
+                          plaidPublicToken: token, accountID: accountID));
                 }
                 if (state is LinkAccountLoadInProgress) {
                   return Center(child: CircularProgressIndicator());
-                }
-                //if (state is LinkAccountLoadSuccess) {}
-                if (state is LinkAccountLoadFailure) {
-                  return PlaidLinkScreen();
                 }
                 return CircularProgressIndicator();
               },

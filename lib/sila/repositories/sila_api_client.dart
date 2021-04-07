@@ -393,8 +393,8 @@ class SilaApiClient {
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
-  Future<LinkAccountResponse> linkAccount(
-      String handle, String userPrivateKey, String plaidPublicToken) async {
+  Future<LinkAccountResponse> linkAccount(String handle, String userPrivateKey,
+      String plaidPublicToken, String accountID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -410,6 +410,7 @@ class SilaApiClient {
       "message": "link_account_msg",
       "public_token": plaidPublicToken,
       "account_name": "$handle",
+      "selected_account_id": "$accountID",
     };
     String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);

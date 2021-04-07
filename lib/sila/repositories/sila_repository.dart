@@ -52,11 +52,12 @@ class SilaRepository {
   }
 
   ///Link bank account to user's SILA Account
-  Future<LinkAccountResponse> linkAccount(String plaidPublicToken) async {
+  Future<LinkAccountResponse> linkAccount(
+      String plaidPublicToken, String accountID) async {
     UserModel user = await _firebaseService.getUserData();
 
     final LinkAccountResponse response = await silaApiClient.linkAccount(
-        user.silaHandle, user.privateKey, plaidPublicToken);
+        user.silaHandle, user.privateKey, plaidPublicToken, accountID);
     return response;
   }
 
