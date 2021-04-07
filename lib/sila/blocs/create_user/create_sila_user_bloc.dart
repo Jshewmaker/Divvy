@@ -28,63 +28,44 @@ class CreateSilaUserBloc
   Stream<CreateSilaUserState> mapEventToState(
       CreateSilaUserEvent event) async* {
     if (event is CreateSilaUserRequest) {
-      yield CheckHandleLoadInProgress();
-
       try {
         UserModel user = await _firebaseService.getUserData();
-        yield GetUserDataForProvider(user: user);
-        createHandle(user);
-        final RegisterResponse response =
-            await silaRepository.checkHandle(handle);
+        yield RegisterLoadInProgress();
+        final RegisterResponse response = await silaRepository.register(handle);
+        yield RegisterLoadSuccess(registerResponse: response);
+        Map<String, String> data = {"silaHandle": handle};
+        _firebaseService.addDataToFirestoreDocument(collection, data);
 
-        if (response.success != true) {
-          yield HandleTaken(checkHandleResponse: response);
-        } else {
-          yield CheckHandleSuccess(checkHandleResponse: response);
+        try {
+          yield RequestKYCLoadInProgress();
+          final RegisterResponse response = await silaRepository.requestKYC();
+          yield RequestKYCLoadSuccess(requestKycResponse: response);
 
           try {
-            yield RegisterLoadInProgress();
-            final RegisterResponse response =
-                await silaRepository.register(handle);
-            yield RegisterLoadSuccess(registerResponse: response);
-            Map<String, String> data = {"silaHandle": handle};
-            _firebaseService.addDataToFirestoreDocument(collection, data);
+            yield CheckKycLoadInProgress();
+            CheckKycResponse response = await silaRepository.checkKYC();
 
-            try {
-              yield RequestKYCLoadInProgress();
-              final RegisterResponse response =
-                  await silaRepository.requestKYC();
-              yield RequestKYCLoadSuccess(requestKycResponse: response);
-
-              try {
-                yield CheckKycLoadInProgress();
-                CheckKycResponse response = await silaRepository.checkKYC();
-
-                while (response.verificationStatus == "pending") {
-                  yield CheckKycPending();
-                  response = await silaRepository.checkKYC();
-                }
-                if (response.success == true) {
-                  _firebaseService.addDataToFirestoreDocument(
-                      'users', {"kyc_status": 'passed'});
-                  yield CheckKycVerifiationSuccess(checkKycResponse: response);
-                  yield CreateSilaUserSuccess(user: user);
-                } else if (response.verificationStatus == "failed")
-                  yield CheckKycVerifiationFail(checkKycResponse: response);
-                print(
-                    "Verification Status: ${response.verificationStatus} ${response.verificationHistory[0].tags[0]}");
-              } catch (_) {
-                yield CheckKycLoadFailure(exception: _);
-              }
-            } catch (_) {
-              yield RequestKYCLoadFailure(exception: _);
+            while (response.verificationStatus == "pending") {
+              yield CheckKycPending();
+              response = await silaRepository.checkKYC();
             }
+            if (response.success == true) {
+              _firebaseService.addDataToFirestoreDocument(
+                  'users', {"kyc_status": 'passed'});
+              yield CheckKycVerifiationSuccess(checkKycResponse: response);
+              yield CreateSilaUserSuccess(user: user);
+            } else if (response.verificationStatus == "failed")
+              yield CheckKycVerifiationFail(checkKycResponse: response);
+            print(
+                "Verification Status: ${response.verificationStatus} ${response.verificationHistory[0].tags[0]}");
           } catch (_) {
-            yield RegisterLoadFailure(exception: _);
+            yield CheckKycLoadFailure(exception: _);
           }
+        } catch (_) {
+          yield RequestKYCLoadFailure(exception: _);
         }
       } catch (_) {
-        yield CheckHandleLoadFailure(exception: _);
+        yield RegisterLoadFailure(exception: _);
       }
     }
   }

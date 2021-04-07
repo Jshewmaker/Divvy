@@ -40,7 +40,7 @@ class SilaBusinessRepository {
     UserModel user = await _firebaseService.getUserData();
 
     final KYBRegisterResponse response =
-        await silaApiClient.registerBusiness(user);
+        await silaApiClient.registerBusiness(user, user.silaHandle);
     return response;
   }
 

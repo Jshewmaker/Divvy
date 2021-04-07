@@ -6,15 +6,18 @@ import 'package:divvy/sila/models/redeem_sila_model.dart';
 import 'package:divvy/sila/models/transfer_sila_response.dart';
 import 'package:divvy/sila/models/update_user_info/update_user_info_response.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 
 class SilaRepository {
   final SilaApiClient silaApiClient;
   FirebaseService _firebaseService;
+  FirebaseAuth firebaseAuth;
 
   SilaRepository({@required this.silaApiClient}) {
     _firebaseService = FirebaseService();
+    firebaseAuth = FirebaseAuth.instance;
     assert(silaApiClient != null);
   }
 
@@ -35,10 +38,11 @@ class SilaRepository {
 
   ///Rquest KYC for registered SILA user
   Future<RegisterResponse> requestKYC() async {
-    UserModel user = await _firebaseService.getUserData();
+    // UserModel user = await _firebaseService.getUserData();
 
-    final RegisterResponse response =
-        await silaApiClient.requestKYC(user.silaHandle, user.privateKey);
+    FirebaseUser user = await firebaseAuth.currentUser();
+
+    final RegisterResponse response = await silaApiClient.requestKYC(user.uid);
     return response;
   }
 

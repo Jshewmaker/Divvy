@@ -84,9 +84,11 @@ class _AppViewState extends State<AppView> {
                         MaterialPageRoute(
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
-                  } else if (!user.isHomeowner && user.kyc_status == 'failed') {
+                  } else if (!user.isHomeowner &&
+                      (user.kyc_status == 'failed' ||
+                          user.kyc_status == null)) {
                     _navigator.push(HomeownerOrBusinessScreen.route());
-                  } else if (user.isHomeowner && user.silaHandle == null) {
+                  } else if (user.isHomeowner && user.silaHandle == "") {
                     _navigator.push(HomeownerOrBusinessScreen.route());
                   } else if (user.isHomeowner && user.kyc_status == 'failed') {
                     _navigator.push(HomeownerOrBusinessScreen.route());

@@ -32,7 +32,7 @@ class SilaApiClient {
 
   Future<Keys> getKeys() async {
     DocumentSnapshot _documentSnapshot =
-        await Firestore.instance.collection('keys').document('sila').get();
+        await Firestore.instance.collection('keys').document('divvy_api').get();
     return Keys.fromEntity(KeysEntity.fromSnapshot(_documentSnapshot));
   }
 
@@ -84,103 +84,32 @@ class SilaApiClient {
       {bool isbusinessUser = false}) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
+    print('user id: ${user.id}');
+    Map body = {"user_id": user.id};
 
-    String address = await eth.createEthWallet(isBusinessUser: isbusinessUser);
-
-    Map body = {
-      "header": {
-        "reference": '1',
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        //"user_handle": user.silaHandle,
-        "user_handle": handle,
-        "version": "0.2",
-        "crypto": "ETH",
-      },
-      "message": "entity_msg",
-      "address": {
-        "address_alias": "home",
-        "street_address_1": user.streetAddress,
-        "city": user.city,
-        "state": user.state,
-        "country": user.country,
-        "postal_code": user.postalCode,
-      },
-      "identity": {
-        "identity_alias": "SSN",
-        "identity_value": user.identityValue.replaceAll(r'-', '')
-      },
-      "contact": {
-        "phone": user.phone,
-        "contact_alias": "",
-        "email": user.email,
-      },
-      "crypto_entry": {
-        "crypto_alias": "Address 1",
-        "crypto_address": "$address",
-        "crypto_code": "ETH"
-      },
-      "entity": {
-        "birthdate": user.dateOfBirthYYYYMMDD,
-        "entity_name": "",
-        "first_name": user.name.split(" ")[0],
-        "last_name": user.name.split(" ")[1],
-        "relationship": "user"
-      }
-    };
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/register';
+    final silaURL = '${_keys.baseUrl}/register_user';
     final silaResponse = await this.httpClient.post(
           silaURL,
-          headers: header,
           body: json.encode(body),
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error with /register' + silaResponse.body);
+      throw Exception('error with /register ' + silaResponse.body);
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  Future<RegisterResponse> requestKYC(
-      String handle, String userPrivateKey) async {
+  Future<RegisterResponse> requestKYC(userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      }
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
+    Map body = {"user_id": userID};
 
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/request_kyc';
+    final silaURL = '${_keys.baseUrl}/request_kyc';
     final silaResponse = await this.httpClient.post(
           silaURL,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -345,7 +274,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_account_balance');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -427,12 +356,15 @@ class SilaApiClient {
           body: json.encode(body),
         );
 
+    final response = jsonDecode(silaResponse.body);
+    final LinkAccountResponse linkAccountResponse =
+        LinkAccountResponse.fromJson(response);
+
     if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+      throw Exception(linkAccountResponse.message);
     }
 
-    final response = jsonDecode(silaResponse.body);
-    return LinkAccountResponse.fromJson(response);
+    return linkAccountResponse;
   }
 
   Future<IssueSilaResponse> issueSila(
@@ -537,7 +469,7 @@ class SilaApiClient {
           body: json.encode(body),
         );
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_transactions');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -871,8 +803,7 @@ class SilaApiClient {
   /// Requires the user handle and the UserModel to fill out body
   ///
   Future<KYBRegisterResponse> registerBusiness(
-    UserModel user,
-  ) async {
+      UserModel user, String handle) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -882,7 +813,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle + ".silamoney.eth",
+        "user_handle": handle + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
         "version": "0.2"
@@ -1146,7 +1077,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /redeem_sila');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
