@@ -36,68 +36,29 @@ class SilaApiClient {
     return Keys.fromEntity(KeysEntity.fromSnapshot(_documentSnapshot));
   }
 
-  /// Check if a SILA hande is avaible
-  ///
-  /// This does not regiester the handle, just makes sure it is avaible
-  Future<RegisterResponse> checkHandle(String handle) async {
-    Keys _keys = Keys();
-    _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
-
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle,
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-    };
-    String authsignature = await eth.signing(body, _keys.privateKey);
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authsignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/check_handle';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
-          headers: header,
-          body: json.encode(body),
-        );
-
-    if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /check_handle');
-    }
-
-    final silaHandleResponse = jsonDecode(silaResponse.body);
-    return RegisterResponse.fromJson(silaHandleResponse);
-  }
-
   /// Registers user Handle and creates and stores wallet addres in firebase
   /// is SILA ecosystem
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
-  Future<RegisterResponse> register(String handle, UserModel user,
+  Future<RegisterResponse> register(String userID,
       {bool isbusinessUser = false}) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    print('user id: ${user.id}');
-    Map body = {"user_id": user.id};
 
-    final silaURL = '${_keys.baseUrl}/register_user';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    Map body = {"user_id": userID, "is_homeowner": isbusinessUser};
+
+    final url = '${_keys.baseUrl}/register_user';
+    final response = await this.httpClient.post(
+          url,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
-      throw Exception('error with /register ' + silaResponse.body);
+    if (response.statusCode != 200) {
+      throw Exception('error with /register ' + response.body);
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
@@ -107,17 +68,17 @@ class SilaApiClient {
 
     Map body = {"user_id": userID};
 
-    final silaURL = '${_keys.baseUrl}/request_kyc';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/request_kyc';
+    final response = await this.httpClient.post(
+          url,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /request_kyc');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
@@ -146,18 +107,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/request_kyc';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/request_kyc';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /request_kyb');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
@@ -184,59 +145,38 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/check_kyc';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/check_kyc';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /check_kyb');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return CheckKybResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CheckKycResponse> checkKYC(
-      String handle, String userPrivateKey) async {
+  Future<CheckKycResponse> checkKYC(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "header_msg"
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
+    Map body = {"user_id": userID};
 
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/check_kyc';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
-          headers: header,
+    final url = '${_keys.baseUrl}/check_kyc';
+    final response = await this.httpClient.post(
+          url,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /check_KYC');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return CheckKycResponse.fromJson(silaHandleResponse);
   }
 
@@ -266,18 +206,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_account_balance';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_account_balance';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body));
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
@@ -307,60 +247,42 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_accounts';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_accounts';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_Accounts');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
   Future<LinkAccountResponse> linkAccount(
-      String handle, String userPrivateKey, String plaidPublicToken) async {
+      userID, String plaidPublicToken) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
+
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "link_account_msg",
-      "public_token": plaidPublicToken,
-      "account_name": "$handle",
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
+      "user_id": userID,
+      "token": plaidPublicToken,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/link_account';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
-          headers: header,
+    final url = '${_keys.baseUrl}/link_bank_account';
+    final response = await this.httpClient.post(
+          url,
           body: json.encode(body),
         );
 
-    final response = jsonDecode(silaResponse.body);
+    final jsonResponse = jsonDecode(response.body);
     final LinkAccountResponse linkAccountResponse =
-        LinkAccountResponse.fromJson(response);
+        LinkAccountResponse.fromJson(jsonResponse);
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception(linkAccountResponse.message);
     }
 
@@ -396,18 +318,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/issue_sila';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/issue_sila';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body));
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return IssueSilaResponse.fromJson(silaHandleResponse);
   }
 
@@ -420,59 +342,39 @@ class SilaApiClient {
       "Content-Type": "application/json",
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_sila_balance';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_sila_balance';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body));
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetSilaBalanceResponse.fromJson(silaHandleResponse);
   }
 
-  Future<GetTransactionsResponse> getTransactions(
-      String handle, userPrivateKey) async {
+  Future<GetTransactionsResponse> getTransactions(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "get_transactions_msg",
+      "user_id": userID,
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final silaURL = '${_keys.baseUrl}/0.2/get_transactions';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
-          headers: header,
+    final url = '${_keys.baseUrl}/get_transactions';
+    final response = await this.httpClient.post(
+          url,
           body: json.encode(body),
         );
-    if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body));
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetTransactionsResponse.fromJson(silaHandleResponse);
   }
 
@@ -499,18 +401,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_entity';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_entity';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_entity');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetEntityResponse.fromJson(silaHandleResponse);
   }
 
@@ -539,18 +441,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/update/email';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/update/email';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /update_email');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
@@ -579,18 +481,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/update/phone';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/update/phone';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /update_phone');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
@@ -624,18 +526,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/update/identity';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/update/identity';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /update_identity');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
@@ -670,18 +572,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/update/address';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/update/address';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /update_address');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
@@ -718,18 +620,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/update/entity';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/update/entity';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /update_entity');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
@@ -752,18 +654,18 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_business_types';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_business_types';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_business_types');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetBusinessTypeResponse.fromJson(silaHandleResponse);
   }
 
@@ -783,18 +685,18 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_naics_categories';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_naics_categories';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_naics_categories');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetNaicsCategoriesResponse.fromJson(silaHandleResponse);
   }
 
@@ -853,18 +755,18 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/register';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/register';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /register business');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return KYBRegisterResponse.fromJson(silaHandleResponse);
   }
 
@@ -884,18 +786,18 @@ class SilaApiClient {
       "authsignature": authSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/get_business_roles';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/get_business_roles';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_business_roles');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return GetBusinessRolesResponse.fromJson(silaHandleResponse);
   }
 
@@ -941,18 +843,18 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/link_business_member';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/link_business_member';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /link_business_member');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return LinkBusinessMemberResponse.fromJson(silaHandleResponse);
   }
 
@@ -984,18 +886,18 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/certify_beneficial_owner';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/certify_beneficial_owner';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /certify_beneficial_owner');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
@@ -1025,18 +927,18 @@ class SilaApiClient {
       "businesssignature": businessSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/certify_business';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/certify_business';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /certify_business');
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
@@ -1069,18 +971,18 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/redeem_sila';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/redeem_sila';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+    if (response.statusCode != 200) {
+      throw Exception(jsonDecode(response.body));
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return RedeemSilaModel.fromJson(silaHandleResponse);
   }
 
@@ -1115,19 +1017,19 @@ class SilaApiClient {
       "usersignature": userSignature,
     };
 
-    final silaURL = '${_keys.baseUrl}/0.2/transfer_sila';
-    final silaResponse = await this.httpClient.post(
-          silaURL,
+    final url = '${_keys.baseUrl}/0.2/transfer_sila';
+    final response = await this.httpClient.post(
+          url,
           headers: header,
           body: json.encode(body),
         );
 
-    if (silaResponse.statusCode != 200) {
+    if (response.statusCode != 200) {
       //throw Exception('error connecting to SILA /transfer_sila');
-      throw Exception(jsonDecode(silaResponse.body)["message"]);
+      throw Exception(jsonDecode(response.body)["message"]);
     }
 
-    final silaHandleResponse = jsonDecode(silaResponse.body);
+    final silaHandleResponse = jsonDecode(response.body);
     return TransferSilaResponse.fromJson(silaHandleResponse);
   }
 }
