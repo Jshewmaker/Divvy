@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
+import 'package:divvy/sila/models/get_bank_accounts_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
@@ -352,7 +353,7 @@ class SilaApiClient {
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
-  Future<BankAccountBalanceResponse> getBankAccounts(
+  Future<GetBankAccountsResponse> getBankAccounts(
       String handle, String userPrivateKey) async {
     Keys _keys = Keys();
     _keys = await getKeys();
@@ -390,11 +391,11 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+    return GetBankAccountsResponse.fromJson(silaHandleResponse);
   }
 
-  Future<LinkAccountResponse> linkAccount(
-      String handle, String userPrivateKey, String plaidPublicToken) async {
+  Future<LinkAccountResponse> linkAccount(String handle, String userPrivateKey,
+      String plaidPublicToken, String accountID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -410,6 +411,7 @@ class SilaApiClient {
       "message": "link_account_msg",
       "public_token": plaidPublicToken,
       "account_name": "$handle",
+      "selected_account_id": "$accountID",
     };
     String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);

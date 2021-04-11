@@ -1,4 +1,5 @@
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
+import 'package:divvy/sila/models/get_bank_accounts_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -52,11 +53,12 @@ class SilaRepository {
   }
 
   ///Link bank account to user's SILA Account
-  Future<LinkAccountResponse> linkAccount(String plaidPublicToken) async {
+  Future<LinkAccountResponse> linkAccount(
+      String plaidPublicToken, String accountID) async {
     UserModel user = await _firebaseService.getUserData();
 
     final LinkAccountResponse response = await silaApiClient.linkAccount(
-        user.silaHandle, user.privateKey, plaidPublicToken);
+        user.silaHandle, user.privateKey, plaidPublicToken, accountID);
     return response;
   }
 
@@ -183,5 +185,11 @@ class SilaRepository {
       String receiverHandle, String transferMessage) async {
     return await silaApiClient.transferSila(
         sender, amount, receiverHandle, transferMessage);
+  }
+
+  Future<GetBankAccountsResponse> getBankAccounts() async {
+    UserModel user = await _firebaseService.getUserData();
+    return await silaApiClient.getBankAccounts(
+        user.silaHandle, user.privateKey);
   }
 }

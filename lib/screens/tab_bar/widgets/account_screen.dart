@@ -3,6 +3,8 @@ import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dar
 import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/screens/contact_divvy_screen.dart';
+import 'package:divvy/screens/screens/get_bank_accounts_screen.dart';
+import 'package:divvy/screens/screens/issue_sila_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -109,9 +111,9 @@ class AccountScreen extends StatelessWidget {
                 )
               : Container(),
           // RaisedButton(
-          //   child: Text('Issue Sila'),
-          //   onPressed: () => Navigator.of(context).push(
-          //       MaterialPageRoute(builder: (contest) => IssueSilaScreen())),
+          //   child: Text('Show Bank Accounts'),
+          //   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+          //       builder: (contest) => BankAccountInfoScreen())),
           // ),
           // RaisedButton(
           //   child: Text('Get Transactions'),
