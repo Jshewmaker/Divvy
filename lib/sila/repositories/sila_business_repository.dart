@@ -9,14 +9,17 @@ import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categori
 import 'package:divvy/sila/models/kyb/register_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/repositories/sila_api_client.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:meta/meta.dart';
 
 class SilaBusinessRepository {
   final SilaApiClient silaApiClient;
   FirebaseService _firebaseService;
+  FirebaseAuth _firebaseAuth;
 
   SilaBusinessRepository({@required this.silaApiClient}) {
     _firebaseService = FirebaseService();
+    _firebaseAuth = FirebaseAuth.instance;
     assert(silaApiClient != null);
   }
 
@@ -50,9 +53,8 @@ class SilaBusinessRepository {
   }
 
   Future<RegisterResponse> registerBusinessAdmin(UserModel user) async {
-    UserModel user = await _firebaseService.getBusinessUser();
-    return await silaApiClient.register(user.silaHandle, user,
-        isbusinessUser: true);
+    FirebaseUser user = await _firebaseAuth.currentUser();
+    return await silaApiClient.register(user.uid, isbusinessUser: true);
   }
 
   Future<List<LinkBusinessMemberResponse>> linkBusinessMember(

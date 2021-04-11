@@ -21,25 +21,16 @@ class SilaRepository {
     assert(silaApiClient != null);
   }
 
-  /// Check if user handle is avaible in SILA ecosystem
-  Future<RegisterResponse> checkHandle(String handle) async {
-    final RegisterResponse response = await silaApiClient.checkHandle(handle);
-    return response;
-  }
-
   ///Register user in SILA ecosystem
-  Future<RegisterResponse> register(String handle) async {
-    UserModel user = await _firebaseService.getUserData();
+  Future<RegisterResponse> register() async {
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final RegisterResponse response =
-        await silaApiClient.register(handle, user);
+    final RegisterResponse response = await silaApiClient.register(user.uid);
     return response;
   }
 
   ///Rquest KYC for registered SILA user
   Future<RegisterResponse> requestKYC() async {
-    // UserModel user = await _firebaseService.getUserData();
-
     FirebaseUser user = await firebaseAuth.currentUser();
 
     final RegisterResponse response = await silaApiClient.requestKYC(user.uid);
@@ -48,19 +39,18 @@ class SilaRepository {
 
   ///Check Status of KYC in SILA ecosystem
   Future<CheckKycResponse> checkKYC() async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final CheckKycResponse response =
-        await silaApiClient.checkKYC(user.silaHandle, user.privateKey);
+    final CheckKycResponse response = await silaApiClient.checkKYC(user.uid);
     return response;
   }
 
   ///Link bank account to user's SILA Account
   Future<LinkAccountResponse> linkAccount(String plaidPublicToken) async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final LinkAccountResponse response = await silaApiClient.linkAccount(
-        user.silaHandle, user.privateKey, plaidPublicToken);
+    final LinkAccountResponse response =
+        await silaApiClient.linkAccount(user.uid, plaidPublicToken);
     return response;
   }
 
@@ -103,10 +93,10 @@ class SilaRepository {
   ///This will return any transaction that deal with: Adding money to the wallet,
   ///removing money from the wallet, and transfering money from wallet to wallet
   Future<GetTransactionsResponse> getTransactions() async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
     final GetTransactionsResponse response =
-        await silaApiClient.getTransactions(user.silaHandle, user.privateKey);
+        await silaApiClient.getTransactions(user.uid);
     return response;
   }
 

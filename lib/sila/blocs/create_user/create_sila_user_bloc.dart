@@ -31,7 +31,7 @@ class CreateSilaUserBloc
       try {
         UserModel user = await _firebaseService.getUserData();
         yield RegisterLoadInProgress();
-        final RegisterResponse response = await silaRepository.register(handle);
+        final RegisterResponse response = await silaRepository.register();
         yield RegisterLoadSuccess(registerResponse: response);
         Map<String, String> data = {"silaHandle": handle};
         _firebaseService.addDataToFirestoreDocument(collection, data);
@@ -74,12 +74,5 @@ class CreateSilaUserBloc
   void onError(Object error, StackTrace stackTrace) {
     print('$error, $stackTrace');
     super.onError(error, stackTrace);
-  }
-
-  void createHandle(UserModel user) {
-    handle += "divvysafe-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
-    for (int i = 0; i < 5; i++) {
-      handle += random.nextInt(10).toString();
-    }
   }
 }

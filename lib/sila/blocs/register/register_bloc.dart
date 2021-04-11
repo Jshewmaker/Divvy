@@ -18,8 +18,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (event is RegisterRequest) {
       yield RegisterLoadInProgress();
       try {
-        final RegisterResponse handle =
-            await silaRepository.register(event.handle);
+        final RegisterResponse handle = await silaRepository.register();
         Map<String, String> data = {"silaHandle": "divvysafe-$handle"};
         _firebaseService.addDataToFirestoreDocument('users', data);
         yield RegisterLoadSuccess(handle: handle);
