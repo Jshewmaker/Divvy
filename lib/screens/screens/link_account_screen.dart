@@ -26,11 +26,11 @@ class LinkAccountScreen extends StatelessWidget {
           child: BlocListener<LinkAccountBloc, LinkAccountState>(
             listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
-                Navigator.pop(context, true);
-                ;
+                Navigator.pop(context, "Bank account linked.");
               }
               if (state is LinkAccountLoadFailure) {
-                Navigator.pop(context, false);
+                Navigator.pop(
+                    context, "Unable to link bank account. Please try again");
               }
             },
             child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
