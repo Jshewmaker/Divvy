@@ -71,8 +71,10 @@ class PlaidLinkScreen extends StatelessWidget {
                         if (result.token != null) {
                           Navigator.of(context)
                               .push(MaterialPageRoute(
-                                  builder: (contest) =>
-                                      LinkAccountScreen(token: result.token)))
+                                  builder: (contest) => LinkAccountScreen(
+                                        token: result.token,
+                                        accountID: result.accountId,
+                                      )))
                               .then((value) => {
                                     BlocProvider.of<WalletScreenBloc>(context)
                                         .add(WalletScreenCheck(initial: true))
