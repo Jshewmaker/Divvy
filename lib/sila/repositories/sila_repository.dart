@@ -54,31 +54,23 @@ class SilaRepository {
     return response;
   }
 
-  Future<BankAccountBalanceResponse> getBankAccountBalance() async {
-    UserModel user = await _firebaseService.getUserData();
-
-    final BankAccountBalanceResponse response = await silaApiClient
-        .getBankAccountBalance(user.silaHandle, user.privateKey);
-    return response;
-  }
-
   ///Transfer money from user's bank account to SILA account.
   ///
   ///Dollars to SILA is 0.01 = 1 SILA. $784.98 = 78498 SILA
   Future<IssueSilaResponse> issueSila(double amount) async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
     amount = amount * 100;
     final IssueSilaResponse response =
-        await silaApiClient.issueSila(user.silaHandle, user.privateKey, amount);
+        await silaApiClient.issueSila(user.uid, amount);
     return response;
   }
 
   ///Get SILA wallet balance
   Future<GetSilaBalanceResponse> getSilaBalance() async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
     final GetSilaBalanceResponse response =
-        await silaApiClient.getSilaBalance(user.wallet);
+        await silaApiClient.getSilaBalance(user.uid);
     return response;
   }
 
@@ -102,33 +94,26 @@ class SilaRepository {
 
   ///Return User info that is stored in SILA ecosystem
   Future<GetEntityResponse> getEntity() async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final GetEntityResponse response =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
+    final GetEntityResponse response = await silaApiClient.getEntity(user.uid);
     return response;
   }
 
   ///Update email  in SILA ecosystem
   Future<UpdateUserInfo> updateEmail(String newEmail) async {
-    UserModel user = await _firebaseService.getUserData();
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final UpdateUserInfo response = await silaApiClient.updateEmail(
-        user.silaHandle, user.privateKey, entity.emails[0].uuid, newEmail);
+    final UpdateUserInfo response =
+        await silaApiClient.updateEmail(user.uid, newEmail);
     return response;
   }
 
   ///Update phone number in SILA ecosystem
   Future<UpdateUserInfo> updatePhone(String newPhone) async {
-    UserModel user = await _firebaseService.getUserData();
-
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
-
-    final UpdateUserInfo response = await silaApiClient.updatePhone(
-        user.silaHandle, user.privateKey, entity.phones[0].uuid, newPhone);
+    FirebaseUser user = await firebaseAuth.currentUser();
+    final UpdateUserInfo response =
+        await silaApiClient.updatePhone(user.uid, newPhone);
     return response;
   }
 
@@ -137,23 +122,19 @@ class SilaRepository {
   ///Only call this if you are writing a flow where KYC hasnt been process yet
   ///or KYC has failed
   Future<UpdateUserInfo> updateIdentity(String newSSN) async {
-    UserModel user = await _firebaseService.getUserData();
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final UpdateUserInfo response = await silaApiClient.updateIdentity(
-        user.silaHandle, user.privateKey, entity.identities[0].uuid, newSSN);
+    final UpdateUserInfo response =
+        await silaApiClient.updateIdentity(user.uid, newSSN);
     return response;
   }
 
   ///Update address in SILA ecosystem
   Future<UpdateUserInfo> updateAddress(Map<String, String> newAddress) async {
-    UserModel user = await _firebaseService.getUserData();
-    GetEntityResponse entity =
-        await silaApiClient.getEntity(user.silaHandle, user.privateKey);
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final UpdateUserInfo response = await silaApiClient.updateAddress(
-        user.silaHandle, user.privateKey, entity.addresses[0].uuid, newAddress);
+    final UpdateUserInfo response =
+        await silaApiClient.updateAddress(user.uid, newAddress);
     return response;
   }
 
@@ -161,21 +142,22 @@ class SilaRepository {
   ///
   ///Update user's first name, last name, or birthday.
   Future<UpdateUserInfo> updateEntity(Map<String, String> entity) async {
-    UserModel user = await _firebaseService.getUserData();
+    FirebaseUser user = await firebaseAuth.currentUser();
 
-    final UpdateUserInfo response = await silaApiClient.updateEntity(
-        user.silaHandle, user.privateKey, entity);
+    final UpdateUserInfo response =
+        await silaApiClient.updateEntity(user.uid, entity);
     return response;
   }
 
   Future<RedeemSilaModel> redeemSila(int amount) async {
-    UserModel user = await _firebaseService.getUserData();
-    return await silaApiClient.redeemSila(user, amount);
+    FirebaseUser user = await firebaseAuth.currentUser();
+    return await silaApiClient.redeemSila(user.uid, amount);
   }
 
-  Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
-      String receiverHandle, String transferMessage) async {
+  Future<TransferSilaResponse> transferSila(
+      double amount, String destinationHandle, String descriptor) async {
+    FirebaseUser user = await firebaseAuth.currentUser();
     return await silaApiClient.transferSila(
-        sender, amount, receiverHandle, transferMessage);
+        user.uid, amount, destinationHandle, descriptor);
   }
 }

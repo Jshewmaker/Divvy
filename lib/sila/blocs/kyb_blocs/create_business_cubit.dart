@@ -202,9 +202,6 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
       user = await _firebaseService.getUserData();
       emit(RegisterBusinessLoadInProgress(user: user));
       emit(GetUserDataForProvider(user: user));
-      String username = formatUsername(user);
-      Map<String, String> data = {"silaHandle": username};
-      _firebaseService.addDataToFirestoreDocument('users', data);
 
       final response = await _silaBusinessRepository.registerKYB();
       emit(RegisterBusinessSuccess(response));
@@ -213,9 +210,6 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
         FirebaseService _firebaseService = FirebaseService();
 
         UserModel businessAdmin = await _firebaseService.getBusinessUser();
-        String username = formatUsername(businessAdmin);
-        Map<String, String> data = {"silaHandle": username};
-        _firebaseService.addDataToBusinessUserDocument('users', data);
 
         final response =
             await _silaBusinessRepository.registerBusinessAdmin(businessAdmin);
@@ -304,16 +298,6 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
     } catch (_) {
       emit(RegisterBusinessFailure(_));
     }
-  }
-
-  String formatUsername(UserModel user) {
-    Random random = Random();
-    String handle;
-    handle = "divvysafe-" + user.name.replaceAll(' ', '').replaceAll('\'', '');
-    for (int i = 0; i < 5; i++) {
-      handle += random.nextInt(10).toString();
-    }
-    return handle;
   }
 
   String getToken(GetEntityResponse response) {

@@ -13,6 +13,7 @@ class ContactDivvyScreen extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               TextButton(
+                onPressed: () {},
                 child: Text('Phone: 123-123-1234'),
                 // onPressed: UrlLauncher.launch("tel://<phone_number>"),
               ),

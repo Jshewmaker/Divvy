@@ -28,7 +28,7 @@ class FirebaseService {
   void createBusinessAdminInFirestore(String collection, data) async {
     var user = await firebaseAuth.currentUser();
     var documentID = user.uid + '-divvysafeBusinessUser';
-    var businessAdminDocumentID = {'businessAdminDocumentID': documentID};
+    var businessAdminDocumentID = {'business_admin_document_id': documentID};
     addDataToFirestoreDocument(collection, businessAdminDocumentID);
     Firestore.instance
         .collection(collection)

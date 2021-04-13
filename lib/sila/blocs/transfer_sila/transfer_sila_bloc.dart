@@ -17,10 +17,7 @@ class TransferSilaBloc extends Bloc<TransferSilaEvent, TransferSilaState> {
       yield TransferSilaLoadInProgress();
       try {
         final TransferSilaResponse response = await silaRepository.transferSila(
-            event.sender,
-            event.amount,
-            event.receiverHandle,
-            event.transferMessage);
+            event.amount, event.receiverHandle, event.transferMessage);
         yield TransferSilaLoadSuccess(response: response);
       } catch (_) {
         yield TransferSilaLoadFailure(exception: _);

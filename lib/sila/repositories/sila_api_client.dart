@@ -41,12 +41,11 @@ class SilaApiClient {
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
-  Future<RegisterResponse> register(String userID,
-      {bool isbusinessUser = false}) async {
+  Future<RegisterResponse> register(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
 
-    Map body = {"user_id": userID, "is_homeowner": isbusinessUser};
+    Map body = {"user_id": userID};
 
     final url = '${_keys.baseUrl}/register_user';
     final response = await this.httpClient.post(
@@ -82,73 +81,15 @@ class SilaApiClient {
     return RegisterResponse.fromJson(silaHandleResponse);
   }
 
-  Future<RegisterResponse> requestKYB(
-      String handle, String userPrivateKey) async {
+  Future<CheckKybResponse> checkKYB(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle,
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      }
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
+    Map body = {"user_id": userID};
 
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/request_kyc';
+    final url = '${_keys.baseUrl}/check_kyc';
     final response = await this.httpClient.post(
           url,
-          headers: header,
-          body: json.encode(body),
-        );
-
-    if (response.statusCode != 200) {
-      throw Exception('error connecting to SILA /request_kyb');
-    }
-
-    final silaHandleResponse = jsonDecode(response.body);
-    return RegisterResponse.fromJson(silaHandleResponse);
-  }
-
-  Future<CheckKybResponse> checkKYB(
-      String handle, String userPrivateKey) async {
-    Keys _keys = Keys();
-    _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
-
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      }
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/check_kyc';
-    final response = await this.httpClient.post(
-          url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -180,77 +121,15 @@ class SilaApiClient {
     return CheckKycResponse.fromJson(silaHandleResponse);
   }
 
-  Future<BankAccountBalanceResponse> getBankAccountBalance(
-      String handle, String userPrivateKey) async {
+  Future<BankAccountBalanceResponse> getBankAccounts(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "account_name": "$handle plaid account"
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
+    Map body = {"user_id": userID};
 
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_account_balance';
+    final url = '${_keys.baseUrl}/0.2/get_bank_accounts';
     final response = await this.httpClient.post(
           url,
-          headers: header,
-          body: json.encode(body),
-        );
-
-    if (response.statusCode != 200) {
-      throw Exception(jsonDecode(response.body));
-    }
-
-    final silaHandleResponse = jsonDecode(response.body);
-    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
-  }
-
-  Future<BankAccountBalanceResponse> getBankAccounts(
-      String handle, String userPrivateKey) async {
-    Keys _keys = Keys();
-    _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
-
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "get_accounts_msg"
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_accounts';
-    final response = await this.httpClient.post(
-          url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -263,7 +142,7 @@ class SilaApiClient {
   }
 
   Future<LinkAccountResponse> linkAccount(
-      userID, String plaidPublicToken) async {
+      String userID, String plaidPublicToken) async {
     Keys _keys = Keys();
     _keys = await getKeys();
 
@@ -289,39 +168,18 @@ class SilaApiClient {
     return linkAccountResponse;
   }
 
-  Future<IssueSilaResponse> issueSila(
-      String handle, String userPrivateKey, double amount) async {
+  Future<IssueSilaResponse> issueSila(String userID, double amount) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": "$handle.silamoney.eth",
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "issue_msg",
+      "user_id": userID,
       "amount": amount,
-      "account_name": "$handle",
-      "processing_type": "STANDARD_ACH"
-    };
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
     };
 
-    final url = '${_keys.baseUrl}/0.2/issue_sila';
+    final url = '${_keys.baseUrl}/issue_sila';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -333,19 +191,14 @@ class SilaApiClient {
     return IssueSilaResponse.fromJson(silaHandleResponse);
   }
 
-  Future<GetSilaBalanceResponse> getSilaBalance(String address) async {
+  Future<GetSilaBalanceResponse> getSilaBalance(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    Map body = {"address": address};
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-    };
+    Map body = {"user_id": userID};
 
     final url = '${_keys.baseUrl}/0.2/get_sila_balance';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -378,33 +231,15 @@ class SilaApiClient {
     return GetTransactionsResponse.fromJson(silaHandleResponse);
   }
 
-  Future<GetEntityResponse> getEntity(
-      String handle, String userPrivateKey) async {
+  Future<GetEntityResponse> getEntity(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle.split(" ")[0]
-      }
-    };
+    Map body = {"user_id": userID};
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_entity';
+    final url = '${_keys.baseUrl}/get_entity';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -416,35 +251,17 @@ class SilaApiClient {
     return GetEntityResponse.fromJson(silaHandleResponse);
   }
 
-  Future<UpdateUserInfo> updateEmail(String handle, String userPrivateKey,
-      String uuid, String newEmail) async {
+  Future<UpdateUserInfo> updateEmail(String userID, String newEmail) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle
-      },
-      "uuid": uuid,
       "email": newEmail,
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/update/email';
+    final url = '${_keys.baseUrl}/update/email';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -456,35 +273,15 @@ class SilaApiClient {
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
-  Future<UpdateUserInfo> updatePhone(String handle, String userPrivateKey,
-      String uuid, String newPhone) async {
+  Future<UpdateUserInfo> updatePhone(String userID, String newPhone) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle
-      },
-      "uuid": uuid,
-      "phone": newPhone
-    };
+    Map body = {"phone": newPhone};
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/update/phone';
+    final url = '${_keys.baseUrl}/update/phone';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -500,36 +297,18 @@ class SilaApiClient {
   ///
   ///Only call this if you are writing a flow where KYC hasnt been process yet
   ///or KYC has failed
-  Future<UpdateUserInfo> updateIdentity(
-      String handle, String userPrivateKey, String uuid, String ssn) async {
+  Future<UpdateUserInfo> updateIdentity(String userID, String ssn) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle
-      },
-      "uuid": uuid,
-      "identity_alias": "SSN",
-      "identity_value": ssn
+      "alias": "SSN",
+      "value": ssn,
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/update/identity';
+    final url = '${_keys.baseUrl}/update/identity';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -541,19 +320,12 @@ class SilaApiClient {
     return UpdateUserInfo.fromJson(silaHandleResponse);
   }
 
-  Future<UpdateUserInfo> updateAddress(String handle, String userPrivateKey,
-      String uuid, Map<String, String> address) async {
+  Future<UpdateUserInfo> updateAddress(
+      String userID, Map<String, String> address) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
     var _addressList = address.values.toList();
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle
-      },
-      "uuid": uuid,
       "address_alias": 'Main Address',
       "street_address_1": _addressList[0],
       "street_address_2": _addressList[1],
@@ -563,19 +335,9 @@ class SilaApiClient {
       "postal_code": _addressList[5],
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/update/address';
+    final url = '${_keys.baseUrl}/update/address';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -593,37 +355,22 @@ class SilaApiClient {
   ///or KYC has failed
   ///Entity Info: first_name, last_name, entity_name, birthdate
   Future<UpdateUserInfo> updateEntity(
-      String handle, String userPrivateKey, Map<String, String> entity) async {
+      String userID, Map<String, String> entity) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
+
     var _listEntity = entity.values.toList();
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle
-      },
       "first_name": _listEntity[0],
       "last_name": _listEntity[1],
       "entity_name": _listEntity[2],
       "birthdate": _listEntity[3]
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, userPrivateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/update/entity';
+    final url = '${_keys.baseUrl}/update/entity';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -638,28 +385,9 @@ class SilaApiClient {
   Future<GetBusinessTypeResponse> getBusinessTypes() async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-      }
-    };
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_business_types';
-    final response = await this.httpClient.post(
-          url,
-          headers: header,
-          body: json.encode(body),
-        );
+    final url = '${_keys.baseUrl}/get_business_types';
+    final response = await this.httpClient.post(url);
 
     if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_business_types');
@@ -672,25 +400,9 @@ class SilaApiClient {
   Future<GetNaicsCategoriesResponse> getNaicsCategories() async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {"created": utcTime, "auth_handle": _keys.authHandle}
-    };
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_naics_categories';
-    final response = await this.httpClient.post(
-          url,
-          headers: header,
-          body: json.encode(body),
-        );
+    final url = '${_keys.baseUrl}/get_naics_categories';
+    final response = await this.httpClient.post(url);
 
     if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_naics_categories');
@@ -704,61 +416,15 @@ class SilaApiClient {
   ///
   /// Requires the user handle and the UserModel to fill out body
   ///
-  Future<KYBRegisterResponse> registerBusiness(
-      UserModel user, String handle) async {
+  Future<KYBRegisterResponse> registerBusiness(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    int utcTime = DateTime.now().millisecondsSinceEpoch;
-    String address = await eth.createEthWallet(isBusinessUser: false);
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": handle + ".silamoney.eth",
-        "reference": "ref",
-        "crypto": "ETH",
-        "version": "0.2"
-      },
-      "message": "entity_msg",
-      "identity": {
-        "identity_alias": "EIN",
-        "identity_value": user.identityValue
-      },
-      "address": {
-        "address_alias": "Office",
-        "street_address_1": user.streetAddress,
-        "city": user.city,
-        "state": user.state,
-        "country": user.country,
-        "postal_code": user.postalCode,
-      },
-      "contact": {"phone": user.phone, "email": user.email},
-      "entity": {
-        "type": "business",
-        "entity_name": user.name,
-        "business_type": user.businessType,
-        "business_website": user.website,
-        "doing_business_as": user.doingBusinessAsName,
-        "naics_code": user.naicsCode
-      },
-      "crypto_entry": {
-        "crypto_code": "ETH",
-        "crypto_address": address,
-      }
-    };
+    Map body = {"user_id": userID};
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/register';
+    final url = '${_keys.baseUrl}/register_business';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -773,25 +439,9 @@ class SilaApiClient {
   Future<GetBusinessRolesResponse> getBusinessRoles() async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {"created": utcTime, "auth_handle": _keys.authHandle}
-    };
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/get_business_roles';
-    final response = await this.httpClient.post(
-          url,
-          headers: header,
-          body: json.encode(body),
-        );
+    final url = '${_keys.baseUrl}/get_business_roles';
+    final response = await this.httpClient.post(url);
 
     if (response.statusCode != 200) {
       throw Exception('error connecting to SILA /get_business_roles');
@@ -802,51 +452,20 @@ class SilaApiClient {
   }
 
   Future<LinkBusinessMemberResponse> linkBusinessMember(
-      String role, UserModel businessUser, UserModel user,
-      {double ownershipStake = 100}) async {
+    String userID,
+    String role,
+  ) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
-    Map body;
 
-    if (role == "beneficial_owner") {
-      body = {
-        "header": {
-          "created": utcTime,
-          "auth_handle": _keys.authHandle,
-          "user_handle": user.silaHandle,
-          "business_handle": businessUser.silaHandle
-        },
-        "role": role,
-        "ownership_stake": ownershipStake
-      };
-    } else {
-      body = {
-        "header": {
-          "created": utcTime,
-          "auth_handle": _keys.authHandle,
-          "user_handle": user.silaHandle,
-          "business_handle": businessUser.silaHandle
-        },
-        "role": role,
-      };
-    }
-
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, user.privateKey);
-    String businessSignature = await eth.signing(body, businessUser.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-      "businesssignature": businessSignature,
+    var body = {
+      "user_id": userID,
+      "role": role,
     };
 
-    final url = '${_keys.baseUrl}/0.2/link_business_member';
+    final url = '${_keys.baseUrl}/link_business_member';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -859,37 +478,18 @@ class SilaApiClient {
   }
 
   Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(
-      UserModel user, UserModel businessUser, String token) async {
+      String userID, String token) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle,
-        "business_handle": businessUser.silaHandle
-      },
-      "member_handle": user.silaHandle,
-      "certification_token": token,
+      "user_id": userID,
+      "token": token,
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, user.privateKey);
-    String businessSignature = await eth.signing(body, businessUser.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-      "businesssignature": businessSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/certify_beneficial_owner';
+    final url = '${_keys.baseUrl}/certify_beneficial_owner';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -901,36 +501,15 @@ class SilaApiClient {
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
-  Future<CertifyBeneficialOwnerResponse> certifyBusiness(
-      UserModel user, UserModel businessUser) async {
+  Future<CertifyBeneficialOwnerResponse> certifyBusiness(String userID) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
-    Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle,
-        "business_handle": businessUser.silaHandle,
-      }
-    };
+    Map body = {"user_id": userID};
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, user.privateKey);
-    String businessSignature = await eth.signing(body, businessUser.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-      "businesssignature": businessSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/certify_business';
+    final url = '${_keys.baseUrl}/certify_business';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -942,39 +521,18 @@ class SilaApiClient {
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
-  Future<RedeemSilaModel> redeemSila(UserModel user, int amount) async {
+  Future<RedeemSilaModel> redeemSila(String userID, int amount) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle,
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": "ref"
-      },
-      "message": "redeem_msg",
+      "user_id": userID,
       "amount": amount,
-      "account_name": user.silaHandle,
-      "processing_type": "STANDARD_ACH"
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, user.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/redeem_sila';
+    final url = '${_keys.baseUrl}/redeem_sila';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 
@@ -986,41 +544,21 @@ class SilaApiClient {
     return RedeemSilaModel.fromJson(silaHandleResponse);
   }
 
-  Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
-      String receiverHandle, String transferMessage) async {
+  Future<TransferSilaResponse> transferSila(String userID, double amount,
+      String destinationHandle, String descriptor) async {
     Keys _keys = Keys();
     _keys = await getKeys();
-    var utcTime = DateTime.now().millisecondsSinceEpoch;
-    Random _random = Random();
 
     Map body = {
-      "header": {
-        "created": utcTime,
-        "auth_handle": _keys.authHandle,
-        "user_handle": sender.silaHandle,
-        "version": "0.2",
-        "crypto": "ETH",
-        "reference": _random.nextInt(10000).toString(),
-      },
-      "message": "transfer_msg",
-      "destination_handle": receiverHandle,
+      "user_id": userID,
+      "destination_handle": destinationHandle,
       "amount": amount * 100,
-      "descriptor": transferMessage,
+      "descriptor": descriptor,
     };
 
-    String authSignature = await eth.signing(body, _keys.privateKey);
-    String userSignature = await eth.signing(body, sender.privateKey);
-
-    Map<String, String> header = {
-      "Content-Type": "application/json",
-      "authsignature": authSignature,
-      "usersignature": userSignature,
-    };
-
-    final url = '${_keys.baseUrl}/0.2/transfer_sila';
+    final url = '${_keys.baseUrl}/transfer_sila';
     final response = await this.httpClient.post(
           url,
-          headers: header,
           body: json.encode(body),
         );
 

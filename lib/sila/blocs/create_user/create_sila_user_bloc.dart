@@ -18,8 +18,6 @@ class CreateSilaUserBloc
   String collection = "users";
   Random random = Random();
 
-  String handle = "";
-
   CreateSilaUserBloc({@required this.silaRepository})
       : assert(silaRepository != null),
         super(CreateSilaUserInitial());
@@ -33,8 +31,6 @@ class CreateSilaUserBloc
         yield RegisterLoadInProgress();
         final RegisterResponse response = await silaRepository.register();
         yield RegisterLoadSuccess(registerResponse: response);
-        Map<String, String> data = {"silaHandle": handle};
-        _firebaseService.addDataToFirestoreDocument(collection, data);
 
         try {
           yield RequestKYCLoadInProgress();
