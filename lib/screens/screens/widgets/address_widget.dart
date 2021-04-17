@@ -139,6 +139,7 @@ class _AddressWidgetState extends State<AddressWidget> {
       onChanged: (String newValue) {
         setState(() {
           stateDropdownValue = newValue;
+          widget.stateController.text = newValue;
         });
       },
       items: <String>[

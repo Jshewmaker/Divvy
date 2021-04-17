@@ -223,6 +223,14 @@ class UserEntity extends Equatable {
     };
   }
 
+  Map<String, Object> toDocumentNameDOBPhone() {
+    return {
+      "name": name,
+      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "phone": phone,
+    };
+  }
+
   Map<String, Object> toDocumentAddresses() {
     return {
       "street_address_1": streetAddress,
