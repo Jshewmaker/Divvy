@@ -73,7 +73,8 @@ class CreateSilaUserBloc
         UserModel user = await _firebaseService.getUserData();
         CheckKycResponse response = await silaRepository.checkKYC();
 
-        while (response.verificationStatus == "pending") {
+        while (response.verificationStatus == "pending" ||
+            response.verificationHistory[0].verificationStatus == "pending") {
           yield CheckKycPending();
           response = await silaRepository.checkKYC();
         }
@@ -82,7 +83,7 @@ class CreateSilaUserBloc
               .addDataToFirestoreDocument('users', {"kyc_status": 'passed'});
           yield CheckKycVerifiationSuccess(checkKycResponse: response);
           yield CreateSilaUserSuccess(user: user);
-        } else if (response.verificationStatus == "failed")
+        } else //if (response.verificationStatus == "failed")
           yield CheckKycVerifiationFail(checkKycResponse: response);
         print(
             "Verification Status: ${response.verificationStatus} ${response.verificationHistory[0].tags[0]}");

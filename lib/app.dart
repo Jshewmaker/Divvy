@@ -84,15 +84,6 @@ class _AppViewState extends State<AppView> {
                         MaterialPageRoute(
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
-                  } else if (user.accountType == 'business' &&
-                      user.kyc_status == 'failed') {
-                    _navigator.push(CreateSilaBusinessScreen.route());
-                  } else if (user.accountType == 'homeowner' &&
-                      user.silaHandle == null) {
-                    _navigator.push(CreateSilaUserScreen.route());
-                  } else if (user.accountType == 'homeowner' &&
-                      user.kyc_status == 'failed') {
-                    _navigator.push(CreateSilaUserScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(
                       HomeScreen.route(user.id),

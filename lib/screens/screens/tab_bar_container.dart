@@ -4,8 +4,8 @@ import 'package:divvy/Screens/tab_bar/models/models.dart';
 import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
-import 'package:divvy/screens/sign_up/kyc/sign_up/address_screen.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
+import 'package:divvy/screens/tab_bar/widgets/safe_screen.dart';
 import 'package:divvy/sila/models/update_user_info/address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -110,7 +110,7 @@ class TabBarContainer extends StatelessWidget {
   Widget activeTabFunction(activeTab) {
     if (activeTab == AppTab.project) return ProjectScreen();
     if (activeTab == AppTab.transactions) return TransactionsScreen();
-    if (activeTab == AppTab.wallet) return AddressScreen();
+    if (activeTab == AppTab.wallet) return SafeScreen();
     if (activeTab == AppTab.account) return AccountScreen();
     return Container();
   }

@@ -724,12 +724,6 @@ class SilaApiClient {
       },
       "uuid": uuid,
       "address_alias": 'Main Address',
-      "street_address_1": _addressList[0],
-      "street_address_2": _addressList[1],
-      "city": _addressList[2],
-      "state": _addressList[3],
-      "country": _addressList[4],
-      "postal_code": _addressList[5],
     };
 
     String authSignature = await eth.signing(body, _keys.privateKey);
@@ -774,11 +768,12 @@ class SilaApiClient {
         "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
-      "first_name": _listEntity[0],
-      "last_name": _listEntity[1],
-      "entity_name": _listEntity[2],
-      "birthdate": _listEntity[3]
+      // "first_name": _listEntity[0],
+      // "last_name": _listEntity[1],
+      // "entity_name": _listEntity[2],
+      // "birthdate": _listEntity[3]
     };
+    body.addAll(entity);
 
     String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
