@@ -34,38 +34,40 @@ class _AddressUpdateScreenState extends State<AddressUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UpdateSilaUserBloc, UpdateSilaUserState>(
-        listener: (context, state) {
-          if (state is UpdateUserInfoSuccess) {
-            Navigator.pop(context, true);
-          }
-        },
-        child: Scaffold(
-            resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              title: FittedBox(
-                  fit: BoxFit.fitWidth, child: Text('Update Address')),
-              actions: [
-                TextButton(
-                    child: Text(
-                      'Next',
-                      style: TextStyle(
-                          color: Colors.blue,
-                          fontWeight: FontWeight.normal,
-                          fontSize: 18),
-                    ),
-                    onPressed: () =>
-                        BlocProvider.of<UpdateSilaUserBloc>(context)
-                            .add(UpdateAddress(
-                          streetAddress: _streetAddressController.text,
-                          city: _cityController.text,
-                          state: _stateController.text,
-                          postalCode: _zipCodeController.text,
-                          country: "US",
-                        )))
-              ],
-            ),
-            body: Column(
+    return Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          title: FittedBox(fit: BoxFit.fitWidth, child: Text('Update Address')),
+          actions: [
+            TextButton(
+                child: Text(
+                  'Next',
+                  style: TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.normal,
+                      fontSize: 18),
+                ),
+                onPressed: () => BlocProvider.of<UpdateSilaUserBloc>(context)
+                        .add(UpdateAddress(
+                      streetAddress: _streetAddressController.text,
+                      city: _cityController.text,
+                      state: _stateController.text,
+                      postalCode: _zipCodeController.text,
+                      country: "US",
+                    )))
+          ],
+        ),
+        body: BlocListener<UpdateSilaUserBloc, UpdateSilaUserState>(
+            listener: (context, state) {
+              if (state is UpdateUserInfoSuccess) {
+                Navigator.pop(context, true);
+              } else if (state is UpdateUserInfoFailure) {
+                SnackBar snackBar =
+                    SnackBar(content: Text('Update failed. Please try again'));
+                Scaffold.of(context).showSnackBar(snackBar);
+              }
+            },
+            child: Column(
               children: [
                 Center(child: Text(message)),
                 AddressWidget(

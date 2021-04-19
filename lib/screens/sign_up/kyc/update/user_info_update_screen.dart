@@ -33,39 +33,42 @@ class _UserUpdateState extends State<UserInfoUpdateScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<UpdateSilaUserBloc, UpdateSilaUserState>(
-      listener: (context, state) {
-        if (state is UpdateUserInfoSuccess) {
-          Navigator.pop(context, true);
-        }
-      },
-      child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: FittedBox(
-                fit: BoxFit.fitWidth, child: Text('Update Personal Info')),
-            actions: [
-              TextButton(
-                child: Text(
-                  'Next',
-                  style: TextStyle(
-                      color: Colors.blue,
-                      fontWeight: FontWeight.normal,
-                      fontSize: 18),
-                ),
-                onPressed: () => {
-                  BlocProvider.of<UpdateSilaUserBloc>(context)
-                      .add(UpdateUserInfo(
-                    firstName: _firstNameController.text,
-                    lastName: _lastNameController.text,
-                    birthday: _birthdayController.text,
-                    phone: _phoneNumberController.text,
-                  )),
-                },
-              )
-            ],
-          ),
-          body: Column(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title: FittedBox(
+            fit: BoxFit.fitWidth, child: Text('Update Personal Info')),
+        actions: [
+          TextButton(
+            child: Text(
+              'Next',
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.normal,
+                  fontSize: 18),
+            ),
+            onPressed: () => {
+              BlocProvider.of<UpdateSilaUserBloc>(context).add(UpdateUserInfo(
+                firstName: _firstNameController.text,
+                lastName: _lastNameController.text,
+                birthday: _birthdayController.text,
+                phone: _phoneNumberController.text,
+              )),
+            },
+          )
+        ],
+      ),
+      body: BlocListener<UpdateSilaUserBloc, UpdateSilaUserState>(
+          listener: (context, state) {
+            if (state is UpdateUserInfoSuccess) {
+              Navigator.pop(context, true);
+            } else if (state is UpdateUserInfoFailure) {
+              SnackBar snackBar =
+                  SnackBar(content: Text('Update failed. Please try again'));
+              Scaffold.of(context).showSnackBar(snackBar);
+            }
+          },
+          child: Column(
             children: [
               Center(child: Text(message)),
               NameAndBdayWidget(
