@@ -3,6 +3,7 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
+import 'package:divvy/sila/models/bank_accounts_entity.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
@@ -12,6 +13,7 @@ import 'package:divvy/sila/models/kyb/get_business_type_response.dart';
 import 'package:divvy/sila/models/kyb/link_business_member_response.dart';
 import 'package:divvy/sila/models/kyb/naics_categories_models/get_naics_categories_response.dart';
 import 'package:divvy/sila/models/kyb/register_response.dart';
+import 'package:divvy/sila/models/list_of_bank_accounts_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/sila/ethereum_service.dart';
@@ -352,7 +354,7 @@ class SilaApiClient {
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
-  Future<BankAccountBalanceResponse> getBankAccounts(
+  Future<List<ListOfBankAccountsModel>> getBankAccounts(
       String handle, String userPrivateKey) async {
     Keys _keys = Keys();
     _keys = await getKeys();
@@ -390,11 +392,12 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return BankAccountBalanceResponse.fromJson(silaHandleResponse);
+    return ListOfBankAccountsModel.fromEntity(
+        ListOfBankAccountEntities.fromJson(silaHandleResponse));
   }
 
   Future<LinkAccountResponse> linkAccount(String handle, String userPrivateKey,
-      String plaidPublicToken, String accountID) async {
+      String plaidPublicToken, String accountID, String accountName) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -409,7 +412,7 @@ class SilaApiClient {
       },
       "message": "link_account_msg",
       "public_token": plaidPublicToken,
-      "account_name": "$handle",
+      "account_name": "$accountName",
       "selected_account_id": "$accountID",
     };
     String authSignature = await eth.signing(body, _keys.privateKey);

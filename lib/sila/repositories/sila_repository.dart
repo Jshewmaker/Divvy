@@ -1,6 +1,7 @@
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
+import 'package:divvy/sila/models/list_of_bank_accounts_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/models/redeem_sila_model.dart';
 import 'package:divvy/sila/models/transfer_sila_response.dart';
@@ -53,15 +54,27 @@ class SilaRepository {
 
   ///Link bank account to user's SILA Account
   Future<LinkAccountResponse> linkAccount(
-      String plaidPublicToken, String accountID) async {
+      String plaidPublicToken, String accountID, String accountName) async {
     UserModel user = await _firebaseService.getUserData();
 
     final LinkAccountResponse response = await silaApiClient.linkAccount(
-        user.silaHandle, user.privateKey, plaidPublicToken, accountID);
+        user.silaHandle,
+        user.privateKey,
+        plaidPublicToken,
+        accountID,
+        accountName);
     return response;
   }
 
-  Future<BankAccountBalanceResponse> getBankAccountBalance() async {
+  Future<List<BankAccountBalanceResponse>> getBankAccountBalance() async {
+    UserModel user = await _firebaseService.getUserData();
+
+    final List<BankAccountBalanceResponse> response =
+        await silaApiClient.getBankAccounts(user.silaHandle, user.privateKey);
+    return response;
+  }
+
+  Future<ListOfBankAccountsModel> getBankAccounts() async {
     UserModel user = await _firebaseService.getUserData();
 
     final BankAccountBalanceResponse response = await silaApiClient
