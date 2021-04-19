@@ -20,7 +20,7 @@ class LinkAccountBloc extends Bloc<LinkAccountEvent, LinkAccountState> {
       yield LinkAccountLoadInProgress();
       try {
         final LinkAccountResponse response = await silaRepository.linkAccount(
-            event.plaidPublicToken, event.accountID);
+            event.plaidPublicToken, event.accountID, event.accountName);
         FirebaseService _firebaseService = FirebaseService();
         _firebaseService.addDataToFirestoreDocument(
             'users', {"bankAccountIsConnected": true});
