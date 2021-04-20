@@ -113,9 +113,15 @@ class CreateSilaBusinessScreen extends StatelessWidget {
                   style: TextStyle(color: Colors.red),
                 );
               } else if (state is CheckKybNotPassed) {
+                int numOfTags =
+                    state.checkKYBResponse.verificationHistory[0].tags.length;
+                String message = "";
+                for (int i = 0; i < numOfTags; i++) {
+                  message +=
+                      "\n${state.checkKYBResponse.verificationHistory[0].tags[i]}";
+                }
                 return Text(
-                  "Business did not pass KYB" +
-                      state.checkKYBResponse.verificationHistory[0].tags[1],
+                  "Business did not pass KYB" + message,
                   style: TextStyle(color: Colors.red),
                 );
               }
