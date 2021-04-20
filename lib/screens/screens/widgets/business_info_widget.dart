@@ -29,6 +29,8 @@ class BusinessInfoWidget extends StatefulWidget {
 }
 
 class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
+  MaskedTextController confirmEinController =
+      MaskedTextController(mask: '00-0000000');
   @override
   Widget build(BuildContext context) {
     final _formKey = widget.formKey;
@@ -90,19 +92,19 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
   }
 
   Widget _websiteInput() {
+    RegExp regex = RegExp(
+        r"(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&\/=]*)");
     return TextFormField(
       validator: (value) {
         if (value.isEmpty) {
           return 'Please Enter Website';
+        } else if (!regex.hasMatch(value)) {
+          return 'Website is invalid. Please make sure your website has the the correct format';
         }
 
         return null;
       },
       controller: widget.websiteController,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(
-            r'(https?:\/\/)?(www\.)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)|(https?:\/\/)?(www\.)?(?!ww)[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)')),
-      ],
       decoration: InputDecoration(
         prefixText: 'https://www.',
         border: UnderlineInputBorder(),
@@ -149,7 +151,7 @@ class _BusinessInfoWidgetState extends State<BusinessInfoWidget> {
 
   Widget _confirmEin() {
     return TextFormField(
-      controller: widget.confirmEinController,
+      controller: confirmEinController,
       validator: (val) {
         if (val.isEmpty) return "";
         if (val != widget.einController.text) return 'EINs Do Not Match';

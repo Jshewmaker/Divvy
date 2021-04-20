@@ -170,14 +170,18 @@ class UserEntity extends Equatable {
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
-      snap.data['account_type'],
+      snap.data['account_type'] != null
+          ? snap.data['account_type']
+          : snap.data['isHomeowner'] != null
+              ? (snap.data['isHomeowner'] == true ? 'homeowner' : "business")
+              : null,
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
       snap.data['project_id'],
       snap.data['bankAccountIsConnected'],
       snap.data['project_list'],
       snap.data['project_name'],
-      snap.data['kyc_status'],
+      snap.data['kyc_status'] == null ? 'failed' : snap.data['kyc_status'],
     );
   }
 
@@ -216,11 +220,18 @@ class UserEntity extends Equatable {
     return {
       "name": name,
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
-      "identity_value": identityValue,
       "phone": phone,
       "account_type": accountType,
       "bankAccountIsConnected": bankAccountIsConnected,
       "kyc_status": kyc_status,
+    };
+  }
+
+  Map<String, Object> toDocumentNameDOBPhone() {
+    return {
+      "name": name,
+      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "phone": phone,
     };
   }
 
@@ -231,6 +242,12 @@ class UserEntity extends Equatable {
       "state": state,
       "country": country,
       "postal_code": postalCode,
+    };
+  }
+
+  Map<String, Object> toDocumentIdentityValue() {
+    return {
+      "identity_value": identityValue,
     };
   }
 

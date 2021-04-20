@@ -1,5 +1,10 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/screens/custome_loading_indicator.dart';
+import 'package:divvy/screens/sign_up/kyc/update/address_update_screen.dart';
+import 'package:divvy/screens/sign_up/kyc/update/bloc/update_sila_user.dart';
+import 'package:divvy/screens/sign_up/kyc/update/ssn_update_screen.dart';
+import 'package:divvy/screens/sign_up/kyc/update/user_info_update_screen.dart';
+import 'package:divvy/screens/tab_bar/widgets/safe_screen.dart';
 import 'package:divvy/sila/blocs/create_user/create_sila_user.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
@@ -38,12 +43,97 @@ class CreateSilaUserScreen extends StatelessWidget {
           child: BlocListener<CreateSilaUserBloc, CreateSilaUserState>(
             listener: (context, state) {
               if (state is CreateSilaUserSuccess) {
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (contest) => HomeScreen(
-                              userID: state.user.id,
-                            )),
-                    (route) => false);
+                Navigator.of(context).popUntil((route) => route.isFirst);
+              } else if (state is CheckKycVerifiationFail) {
+                List<String> tags =
+                    state.checkKycResponse.verificationHistory[0].tags;
+                for (int i = 0; i < tags.length; i++) {
+                  String tag = tags[i];
+                  String message = "There was an issue with your";
+                  if (tag.contains('Not')) {
+                    if (tag.contains('Address')) {
+                      i = tags.length;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<UpdateSilaUserBloc>(
+                              create: (BuildContext context) =>
+                                  UpdateSilaUserBloc(
+                                      silaRepository: silaRepository),
+                              child: AddressUpdateScreen(
+                                  message: '$message Address'), //
+                            ),
+                          )).then((success) {
+                        if (success != null && success == true) {
+                          BlocProvider.of<CreateSilaUserBloc>(context)
+                              .add(SilaRequestKYC());
+                        }
+                      });
+                    } else if (tag.contains('Name')) {
+                      i = tags.length;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<UpdateSilaUserBloc>(
+                              create: (BuildContext context) =>
+                                  UpdateSilaUserBloc(
+                                      silaRepository: silaRepository),
+                              child: UserInfoUpdateScreen(
+                                  message: '$message name'), //
+                            ),
+                          )).then((success) {
+                        if (success != null && success == true) {
+                          BlocProvider.of<CreateSilaUserBloc>(context)
+                              .add(SilaRequestKYC());
+                        }
+                      });
+                    } else if (tag.contains('DOB')) {
+                      i = tags.length;
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<UpdateSilaUserBloc>(
+                              create: (BuildContext context) =>
+                                  UpdateSilaUserBloc(
+                                      silaRepository: silaRepository),
+                              child: UserInfoUpdateScreen(
+                                  message: '$message date of birth'), //
+                            ),
+                          )).then((success) {
+                        if (success != null && success == true) {
+                          BlocProvider.of<CreateSilaUserBloc>(context)
+                              .add(SilaRequestKYC());
+                        }
+                      });
+                    } else if (tag.contains('SSN')) {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                BlocProvider<UpdateSilaUserBloc>(
+                              create: (BuildContext context) =>
+                                  UpdateSilaUserBloc(
+                                      silaRepository: silaRepository),
+                              child:
+                                  SSNUpdateScreen(message: '$message SSN'), //
+                            ),
+                          )).then((success) {
+                        if (success != null && success == true) {
+                          BlocProvider.of<CreateSilaUserBloc>(context)
+                              .add(SilaRequestKYC());
+                        }
+                      });
+                    }
+                  }
+                }
+                return Text(
+                  "KYC Failure: " +
+                      state.checkKycResponse.verificationHistory[0].tags[1],
+                  style: TextStyle(color: Colors.red),
+                );
               }
             },
             child: BlocBuilder<CreateSilaUserBloc, CreateSilaUserState>(
@@ -78,13 +168,6 @@ class CreateSilaUserScreen extends StatelessWidget {
               } else if (state is RequestKYCFailure) {
                 return Text(
                   "Request KYC Failure: " + state.exception.toString(),
-                  style: TextStyle(color: Colors.red),
-                );
-              } else if (state is CheckKycVerifiationFail) {
-                //TODO: put in list view for all tags to show
-                return Text(
-                  "KYC Failure: " +
-                      state.checkKycResponse.verificationHistory[0].tags[1],
                   style: TextStyle(color: Colors.red),
                 );
               } else if (state is CheckKycFailure) {

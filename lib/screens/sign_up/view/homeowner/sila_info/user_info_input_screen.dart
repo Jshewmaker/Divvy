@@ -98,7 +98,6 @@ class _UserInputState extends State<UserInfoInputScreen> {
           UserModel(
             name: "${_firstNameController.text} ${_lastNameController.text}",
             dateOfBirthYYYYMMDD: _birthdayController.text,
-            // identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
             accountType: widget.accountType,
             bankAccountIsConnected: false,

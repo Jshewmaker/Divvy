@@ -72,7 +72,7 @@ class _SignupFormState extends State<BusinessSignUpPage> {
           UserModel(
                   name: _businessNameController.text,
                   doingBusinessAsName: _aliasController.text,
-                  website: _websiteController.text,
+                  website: 'https://www.${_websiteController.text}',
                   identityValue: _einController.text,
                   phone: _phoneNumberController.text,
                   businessType: businessType,

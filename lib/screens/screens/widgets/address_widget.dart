@@ -6,7 +6,6 @@ class AddressWidget extends StatefulWidget {
   final TextEditingController cityController;
   TextEditingController stateController;
   MaskedTextController zipCodeController = MaskedTextController(mask: '00000');
-  TextEditingController countryController;
   final GlobalKey<FormState> formKey;
 
   AddressWidget(
@@ -24,6 +23,12 @@ class AddressWidget extends StatefulWidget {
 
 class _AddressWidgetState extends State<AddressWidget> {
   String stateDropdownValue = 'AL';
+
+  @override
+  void initState() {
+    super.initState();
+    widget.stateController.text = 'AL';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,10 +99,10 @@ class _AddressWidgetState extends State<AddressWidget> {
   }
 
   Widget _countryInput() {
-    return TextField(
+    return TextFormField(
       readOnly: true,
       enabled: false,
-      controller: widget.countryController,
+      initialValue: 'US',
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Country',
@@ -134,6 +139,7 @@ class _AddressWidgetState extends State<AddressWidget> {
       onChanged: (String newValue) {
         setState(() {
           stateDropdownValue = newValue;
+          widget.stateController.text = newValue;
         });
       },
       items: <String>[

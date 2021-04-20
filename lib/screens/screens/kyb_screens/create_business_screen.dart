@@ -42,7 +42,7 @@ class CreateSilaBusinessScreen extends StatelessWidget {
                 builder: (context, state) {
               if (state is CreateSilaBusinessInitial) {
                 BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(DivvyCheckForBusinessHandle());
+                    .add(CreateBusinessHandle());
               }
 
               //Business Sila Handle Creation + Registration
@@ -64,10 +64,9 @@ class CreateSilaBusinessScreen extends StatelessWidget {
               }
 
               //Admin Sila Handle Creation + Registration
-              else if (state is SilaBusinessHandleExists ||
-                  state is RegisterBusinessSuccess) {
+              else if (state is RegisterBusinessSuccess) {
                 BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(DivvyCheckForAdminHandle());
+                    .add(CreateAdminHandle());
               } else if (state is SilaAdminHandleDoesNotExist ||
                   state is AdminHandleTaken) {
                 BlocProvider.of<CreateSilaBusinessBloc>(context)
@@ -86,8 +85,7 @@ class CreateSilaBusinessScreen extends StatelessWidget {
               }
 
               //Link Business Members
-              else if (state is SilaAdminHandleExists ||
-                  state is RegisterAdminSuccess) {
+              else if (state is RegisterAdminSuccess) {
                 BlocProvider.of<CreateSilaBusinessBloc>(context)
                     .add(LinkBusinessMembers());
               } else if (state is LinkBusinessMembersFailure) {
