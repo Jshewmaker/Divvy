@@ -927,7 +927,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /register business');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

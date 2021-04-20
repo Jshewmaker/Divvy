@@ -170,14 +170,18 @@ class UserEntity extends Equatable {
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
-      snap.data['account_type'],
+      snap.data['account_type'] != null
+          ? snap.data['account_type']
+          : snap.data['isHomeowner'] != null
+              ? (snap.data['isHomeowner'] == true ? 'homeowner' : "business")
+              : null,
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
       snap.data['project_id'],
       snap.data['bankAccountIsConnected'],
       snap.data['project_list'],
       snap.data['project_name'],
-      snap.data['kyc_status'],
+      snap.data['kyc_status'] == null ? 'failed' : snap.data['kyc_status'],
     );
   }
 

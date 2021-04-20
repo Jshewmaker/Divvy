@@ -1,4 +1,5 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
+import 'package:divvy/screens/sign_up/view/contractor/select_business_type_screen.dart';
 import 'package:divvy/screens/sign_up/view/homeowner/sila_info/user_info_input_screen.dart';
 
 import 'package:flutter/material.dart';
@@ -91,9 +92,7 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
                   onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => UserInfoInputScreen(
-                                accountType: 'business',
-                              ))),
+                          builder: (context) => SelectBusinessTypeScreen())),
                 ),
                 const SizedBox(
                   height: 8.0,
