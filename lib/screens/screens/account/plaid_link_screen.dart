@@ -69,14 +69,7 @@ class PlaidLinkScreen extends StatelessWidget {
                       textColor: Colors.white,
                       onPressed: () => plaidLink.launch(context, (result) {
                         if (result.token != null) {
-                          Navigator.of(context)
-                              .push(MaterialPageRoute(
-                                  builder: (contest) =>
-                                      LinkAccountScreen(token: result.token)))
-                              .then((value) => {
-                                    BlocProvider.of<WalletScreenBloc>(context)
-                                        .add(WalletScreenCheck(initial: true))
-                                  });
+                          _navigateAndDisplaySelection(context, result);
                         }
                       }),
                     ),
@@ -92,5 +85,23 @@ class PlaidLinkScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  _navigateAndDisplaySelection(BuildContext context, dynamic result) async {
+    // Navigator.push returns a Future that completes after calling
+    // Navigator.pop on the Selection Screen.
+    final message = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (contest) => LinkAccountScreen(
+              token: result.token,
+              accountID: result.accountId,
+            )));
+    BlocProvider.of<WalletScreenBloc>(context)
+        .add(WalletScreenCheck(initial: true));
+
+    // After the Selection Screen returns a result, hide any previous snackbars
+    // and show the new result.
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(content: Text("$message")));
   }
 }
