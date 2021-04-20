@@ -69,7 +69,16 @@ class PlaidLinkScreen extends StatelessWidget {
                       textColor: Colors.white,
                       onPressed: () => plaidLink.launch(context, (result) {
                         if (result.token != null) {
-                          _navigateAndDisplaySelection(context, result);
+                          Navigator.of(context)
+                              .push(MaterialPageRoute(
+                                  builder: (contest) => LinkAccountScreen(
+                                        token: result.token,
+                                        accountID: result.accountId,
+                                      )))
+                              .then((value) => {
+                                    BlocProvider.of<WalletScreenBloc>(context)
+                                        .add(WalletScreenCheck(initial: true))
+                                  });
                         }
                       }),
                     ),
