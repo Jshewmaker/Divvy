@@ -22,7 +22,9 @@ class Memberships extends Equatable {
       entityName: json['entity_name'],
       role: json['role'],
       details: json['details'],
-      ownershipStake: json['ownership_stake'],
+      ownershipStake: (json['ownership_stake'] != null)
+          ? json['ownership_stake'].toDouble()
+          : null,
       certificationToken: json['certification_token'],
     );
   }

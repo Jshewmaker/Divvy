@@ -62,10 +62,14 @@ class SilaBusinessRepository {
     FirebaseUser user = await _firebaseAuth.currentUser();
 
     List<LinkBusinessMemberResponse> responses = [];
-    for (int i = 0; i < getBusinessRolesResponse.businessRoles.length; i++) {
+    for (int i = 1; i <= getBusinessRolesResponse.businessRoles.length; i++) {
       LinkBusinessMemberResponse response =
           await silaApiClient.linkBusinessMember(
-              user.uid, getBusinessRolesResponse.businessRoles[i].name);
+              user.uid,
+              getBusinessRolesResponse
+                  .businessRoles[
+                      getBusinessRolesResponse.businessRoles.length - i]
+                  .name);
       responses.add(response);
     }
     return responses;
@@ -89,7 +93,7 @@ class SilaBusinessRepository {
   Future<GetEntityResponse> getEntity() async {
     FirebaseUser user = await _firebaseAuth.currentUser();
 
-    return silaApiClient.getEntity(user.uid);
+    return silaApiClient.getEntity(user.uid, true);
   }
 
   Future<CertifyBeneficialOwnerResponse> certifyBeneficialOwner(

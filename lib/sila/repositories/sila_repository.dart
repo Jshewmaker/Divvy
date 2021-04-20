@@ -12,11 +12,9 @@ import 'package:authentication_repository/authentication_repository.dart';
 
 class SilaRepository {
   final SilaApiClient silaApiClient;
-  FirebaseService _firebaseService;
   FirebaseAuth firebaseAuth;
 
   SilaRepository({@required this.silaApiClient}) {
-    _firebaseService = FirebaseService();
     firebaseAuth = FirebaseAuth.instance;
     assert(silaApiClient != null);
   }
@@ -96,7 +94,8 @@ class SilaRepository {
   Future<GetEntityResponse> getEntity() async {
     FirebaseUser user = await firebaseAuth.currentUser();
 
-    final GetEntityResponse response = await silaApiClient.getEntity(user.uid);
+    final GetEntityResponse response =
+        await silaApiClient.getEntity(user.uid, false);
     return response;
   }
 

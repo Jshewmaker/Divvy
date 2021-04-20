@@ -1,10 +1,10 @@
+import 'memberships.dart';
 import 'package:equatable/equatable.dart';
 import "entity.dart";
 import "addresses.dart";
 import "identities.dart";
 import "emails.dart";
 import "phones.dart";
-import "memberships.dart";
 
 class GetEntityResponse extends Equatable {
   final bool success;
@@ -78,7 +78,7 @@ class GetEntityResponse extends Equatable {
       data['phones'] = this.phones.map((v) => v.toJson()).toList();
     }
     if (this.memberships != null) {
-      data['memberships'] = this.memberships.map((v) => v.toJson()).toList();
+      data['members'] = this.memberships.map((v) => v.toJson()).toList();
     }
     return data;
   }

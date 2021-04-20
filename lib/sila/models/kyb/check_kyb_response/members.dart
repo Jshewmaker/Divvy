@@ -6,7 +6,7 @@ class Members extends Equatable {
   final String lastName;
   final String role;
   final String details;
-  final double ownershipStake;
+  final int ownershipStake;
   final String verificationStatus;
   final bool verificationRequired;
   final String verificationId;

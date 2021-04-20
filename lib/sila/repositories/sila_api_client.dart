@@ -231,11 +231,11 @@ class SilaApiClient {
     return GetTransactionsResponse.fromJson(silaHandleResponse);
   }
 
-  Future<GetEntityResponse> getEntity(String userID) async {
+  Future<GetEntityResponse> getEntity(String userID, bool kyb) async {
     Keys _keys = Keys();
     _keys = await getKeys();
 
-    Map body = {"user_id": userID};
+    Map body = {"user_id": userID, "kyb": kyb};
 
     final url = '${_keys.baseUrl}/get_entity';
     final response = await this.httpClient.post(
