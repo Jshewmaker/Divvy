@@ -1,4 +1,5 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/list_bank_accounts_screen.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
 import 'package:divvy/screens/screens/redeem_sila_screen.dart';
@@ -285,12 +286,13 @@ class BalanceCard extends StatelessWidget {
         color: const Color(0xFF1E90FF),
         textColor: Colors.white,
         onPressed: () async {
-          final amount = await Navigator.push(context,
+          final bankAccountAndAmount = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => IssueSilaScreen()));
 
-          if (amount != null) {
-            BlocProvider.of<IssueSilaBloc>(context)
-                .add(IssueSilaRequest(amount: double.parse(amount)));
+          if (bankAccountAndAmount != null) {
+            BlocProvider.of<IssueSilaBloc>(context).add(IssueSilaRequest(
+                amount: double.parse(bankAccountAndAmount[0]),
+                account: bankAccountAndAmount[1]));
           }
 
           // Navigator.of(context).push(MaterialPageRoute(

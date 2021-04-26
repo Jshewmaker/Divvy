@@ -2,19 +2,24 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart';
 
+/*
+List<Photo> parsePhotos(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<Photo>((json) => Photo.fromJson(json)).toList();
+}
+*/
+
 class ListOfBankAccountEntities {
   final List<BankAccountEntity> bankAccounts;
 
   ListOfBankAccountEntities({this.bankAccounts});
 
-  factory ListOfBankAccountEntities.fromJson(Map<String, dynamic> json) {
-    var jsonList = json as List;
-    List<BankAccountEntity> bankAccounts = [];
-    bankAccounts = jsonList
-        .map<BankAccountEntity>((json) => BankAccountEntity.fromJson(json))
-        .toList();
+  factory ListOfBankAccountEntities.fromJson(List<dynamic> parsedJson) {
+    List<BankAccountEntity> accounts = [];
+    accounts = parsedJson.map((i) => BankAccountEntity.fromJson(i)).toList();
 
-    return ListOfBankAccountEntities(bankAccounts: bankAccounts);
+    return new ListOfBankAccountEntities(bankAccounts: accounts);
   }
 }
 

@@ -354,7 +354,7 @@ class SilaApiClient {
     return BankAccountBalanceResponse.fromJson(silaHandleResponse);
   }
 
-  Future<List<ListOfBankAccountsModel>> getBankAccounts(
+  Future<ListOfBankAccountEntities> getBankAccounts(
       String handle, String userPrivateKey) async {
     Keys _keys = Keys();
     _keys = await getKeys();
@@ -392,8 +392,7 @@ class SilaApiClient {
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
-    return ListOfBankAccountsModel.fromEntity(
-        ListOfBankAccountEntities.fromJson(silaHandleResponse));
+    return ListOfBankAccountEntities.fromJson(silaHandleResponse);
   }
 
   Future<LinkAccountResponse> linkAccount(String handle, String userPrivateKey,
@@ -439,8 +438,8 @@ class SilaApiClient {
     return LinkAccountResponse.fromJson(response);
   }
 
-  Future<IssueSilaResponse> issueSila(
-      String handle, String userPrivateKey, double amount) async {
+  Future<IssueSilaResponse> issueSila(String handle, String userPrivateKey,
+      double amount, String account) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -456,7 +455,7 @@ class SilaApiClient {
       },
       "message": "issue_msg",
       "amount": amount,
-      "account_name": "$handle",
+      "account_name": account,
       "processing_type": "STANDARD_ACH"
     };
     String authSignature = await eth.signing(body, _keys.privateKey);
