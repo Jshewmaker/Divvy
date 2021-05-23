@@ -26,7 +26,8 @@ class GetSilaBalanceResponse extends Equatable {
       success: json['success'],
       status: json['status'],
       address: json['address'],
-      silaBalance: json['sila_balance'],
+      silaBalance:
+          json['sila_balance'] != null ? json['sila_balance'].toDouble() : null,
     );
   }
 }

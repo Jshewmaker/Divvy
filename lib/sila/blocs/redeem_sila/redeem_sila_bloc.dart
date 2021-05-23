@@ -7,10 +7,6 @@ import 'package:flutter/material.dart';
 
 import 'redeem_sila.dart';
 
-///You can only update SSN before KYC is processed.
-///
-///Only call this if you are writing a flow where KYC hasnt been process yet
-///or KYC has failed
 class RedeemSilaBloc extends Bloc<RedeemSilaEvent, RedeemSilaState> {
   final SilaRepository silaRepository;
 
@@ -23,7 +19,8 @@ class RedeemSilaBloc extends Bloc<RedeemSilaEvent, RedeemSilaState> {
     if (event is RedeemSilaRequest) {
       yield RedeemSilaLoadInProgress();
       try {
-        final response = await silaRepository.redeemSila(event.amount);
+        final response =
+            await silaRepository.redeemSila(event.account, event.amount);
         yield RedeemSilaLoadSuccess(response);
       } catch (_) {
         yield RedeemSilaLoadFailure();

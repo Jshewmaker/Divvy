@@ -1112,7 +1112,8 @@ class SilaApiClient {
     return CertifyBeneficialOwnerResponse.fromJson(silaHandleResponse);
   }
 
-  Future<RedeemSilaModel> redeemSila(UserModel user, int amount) async {
+  Future<RedeemSilaModel> redeemSila(
+      UserModel user, String account, int amount) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     var utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -1128,7 +1129,7 @@ class SilaApiClient {
       },
       "message": "redeem_msg",
       "amount": amount,
-      "account_name": user.silaHandle,
+      "account_name": account,
       "processing_type": "STANDARD_ACH"
     };
 

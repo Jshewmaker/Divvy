@@ -50,8 +50,8 @@ class _NameBankAccountScreenState extends State<NameBankAccountScreen> {
                       accountID: widget.accountID,
                       accountName: textEditingController.text)));
         },
-        tooltip: 'Show me the value!',
-        child: Icon(Icons.text_fields),
+
+        child: Icon(Icons.add),
       ),
     );
   }

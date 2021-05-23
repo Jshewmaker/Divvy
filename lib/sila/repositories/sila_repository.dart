@@ -181,9 +181,9 @@ class SilaRepository {
     return response;
   }
 
-  Future<RedeemSilaModel> redeemSila(int amount) async {
+  Future<RedeemSilaModel> redeemSila(String account, int amount) async {
     UserModel user = await _firebaseService.getUserData();
-    return await silaApiClient.redeemSila(user, amount);
+    return await silaApiClient.redeemSila(user, account, amount);
   }
 
   Future<TransferSilaResponse> transferSila(UserModel sender, double amount,
