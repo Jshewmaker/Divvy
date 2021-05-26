@@ -69,24 +69,6 @@ class PlaidLinkScreen extends StatelessWidget {
                       ),
                       textColor: Colors.white,
                       onPressed: () => plaidLink.launch(context, (result) {
-/*
-IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () async {
-              final city = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CitySelection(),
-                ),
-              );
-              if (city != null) {
-                BlocProvider.of<WeatherBloc>(context)
-                    .add(WeatherRequested(city: city));
-              }
-            },
-          )
-*/
-
                         if (result.token != null) {
                           Navigator.of(context)
                               .push(MaterialPageRoute(

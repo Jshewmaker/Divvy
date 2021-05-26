@@ -34,25 +34,44 @@ class _NameBankAccountScreenState extends State<NameBankAccountScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: TextField(
-          controller: textEditingController,
+        child: Column(
+          children: [
+            TextField(
+              controller: textEditingController,
+            ),
+            RaisedButton(
+                child: Text('Add Bank Account'),
+                shape: (RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30))),
+                color: const Color(0xFF1E90FF),
+                textColor: Colors.white,
+                onPressed: () {
+                  Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => LinkAccountScreen(
+                              token: widget.token,
+                              accountID: widget.accountID,
+                              accountName: textEditingController.text)));
+                })
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        // When the user presses the button, show an alert dialog containing
-        // the text that the user has entered into the text field.
-        onPressed: () {
-          Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => LinkAccountScreen(
-                      token: widget.token,
-                      accountID: widget.accountID,
-                      accountName: textEditingController.text)));
-        },
+      // floatingActionButton: FloatingActionButton(
+      //   // When the user presses the button, show an alert dialog containing
+      //   // the text that the user has entered into the text field.
+      //   onPressed: () {
+      //     Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(
+      //             builder: (context) => LinkAccountScreen(
+      //                 token: widget.token,
+      //                 accountID: widget.accountID,
+      //                 accountName: textEditingController.text)));
+      //   },
 
-        child: Icon(Icons.add),
-      ),
+      //   child: Icon(Icons.add),
+      // ),
     );
   }
 }

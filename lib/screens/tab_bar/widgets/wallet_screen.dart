@@ -2,12 +2,14 @@ import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/list_bank_accounts_screen.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
+import 'package:divvy/screens/screens/name_bank_account_screen.dart';
 import 'package:divvy/screens/screens/redeem_sila_screen.dart';
 import 'package:divvy/sila/blocs/issue_sila/issue_sila.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_bloc.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_event.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_state.dart';
 import 'package:divvy/sila/models/models.dart';
+import 'package:divvy/sila/plaid/plaid_link/newplaidlink.dart';
 import 'package:flutter/material.dart';
 
 import 'package:divvy/sila/blocs/get_sila_balance/get_sila_balance.dart';
@@ -30,6 +32,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final PlaidLink plaidLink = PlaidLink();
     UserModel user = Provider.of<UserModel>(context);
     return MultiBlocProvider(
       providers: [
@@ -104,6 +107,21 @@ class _WalletScreenState extends State<WalletScreen> {
               },
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text('Add Bank'),
+          onPressed: () => plaidLink.launch(context, (result) {
+            if (result.token != null) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (contest) => NameBankAccountScreen(
+                          result.accountId, result.token)))
+                  .then((value) => {
+                        BlocProvider.of<WalletScreenBloc>(context)
+                            .add(WalletScreenCheck(initial: true))
+                      });
+            }
+          }),
         ),
       ),
     );
