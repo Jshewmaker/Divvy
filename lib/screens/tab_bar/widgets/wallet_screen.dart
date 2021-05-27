@@ -110,6 +110,7 @@ class _WalletScreenState extends State<WalletScreen> {
         ),
         floatingActionButton: FloatingActionButton.extended(
           label: Text('Add Bank'),
+          backgroundColor: Colors.teal[200],
           onPressed: () => plaidLink.launch(context, (result) {
             if (result.token != null) {
               Navigator.of(context)
