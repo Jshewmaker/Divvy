@@ -1,12 +1,15 @@
 import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/list_bank_accounts_screen.dart';
 import 'package:divvy/screens/screens/account/plaid_link_screen.dart';
 import 'package:divvy/screens/screens/issue_sila_screen.dart';
+import 'package:divvy/screens/screens/name_bank_account_screen.dart';
 import 'package:divvy/screens/screens/redeem_sila_screen.dart';
 import 'package:divvy/sila/blocs/issue_sila/issue_sila.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_bloc.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_event.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_state.dart';
 import 'package:divvy/sila/models/models.dart';
+import 'package:divvy/sila/plaid/plaid_link/newplaidlink.dart';
 import 'package:flutter/material.dart';
 
 import 'package:divvy/sila/blocs/get_sila_balance/get_sila_balance.dart';
@@ -29,6 +32,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final PlaidLink plaidLink = PlaidLink();
     UserModel user = Provider.of<UserModel>(context);
     return MultiBlocProvider(
       providers: [
@@ -94,6 +98,22 @@ class _WalletScreenState extends State<WalletScreen> {
               return Container();
             },
           ),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          label: Text('Add Bank'),
+          backgroundColor: Colors.teal[200],
+          onPressed: () => plaidLink.launch(context, (result) {
+            if (result.token != null) {
+              Navigator.of(context)
+                  .push(MaterialPageRoute(
+                      builder: (contest) => NameBankAccountScreen(
+                          result.accountId, result.token)))
+                  .then((value) => {
+                        BlocProvider.of<WalletScreenBloc>(context)
+                            .add(WalletScreenCheck(initial: true))
+                      });
+            }
+          }),
         ),
       ),
     );
@@ -277,17 +297,14 @@ class BalanceCard extends StatelessWidget {
         color: const Color(0xFF1E90FF),
         textColor: Colors.white,
         onPressed: () async {
-          final amount = await Navigator.push(context,
+          final bankAccountAndAmount = await Navigator.push(context,
               MaterialPageRoute(builder: (context) => IssueSilaScreen()));
 
-          if (amount != null) {
-            BlocProvider.of<IssueSilaBloc>(context)
-                .add(IssueSilaRequest(amount: double.parse(amount)));
+          if (bankAccountAndAmount != null) {
+            BlocProvider.of<IssueSilaBloc>(context).add(IssueSilaRequest(
+                amount: double.parse(bankAccountAndAmount[0]),
+                account: bankAccountAndAmount[1]));
           }
-
-          // Navigator.of(context).push(MaterialPageRoute(
-
-          //     builder: (contest) => IssueSilaScreen()));
         },
       );
     } else {
@@ -297,13 +314,13 @@ class BalanceCard extends StatelessWidget {
             (RoundedRectangleBorder(borderRadius: BorderRadius.circular(30))),
         color: const Color(0xFF1E90FF),
         textColor: Colors.white,
-        onPressed: (amountSila > 0)
+        onPressed: (amountSila < 0)
             ? () async {
                 final message = await Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => RedeemSilaScreen(
-                            amount: (amountSila * 100).round())));
+                        builder: (context) =>
+                            RedeemSilaScreen((amountSila * 100))));
 
                 if (message != null) {
                   final snackBar = SnackBar(content: Text(message));
