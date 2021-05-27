@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/bank_accounts_entity.dart';
+
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/kyb/certify_business_owner_response.dart';
@@ -347,7 +348,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_account_balance');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -355,6 +356,7 @@ class SilaApiClient {
   }
 
   Future<ListOfBankAccountEntities> getBankAccounts(
+
       String handle, String userPrivateKey) async {
     Keys _keys = Keys();
     _keys = await getKeys();
@@ -393,6 +395,7 @@ class SilaApiClient {
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
     return ListOfBankAccountEntities.fromJson(silaHandleResponse);
+
   }
 
   Future<LinkAccountResponse> linkAccount(String handle, String userPrivateKey,
@@ -430,12 +433,15 @@ class SilaApiClient {
           body: json.encode(body),
         );
 
+    final response = jsonDecode(silaResponse.body);
+    final LinkAccountResponse linkAccountResponse =
+        LinkAccountResponse.fromJson(response);
+
     if (silaResponse.statusCode != 200) {
-      throw Exception(jsonDecode(silaResponse.body));
+      throw Exception(linkAccountResponse.message);
     }
 
-    final response = jsonDecode(silaResponse.body);
-    return LinkAccountResponse.fromJson(response);
+    return linkAccountResponse;
   }
 
   Future<IssueSilaResponse> issueSila(String handle, String userPrivateKey,
@@ -540,7 +546,7 @@ class SilaApiClient {
           body: json.encode(body),
         );
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /get_transactions');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -724,12 +730,6 @@ class SilaApiClient {
       },
       "uuid": uuid,
       "address_alias": 'Main Address',
-      "street_address_1": _addressList[0],
-      "street_address_2": _addressList[1],
-      "city": _addressList[2],
-      "state": _addressList[3],
-      "country": _addressList[4],
-      "postal_code": _addressList[5],
     };
 
     String authSignature = await eth.signing(body, _keys.privateKey);
@@ -774,11 +774,12 @@ class SilaApiClient {
         "auth_handle": _keys.authHandle,
         "user_handle": handle
       },
-      "first_name": _listEntity[0],
-      "last_name": _listEntity[1],
-      "entity_name": _listEntity[2],
-      "birthdate": _listEntity[3]
+      // "first_name": _listEntity[0],
+      // "last_name": _listEntity[1],
+      // "entity_name": _listEntity[2],
+      // "birthdate": _listEntity[3]
     };
+    body.addAll(entity);
 
     String authSignature = await eth.signing(body, _keys.privateKey);
     String userSignature = await eth.signing(body, userPrivateKey);
@@ -874,8 +875,7 @@ class SilaApiClient {
   /// Requires the user handle and the UserModel to fill out body
   ///
   Future<KYBRegisterResponse> registerBusiness(
-    UserModel user,
-  ) async {
+      UserModel user, String handle) async {
     Keys _keys = Keys();
     _keys = await getKeys();
     int utcTime = DateTime.now().millisecondsSinceEpoch;
@@ -885,7 +885,7 @@ class SilaApiClient {
       "header": {
         "created": utcTime,
         "auth_handle": _keys.authHandle,
-        "user_handle": user.silaHandle + ".silamoney.eth",
+        "user_handle": handle + ".silamoney.eth",
         "reference": "ref",
         "crypto": "ETH",
         "version": "0.2"
@@ -933,7 +933,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /register business');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);
@@ -1150,7 +1150,7 @@ class SilaApiClient {
         );
 
     if (silaResponse.statusCode != 200) {
-      throw Exception('error connecting to SILA /redeem_sila');
+      throw Exception(jsonDecode(silaResponse.body));
     }
 
     final silaHandleResponse = jsonDecode(silaResponse.body);

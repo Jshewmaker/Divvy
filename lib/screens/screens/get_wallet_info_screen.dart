@@ -38,7 +38,7 @@ class GetWalletInfoScreen extends StatelessWidget {
               }
               if (state is GetSilaBalanceLoadFailure) {
                 return Text(
-                  'Something went wrong with sila_balance!',
+                  'Something went wrong with sila_balance! ${state.exception.toString()}',
                   style: TextStyle(color: Colors.red),
                 );
               }

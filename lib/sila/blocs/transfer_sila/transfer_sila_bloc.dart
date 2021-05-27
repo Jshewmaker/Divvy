@@ -24,6 +24,7 @@ class TransferSilaBloc extends Bloc<TransferSilaEvent, TransferSilaState> {
         yield TransferSilaLoadSuccess(response: response);
       } catch (_) {
         yield TransferSilaLoadFailure(exception: _);
+        print('error caught: $_');
       }
     }
   }
