@@ -7,7 +7,9 @@ abstract class IssueSilaEvent extends Equatable {
 
 class IssueSilaRequest extends IssueSilaEvent {
   final double amount;
-  const IssueSilaRequest({@required this.amount}) : assert(amount != null);
+  final String account;
+  const IssueSilaRequest({@required this.amount, this.account})
+      : assert(amount != null);
   @override
   List<Object> get props => [amount];
 }
