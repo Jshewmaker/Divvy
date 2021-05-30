@@ -95,10 +95,10 @@ class AuthenticationRepository {
   //     throw LogInWithGoogleFailure();
   //   }
   // }
-
   /// Signs in with the provided [email] and [password].
   ///
   /// Throws a [LogInWithEmailAndPasswordFailure] if an exception occurs.
+  ///
   Future<void> logInWithEmailAndPassword({
     @required String email,
     @required String password,
