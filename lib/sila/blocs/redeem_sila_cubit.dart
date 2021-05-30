@@ -16,7 +16,11 @@ class RedeemSilaLoadSuccess extends RedeemSilaState {
   final RedeemSilaModel response;
 }
 
-class RedeemSilaLoadFailure extends RedeemSilaState {}
+class RedeemSilaLoadFailure extends RedeemSilaState {
+  RedeemSilaLoadFailure(this.exception);
+
+  final Exception exception;
+}
 
 class RedeemSilaCubit extends Cubit<RedeemSilaState> {
   RedeemSilaCubit(this._silaRepository) : super(RedeemSilaInitial());
@@ -29,7 +33,7 @@ class RedeemSilaCubit extends Cubit<RedeemSilaState> {
       final response = await _silaRepository.redeemSila(amount);
       emit(RedeemSilaLoadSuccess(response));
     } catch (_) {
-      emit(RedeemSilaLoadFailure());
+      emit(RedeemSilaLoadFailure(_));
     }
   }
 }

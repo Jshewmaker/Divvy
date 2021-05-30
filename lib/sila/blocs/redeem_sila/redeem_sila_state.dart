@@ -18,4 +18,11 @@ class RedeemSilaLoadSuccess extends RedeemSilaState {
   final RedeemSilaModel response;
 }
 
-class RedeemSilaLoadFailure extends RedeemSilaState {}
+class RedeemSilaLoadFailure extends RedeemSilaState {
+  final Exception exception;
+
+  const RedeemSilaLoadFailure({this.exception}) : assert(exception != null);
+
+  @override
+  List<Object> get props => [exception];
+}

@@ -45,7 +45,7 @@ class TransactionsScreen extends StatelessWidget {
               }
               if (state is GetTransactionsLoadFailure) {
                 return Text(
-                  'Something went wrong with /get_transactions!',
+                  'Something went wrong with /get_transactions! ${state.exception.toString()}',
                   style: TextStyle(color: Colors.red),
                 );
               }
