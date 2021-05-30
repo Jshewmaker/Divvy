@@ -37,7 +37,7 @@ class GetSilaBalanceBloc
         }
       } catch (_) {
         print('error caught: $_');
-        yield GetSilaBalanceLoadFailure(exception: _);
+        yield GetSilaBalanceLoadFailure();
       }
     }
   }

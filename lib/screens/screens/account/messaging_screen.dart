@@ -4,6 +4,7 @@ import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:flutter/material.dart';
 import 'package:authentication_repository/src/models/project_line_items/messages.dart';
 import 'package:http/http.dart' as http;
+import 'package:provider/provider.dart';
 
 import 'messaging_widget.dart';
 
@@ -28,7 +29,7 @@ class MessagingScreen extends StatelessWidget {
     return WillPopScope(
       onWillPop: () {
         print("user hit back button");
-        String field = (user.accountType == 'homeowner')
+        String field = (user.isHomeowner)
             ? "new_message_from_gc"
             : "new_message_from_homeowner";
 
@@ -77,7 +78,7 @@ class _ChatState extends State<Chat> {
         Message(id: user.id, message: message, timestamp: Timestamp.now());
     _firebaseService.addMessage(
         project.projectID, lineItem.id, messageModel.toMap());
-    String field = (user.accountType == 'homeowner')
+    String field = (user.isHomeowner)
         ? "new_message_from_homeowner"
         : "new_message_from_gc";
 

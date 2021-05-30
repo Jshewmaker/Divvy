@@ -128,7 +128,7 @@ class CheckKybFailure extends CreateSilaBusinessState {
 class CheckKybNotPassed extends CreateSilaBusinessState {
   CheckKybNotPassed(this.response);
 
-  final CheckKybResponse response;
+  final String response;
 }
 
 //get entity
@@ -206,7 +206,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
       Map<String, String> data = {"silaHandle": username};
       _firebaseService.addDataToFirestoreDocument('users', data);
 
-      final response = await _silaBusinessRepository.registerKYB(username);
+      final response = await _silaBusinessRepository.registerKYB();
       emit(RegisterBusinessSuccess(response));
 
       try {
@@ -218,7 +218,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
         _firebaseService.addDataToBusinessUserDocument('users', data);
 
         final response =
-            await _silaBusinessRepository.registerBusinessAdmin(username);
+            await _silaBusinessRepository.registerBusinessAdmin(businessAdmin);
         emit(RegisterBusinessRoleLoadSuccess(response));
 
         try {
@@ -284,7 +284,7 @@ class CreateSilaBusinessCubit extends Cubit<CreateSilaBusinessState> {
                     emit(GetEntityFailure(_));
                   }
                 } else {
-                  emit(CheckKybNotPassed(checkKYBResponse));
+                  emit(CheckKybNotPassed(checkKYBResponse.message));
                 }
               } catch (_) {
                 emit(CheckKybFailure(_));

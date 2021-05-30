@@ -5,7 +5,6 @@ import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:divvy/screens/screens/kyb_screens/create_business_screen.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
 import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_1.dart';
-import 'package:divvy/screens/sign_up/view/contractor/business_signup_form_2.dart';
 import 'package:divvy/screens/sign_up/view/homeowner_or_business.dart';
 import 'package:divvy/sila/blocs/blocs.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
@@ -76,21 +75,24 @@ class _AppViewState extends State<AppView> {
                 case AuthenticationStatus.authenticated:
                   UserModel user = state.user;
 
-                  if (user == null || user.name == null)
+                  if (user == null)
                     _navigator.pushReplacement(MaterialPageRoute(
                         builder: (context) => HomeownerOrBusinessScreen()));
-                  else if (user.accountType == 'business' &&
+                  else if (!user.isHomeowner &&
                       user.businessAdminDocumentID == null) {
                     _navigator.pushAndRemoveUntil(
                         MaterialPageRoute(
                             builder: (context) => BusinessAdminSignupPage1()),
                         (route) => false);
-                  } else if (user.accountType == 'business' &&
-                      user.kyc_status != 'passed') {
+                  } else if (!user.isHomeowner && user.kyc_status == 'failed') {
+                    _navigator.push(HomeownerOrBusinessScreen.route());
+                  } else if (user.isHomeowner && user.silaHandle == null) {
+                    _navigator.push(HomeownerOrBusinessScreen.route());
+                  } else if (user.isHomeowner && user.kyc_status == 'failed') {
                     _navigator.push(HomeownerOrBusinessScreen.route());
                   } else {
                     _navigator.pushAndRemoveUntil<void>(
-                      HomeScreen.route(user.id),
+                      HomeScreen.route(user),
                       (route) => false,
                     );
                   }

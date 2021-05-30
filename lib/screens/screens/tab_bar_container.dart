@@ -5,34 +5,31 @@ import 'package:divvy/Screens/tab_bar/widgets/widgets.dart';
 import 'package:divvy/screens/screens/conected_projects_screen.dart';
 import 'package:divvy/screens/screens/connect_to_project.dart';
 import 'package:divvy/screens/tab_bar/widgets/wallet_screen.dart';
-import 'package:divvy/screens/tab_bar/widgets/safe_screen.dart';
-import 'package:divvy/sila/models/update_user_info/address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatelessWidget {
-  final String userID;
-  const HomeScreen({Key key, this.userID}) : super(key: key);
+  final UserModel user;
+  const HomeScreen({Key key, this.user}) : super(key: key);
 
-  static Route route(String userID) {
+  static Route route(UserModel user) {
     return MaterialPageRoute<void>(
         builder: (_) => HomeScreen(
-              userID: userID,
+              user: user,
             ));
   }
 
   @override
   Widget build(BuildContext context) {
     FirebaseService firebaseService = FirebaseService();
-
     return BlocProvider(
         create: (BuildContext context) => TabBloc(),
         child: MultiProvider(
           providers: [
             StreamProvider<UserModel>(
-              initialData: UserModel.empty,
-              create: (context) => firebaseService.streamRealtimeUser(userID),
+              initialData: user,
+              create: (context) => firebaseService.streamRealtimeUser(user.id),
             ),
           ],
           child: TabBarContainer(),
@@ -62,7 +59,7 @@ class TabBarContainer extends StatelessWidget {
             ),
             actions: [
               Visibility(
-                visible: user.accountType == 'business',
+                visible: user.isHomeowner == false,
                 child: IconButton(
                   icon: Icon(Icons.add),
                   onPressed: () => _settingModalBottomSheet(context, user),
@@ -110,7 +107,7 @@ class TabBarContainer extends StatelessWidget {
   Widget activeTabFunction(activeTab) {
     if (activeTab == AppTab.project) return ProjectScreen();
     if (activeTab == AppTab.transactions) return TransactionsScreen();
-    if (activeTab == AppTab.wallet) return SafeScreen();
+    if (activeTab == AppTab.wallet) return WalletScreen();
     if (activeTab == AppTab.account) return AccountScreen();
     return Container();
   }

@@ -27,7 +27,7 @@ class UserModel extends Equatable {
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
-  final String accountType;
+  final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
   final String projectID;
@@ -55,7 +55,7 @@ class UserModel extends Equatable {
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
-    this.accountType,
+    this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
     this.projectID,
@@ -85,7 +85,7 @@ class UserModel extends Equatable {
     privateKey: null,
     silaEntityName: null,
     silaHandle: null,
-    accountType: null,
+    isHomeowner: null,
     wallet: null,
     businessAdminDocumentID: null,
     projectID: null,
@@ -115,7 +115,7 @@ class UserModel extends Equatable {
         privateKey,
         silaEntityName,
         silaHandle,
-        accountType,
+        isHomeowner,
         wallet,
         businessAdminDocumentID,
         projectID,
@@ -145,7 +145,7 @@ class UserModel extends Equatable {
       privateKey: entity.privateKey,
       silaHandle: entity.silaHandle,
       silaEntityName: entity.silaEntityName,
-      accountType: entity.accountType,
+      isHomeowner: entity.isHomeowner,
       wallet: entity.wallet,
       businessAdminDocumentID: entity.businessAdminDocumentID,
       projectID: (entity.projectID == null) ? "" : entity.projectID,
@@ -176,7 +176,7 @@ class UserModel extends Equatable {
       privateKey,
       silaEntityName,
       silaHandle,
-      accountType,
+      isHomeowner,
       wallet,
       businessAdminDocumentID,
       projectID,

@@ -23,12 +23,4 @@ class GetTransactionsLoadSuccess extends GetTransactionsState {
   List<Object> get props => [response];
 }
 
-class GetTransactionsLoadFailure extends GetTransactionsState {
-  final Exception exception;
-
-  const GetTransactionsLoadFailure({@required this.exception})
-      : assert(exception != null);
-
-  @override
-  List<Object> get props => [exception];
-}
+class GetTransactionsLoadFailure extends GetTransactionsState {}

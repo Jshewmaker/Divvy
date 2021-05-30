@@ -23,12 +23,4 @@ class LinkAccountLoadSuccess extends LinkAccountState {
   List<Object> get props => [response];
 }
 
-class LinkAccountLoadFailure extends LinkAccountState {
-  final Exception exception;
-
-  const LinkAccountLoadFailure({@required this.exception})
-      : assert(exception != null);
-
-  @override
-  List<Object> get props => [exception];
-}
+class LinkAccountLoadFailure extends LinkAccountState {}

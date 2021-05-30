@@ -23,12 +23,4 @@ class IssueSilaLoadSuccess extends IssueSilaState {
   List<Object> get props => [response];
 }
 
-class IssueSilaLoadFailure extends IssueSilaState {
-  final Exception exception;
-
-  const IssueSilaLoadFailure({@required this.exception})
-      : assert(exception != null);
-
-  @override
-  List<Object> get props => [exception];
-}
+class IssueSilaLoadFailure extends IssueSilaState {}

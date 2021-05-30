@@ -1,53 +1,69 @@
+import 'package:authentication_repository/authentication_repository.dart';
+import 'package:divvy/screens/screens/account/create_sila_user_screen.dart';
 import 'package:flutter/material.dart';
+
 import 'package:flutter/services.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
-class BusinessAddressWidget extends StatefulWidget {
-  final TextEditingController streetAddressController;
-  final TextEditingController cityController;
-  final TextEditingController stateController;
-  TextEditingController countryController = TextEditingController(text: 'US');
-  MaskedTextController postalCodeController =
-      MaskedTextController(mask: '00000');
-  final GlobalKey<FormState> formKey;
-
-  BusinessAddressWidget(
-      {Key key,
-      this.streetAddressController,
-      this.cityController,
-      this.stateController,
-      this.countryController,
-      this.postalCodeController,
-      this.formKey})
-      : super(key: key);
+// ignore: must_be_immutable
+class HomeownerSignupPage2 extends StatefulWidget {
+  HomeownerSignupPage2({Key key}) : super(key: key);
 
   @override
-  _BusinessAddressWidgetState createState() => _BusinessAddressWidgetState();
+  _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
+class _SignUpFormState extends State<HomeownerSignupPage2> {
   String stateDropdownValue = 'AL';
+  FirebaseService _firebaseService = FirebaseService();
+
+  final TextEditingController _streetAddressController =
+      TextEditingController();
+  final TextEditingController _cityController = TextEditingController();
+  final TextEditingController _stateController = TextEditingController();
+  final TextEditingController _countryController =
+      TextEditingController(text: 'US');
+  final MaskedTextController _postalCodeController =
+      MaskedTextController(mask: '00000');
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    final _formKey = widget.formKey;
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Form(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        title:
+            FittedBox(fit: BoxFit.fitWidth, child: Text('Homeowner Address')),
+        actions: [
+          TextButton(
+              child: Text(
+                'Next',
+                style: TextStyle(
+                    color: Colors.blue,
+                    fontWeight: FontWeight.normal,
+                    fontSize: 18),
+              ),
+              onPressed: () => _signUpButton(context)),
+        ],
+      ),
+      body: Form(
         key: _formKey,
-        child: ListView(
-          shrinkWrap: true,
-          children: [
-            _streetAddressInput(),
-            const SizedBox(height: 8.0),
-            _cityInput(),
-            const SizedBox(height: 8.0),
-            _stateInput(),
-            const SizedBox(height: 8.0),
-            _countryInput(),
-            const SizedBox(height: 8.0),
-            _postalCodeInput(),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(left: 8, right: 8),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              _streetAddressInput(),
+              const SizedBox(height: 8.0),
+              _cityInput(),
+              const SizedBox(height: 8.0),
+              _stateInput(),
+              const SizedBox(height: 8.0),
+              _countryInput(),
+              const SizedBox(height: 8.0),
+              _postalCodeInput(),
+            ],
+          ),
         ),
       ),
     );
@@ -61,7 +77,7 @@ class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
         }
         return null;
       },
-      controller: widget.streetAddressController,
+      controller: _streetAddressController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Street Address',
@@ -79,7 +95,7 @@ class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
         }
         return null;
       },
-      controller: widget.cityController,
+      controller: _cityController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'City',
@@ -163,7 +179,7 @@ class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
   Widget _countryInput() {
     return TextField(
       enabled: false,
-      controller: widget.countryController,
+      controller: _countryController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Country',
@@ -180,7 +196,7 @@ class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
         }
         return null;
       },
-      controller: widget.postalCodeController,
+      controller: _postalCodeController,
       decoration: InputDecoration(
         border: UnderlineInputBorder(),
         labelText: 'Zip Code',
@@ -188,5 +204,26 @@ class _BusinessAddressWidgetState extends State<BusinessAddressWidget> {
       ),
       keyboardType: TextInputType.number,
     );
+  }
+
+  void _signUpButton(context) {
+    if (_formKey.currentState.validate()) {
+      _firebaseService.addDataToFirestoreDocument(
+          'users',
+          UserModel(
+            streetAddress: _streetAddressController.text,
+            city: _cityController.text,
+            state: stateDropdownValue,
+            postalCode: _postalCodeController.text,
+            country: _countryController.text,
+          ).toEntity().toDocumentAddresses());
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateSilaUserScreen(),
+        ),
+      );
+    }
   }
 }

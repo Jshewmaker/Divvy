@@ -1,33 +1,33 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/sign_up/view/contractor/admin/business_admin_signup_page_2.dart';
+import 'package:divvy/screens/sign_up/view/homeowner/sila_info/homeowner_signup_page_2.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter/services.dart';
 
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:intl/intl.dart';
 
-class BusinessAdminSignupPage1 extends StatefulWidget {
-  BusinessAdminSignupPage1({Key key}) : super(key: key);
+class HomeownerSignupPage1 extends StatefulWidget {
+  HomeownerSignupPage1({Key key}) : super(key: key);
 
   @override
   _SignUpFormState createState() => _SignUpFormState();
 }
 
 // ignore: must_be_immutable
-class _SignUpFormState extends State<BusinessAdminSignupPage1> {
+class _SignUpFormState extends State<HomeownerSignupPage1> {
   FirebaseService _firebaseService = FirebaseService();
   final TextEditingController _nameController = TextEditingController();
   final MaskedTextController _ssnController =
       MaskedTextController(mask: '000-00-0000');
   final MaskedTextController _confirmSsnController =
       MaskedTextController(mask: '000-00-0000');
-  final TextEditingController _birthdayController = TextEditingController();
   final MaskedTextController _phoneNumberController =
       MaskedTextController(mask: '000-000-0000');
-  final TextEditingController _emailController = TextEditingController();
-  String yearDropDown = '1900';
+  String yearDropDown = '1950';
   String monthDropDown = '1';
   String dayDropDown = '1';
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -35,7 +35,8 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Admin Personal Info'),
+        title: FittedBox(
+            fit: BoxFit.fitWidth, child: Text('Homeowner Personal Info')),
         actions: [
           TextButton(
               child: Text(
@@ -48,25 +49,28 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
               onPressed: () => _signUpButton(context)),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
+      body: Form(
+        key: _formKey,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
           child: ListView(
             shrinkWrap: true,
             children: [
               _nameInput(),
               const SizedBox(height: 8.0),
-              _emailInput(),
+              _ssnInput(context),
               const SizedBox(height: 8.0),
-              _ssnInput(),
-              const SizedBox(height: 8.0),
-              _confirmSSN(),
+              _confirmSsn(),
               const SizedBox(height: 8.0),
               _birthdayInput(),
               const SizedBox(height: 8.0),
-              _phoneNumberInput(),
+              Text(
+                'YYYY      MM     DD',
+                style: TextStyle(color: Colors.grey),
+              ),
               const SizedBox(height: 8.0),
+              _phoneNumberInput(),
+              const SizedBox(height: 30.0),
               Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: Text(
@@ -98,31 +102,28 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     );
   }
 
-  Widget _ssnInput() {
-    return Row(
-      children: [
-        Flexible(
-          child: TextFormField(
-            validator: (value) {
-              if (value.length != 11) {
-                return 'Please Enter Valid Social Security Number';
-              }
-              return null;
-            },
-            controller: _ssnController,
-            decoration: InputDecoration(
-              border: UnderlineInputBorder(),
-              hintText: "xxx-xx-xxxx",
-              labelText: 'Social Security Number',
-            ),
-            keyboardType: TextInputType.number,
-          ),
+  Widget _ssnInput(BuildContext context) {
+    return Container(
+      width: 200,
+      child: TextFormField(
+        validator: (value) {
+          if (value.length != 11) {
+            return 'Please Enter Valid Social Security Number';
+          }
+          return null;
+        },
+        controller: _ssnController,
+        decoration: InputDecoration(
+          border: UnderlineInputBorder(),
+          hintText: "xxx-xx-xxxx",
+          labelText: 'Social Security Number',
         ),
-      ],
+        keyboardType: TextInputType.number,
+      ),
     );
   }
 
-  Widget _confirmSSN() {
+  Widget _confirmSsn() {
     return TextFormField(
       controller: _confirmSsnController,
       validator: (val) {
@@ -139,56 +140,9 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     );
   }
 
-  // _showAlertDialog(BuildContext context) {
-  //   // set up the button
-  //   Widget okButton = FlatButton(
-  //     child: Text("OK"),
-  //     onPressed: () {
-  //       Navigator.pop(context);
-  //     },
-  //   );
-
-  //   // set up the AlertDialog
-  //   AlertDialog alert = AlertDialog(
-  //     title: Text("My title"),
-  //     content: Text(
-  //         "We need your SSN to validate who you are. We do this for your protection to make sure no one can open an account in your name"),
-  //     actions: [
-  //       okButton,
-  //     ],
-  //   );
-
-  //   // show the dialog
-  //   showDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return alert;
-  //     },
-  //   );
-  // }
-
-  // Widget _birthdayInput(context) {
-  //   return TextFormField(
-  //     validator: (value) {
-  //       if (value.length != 10) {
-  //         return 'Please Enter Birthday as YYYY-MM-DD';
-  //       }
-  //       return null;
-  //     },
-  //     onTap: () => _selectDate(context),
-  //     controller: _birthdayController,
-  //     decoration: InputDecoration(
-  //       border: UnderlineInputBorder(),
-  //       hintText: 'YYYY/MM/DD',
-  //       labelText: 'Birthday',
-  //     ),
-  //     keyboardType: TextInputType.datetime,
-  //   );
-  // }
-
   Widget _birthdayInput() {
     var yearList =
-        new List<String>.generate(103, (i) => (1899 + i + 1).toString());
+        new List<String>.generate(103, (i) => (1949 + i + 1).toString());
     var monthList = new List<String>.generate(12, (i) => (i + 1).toString());
 
     var dayList = new List<String>.generate(31, (i) => (i + 1).toString());
@@ -247,55 +201,33 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
     );
   }
 
-  Widget _emailInput() {
-    return TextFormField(
-      validator: (value) {
-        if (!value.contains('@')) {
-          return 'Please Enter Valid Email Address.';
-        }
-        return null;
+  _showAlertDialog(BuildContext context) {
+    // set up the button
+    Widget okButton = FlatButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.pop(context);
       },
-      controller: _emailController,
-      decoration: InputDecoration(
-        hintText: "info@FrequencyPay.com",
-        border: UnderlineInputBorder(),
-        labelText: 'Email',
-      ),
-      keyboardType: TextInputType.emailAddress,
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Text("My title"),
+      content: Text(
+          "We need your SSN to validate who you are. We do this for your protection to make sure no one can open an account in your name"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
     );
   }
-
-  // _selectDate(BuildContext context) async {
-  //   DateTime _selectedDate;
-  //   DateTime newSelectedDate = await showDatePicker(
-  //       context: context,
-  //       initialDate: _selectedDate != null ? _selectedDate : DateTime.now(),
-  //       firstDate: DateTime(1900),
-  //       lastDate: DateTime(2040),
-  //       builder: (BuildContext context, Widget child) {
-  //         return Theme(
-  //           data: ThemeData.light().copyWith(
-  //             colorScheme: ColorScheme.light(
-  //               primary: Colors.teal[200],
-  //               onPrimary: Colors.white,
-  //               surface: Colors.teal[200],
-  //               onSurface: Colors.black,
-  //             ),
-  //             // dialogBackgroundColor: Colors.teal[500],
-  //           ),
-  //           child: child,
-  //         );
-  //       });
-
-  //   if (newSelectedDate != null) {
-  //     _selectedDate = newSelectedDate;
-  //     _birthdayController
-  //       ..text = DateFormat("yyyy-MM-dd").format(_selectedDate)
-  //       ..selection = TextSelection.fromPosition(TextPosition(
-  //           offset: _birthdayController.text.length,
-  //           affinity: TextAffinity.upstream));
-  //   }
-  // }
 
   Widget _phoneNumberInput() {
     return TextFormField(
@@ -317,21 +249,22 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
 
   void _signUpButton(BuildContext context) {
     if (_formKey.currentState.validate()) {
-      _firebaseService.createBusinessAdminInFirestore(
+      _firebaseService.addUserEmailToFirebaseDocument();
+      _firebaseService.userSetupCreateFirestore(
           'users',
           UserModel(
             name: _nameController.text,
-            email: _emailController.text,
             dateOfBirthYYYYMMDD: '$yearDropDown-$monthDropDown-$dayDropDown',
             identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
-            isHomeowner: false,
+            isHomeowner: true,
+            bankAccountIsConnected: false,
             kyc_status: 'failed',
-          ).toEntity().toDocumentAdminInfo());
+          ).toEntity().toDocumentPersonalInfo());
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => BusinessAdminSignupPage2(),
+          builder: (context) => HomeownerSignupPage2(),
         ),
       );
     }
