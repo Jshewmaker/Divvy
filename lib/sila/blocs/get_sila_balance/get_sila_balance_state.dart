@@ -25,11 +25,4 @@ class GetSilaBalanceLoadSuccess extends GetSilaBalanceState {
   List<Object> get props => [userSilaResponse, projectSilaResponse];
 }
 
-class GetSilaBalanceLoadFailure extends GetSilaBalanceState {
-  final Exception exception;
-
-  const GetSilaBalanceLoadFailure({@required this.exception});
-
-  @override
-  List<Object> get props => [exception];
-}
+class GetSilaBalanceLoadFailure extends GetSilaBalanceState {}

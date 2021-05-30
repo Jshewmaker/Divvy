@@ -1,5 +1,6 @@
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
-import 'package:divvy/sila/models/get_bank_accounts_response.dart';
+import 'package:divvy/sila/models/bank_accounts_entity.dart';
+
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
 import 'package:divvy/sila/models/models.dart';
@@ -155,17 +156,8 @@ class SilaRepository {
   }
 
   ///Update address in SILA ecosystem
-  Future<UpdateUserInfo> updateAddress() async {
+  Future<UpdateUserInfo> updateAddress(Map<String, String> newAddress) async {
     UserModel user = await _firebaseService.getUserData();
-    Map<String, String> newAddress = {
-      "street_address_1": user.streetAddress,
-      "street_address_2": "",
-      "city": user.city,
-      "state": user.state,
-      "country": user.country,
-      "postal_code": user.postalCode,
-    };
-
     GetEntityResponse entity =
         await silaApiClient.getEntity(user.silaHandle, user.privateKey);
 
@@ -177,13 +169,8 @@ class SilaRepository {
   ///You can only update this info before KYC is processed
   ///
   ///Update user's first name, last name, or birthday.
-  Future<UpdateUserInfo> updateEntity() async {
+  Future<UpdateUserInfo> updateEntity(Map<String, String> entity) async {
     UserModel user = await _firebaseService.getUserData();
-    Map<String, String> entity = {
-      "first_name": user.name.split(' ')[0],
-      "last_name": user.name.split(' ')[1],
-      "birthdate": user.dateOfBirthYYYYMMDD,
-    };
 
     final UpdateUserInfo response = await silaApiClient.updateEntity(
         user.silaHandle, user.privateKey, entity);
@@ -199,11 +186,5 @@ class SilaRepository {
       String receiverHandle, String transferMessage) async {
     return await silaApiClient.transferSila(
         sender, amount, receiverHandle, transferMessage);
-  }
-
-  Future<GetBankAccountsResponse> getBankAccounts() async {
-    UserModel user = await _firebaseService.getUserData();
-    return await silaApiClient.getBankAccounts(
-        user.silaHandle, user.privateKey);
   }
 }

@@ -26,8 +26,7 @@ class RedeemSilaBloc extends Bloc<RedeemSilaEvent, RedeemSilaState> {
         final response = await silaRepository.redeemSila(event.amount);
         yield RedeemSilaLoadSuccess(response);
       } catch (_) {
-        yield RedeemSilaLoadFailure(exception: _);
-        print('error caught: $_');
+        yield RedeemSilaLoadFailure();
       }
     }
   }

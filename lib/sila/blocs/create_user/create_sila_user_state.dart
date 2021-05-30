@@ -26,28 +26,14 @@ class GetUserDataForProvider extends CreateSilaUserState {
 
 class CheckHandleLoadInProgress extends CreateSilaUserState {}
 
-class SilaHandleExists extends CreateSilaUserState {}
-
-class SilaHandleDoesNotExist extends CreateSilaUserState {}
-
-class CreateHandleSuccess extends CreateSilaUserState {
-  final String handle;
-
-  const CreateHandleSuccess({@required this.handle}) : assert(handle != null);
-
-  @override
-  List<Object> get props => [handle];
-}
-
 class CheckHandleSuccess extends CreateSilaUserState {
   final RegisterResponse checkHandleResponse;
-  final String handle;
 
-  const CheckHandleSuccess({@required this.checkHandleResponse, this.handle})
-      : assert(checkHandleResponse != null && handle != null);
+  const CheckHandleSuccess({@required this.checkHandleResponse})
+      : assert(checkHandleResponse != null);
 
   @override
-  List<Object> get props => [checkHandleResponse, handle];
+  List<Object> get props => [checkHandleResponse];
 }
 
 class HandleTaken extends CreateSilaUserState {
@@ -60,10 +46,10 @@ class HandleTaken extends CreateSilaUserState {
   List<Object> get props => [checkHandleResponse];
 }
 
-class CheckHandleFailure extends CreateSilaUserState {
+class CheckHandleLoadFailure extends CreateSilaUserState {
   final dynamic exception;
 
-  const CheckHandleFailure({@required this.exception})
+  const CheckHandleLoadFailure({@required this.exception})
       : assert(exception != null);
 
   @override
@@ -76,20 +62,21 @@ class CheckHandleFailure extends CreateSilaUserState {
 
 class RegisterLoadInProgress extends CreateSilaUserState {}
 
-class RegisterSuccess extends CreateSilaUserState {
+class RegisterLoadSuccess extends CreateSilaUserState {
   final RegisterResponse registerResponse;
 
-  RegisterSuccess({@required this.registerResponse})
+  RegisterLoadSuccess({@required this.registerResponse})
       : assert(registerResponse != null);
 
   @override
   List<Object> get props => [registerResponse];
 }
 
-class RegisterFailure extends CreateSilaUserState {
+class RegisterLoadFailure extends CreateSilaUserState {
   final dynamic exception;
 
-  const RegisterFailure({@required this.exception}) : assert(exception != null);
+  const RegisterLoadFailure({@required this.exception})
+      : assert(exception != null);
 
   @override
   List<Object> get props => [exception];
@@ -101,20 +88,20 @@ class RegisterFailure extends CreateSilaUserState {
 
 class RequestKYCLoadInProgress extends CreateSilaUserState {}
 
-class RequestKYCSuccess extends CreateSilaUserState {
+class RequestKYCLoadSuccess extends CreateSilaUserState {
   final RegisterResponse requestKycResponse;
 
-  const RequestKYCSuccess({@required this.requestKycResponse})
+  const RequestKYCLoadSuccess({@required this.requestKycResponse})
       : assert(requestKycResponse != null);
 
   @override
   List<Object> get props => [requestKycResponse];
 }
 
-class RequestKYCFailure extends CreateSilaUserState {
+class RequestKYCLoadFailure extends CreateSilaUserState {
   final dynamic exception;
 
-  const RequestKYCFailure({@required this.exception})
+  const RequestKYCLoadFailure({@required this.exception})
       : assert(exception != null);
 
   @override
@@ -149,10 +136,11 @@ class CheckKycVerifiationFail extends CreateSilaUserState {
   List<Object> get props => [checkKycResponse];
 }
 
-class CheckKycFailure extends CreateSilaUserState {
+class CheckKycLoadFailure extends CreateSilaUserState {
   final dynamic exception;
 
-  const CheckKycFailure({@required this.exception}) : assert(exception != null);
+  const CheckKycLoadFailure({@required this.exception})
+      : assert(exception != null);
 
   @override
   List<Object> get props => [exception];
