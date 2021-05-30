@@ -1,8 +1,8 @@
 import 'package:divvy/sila/models/bank_account_balance_response.dart';
 import 'package:divvy/sila/models/bank_accounts_entity.dart';
+
 import 'package:divvy/sila/models/get_entity/get_entity_response.dart';
 import 'package:divvy/sila/models/get_transactions_response.dart';
-import 'package:divvy/sila/models/list_of_bank_accounts_response.dart';
 import 'package:divvy/sila/models/models.dart';
 import 'package:divvy/sila/models/redeem_sila_model.dart';
 import 'package:divvy/sila/models/transfer_sila_response.dart';
@@ -55,34 +55,30 @@ class SilaRepository {
 
   ///Link bank account to user's SILA Account
   Future<LinkAccountResponse> linkAccount(
-      String plaidPublicToken, String accountID, String accountName) async {
+      String plaidPublicToken, String accountID) async {
     UserModel user = await _firebaseService.getUserData();
 
     final LinkAccountResponse response = await silaApiClient.linkAccount(
-        user.silaHandle,
-        user.privateKey,
-        plaidPublicToken,
-        accountID,
-        accountName);
+        user.silaHandle, user.privateKey, plaidPublicToken, accountID);
     return response;
   }
 
-  Future<ListOfBankAccountEntities> getBankAccounts() async {
+  Future<BankAccountBalanceResponse> getBankAccountBalance() async {
     UserModel user = await _firebaseService.getUserData();
 
-    final ListOfBankAccountEntities response =
-        await silaApiClient.getBankAccounts(user.silaHandle, user.privateKey);
+    final BankAccountBalanceResponse response = await silaApiClient
+        .getBankAccountBalance(user.silaHandle, user.privateKey);
     return response;
   }
 
   ///Transfer money from user's bank account to SILA account.
   ///
   ///Dollars to SILA is 0.01 = 1 SILA. $784.98 = 78498 SILA
-  Future<IssueSilaResponse> issueSila(double amount, String account) async {
+  Future<IssueSilaResponse> issueSila(double amount) async {
     UserModel user = await _firebaseService.getUserData();
     amount = amount * 100;
-    final IssueSilaResponse response = await silaApiClient.issueSila(
-        user.silaHandle, user.privateKey, amount, account);
+    final IssueSilaResponse response =
+        await silaApiClient.issueSila(user.silaHandle, user.privateKey, amount);
     return response;
   }
 
@@ -181,9 +177,9 @@ class SilaRepository {
     return response;
   }
 
-  Future<RedeemSilaModel> redeemSila(String account, int amount) async {
+  Future<RedeemSilaModel> redeemSila(int amount) async {
     UserModel user = await _firebaseService.getUserData();
-    return await silaApiClient.redeemSila(user, account, amount);
+    return await silaApiClient.redeemSila(user, amount);
   }
 
   Future<TransferSilaResponse> transferSila(UserModel sender, double amount,

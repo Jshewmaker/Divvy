@@ -26,8 +26,8 @@ class RedeemSilaCubit extends Cubit<RedeemSilaState> {
   Future<void> redeemSila(int amount) async {
     emit(RedeemSilaLoadInProgress());
     try {
-      //final response = await _silaRepository.redeemSila(amount);
-      // emit(RedeemSilaLoadSuccess(response));
+      final response = await _silaRepository.redeemSila(amount);
+      emit(RedeemSilaLoadSuccess(response));
     } catch (_) {
       emit(RedeemSilaLoadFailure());
     }

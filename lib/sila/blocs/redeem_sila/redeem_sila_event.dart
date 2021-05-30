@@ -7,10 +7,8 @@ abstract class RedeemSilaEvent extends Equatable {
 
 class RedeemSilaRequest extends RedeemSilaEvent {
   final int amount;
-  final String account;
 
-  const RedeemSilaRequest({@required this.account, @required this.amount})
-      : assert(account != null, amount != null);
+  const RedeemSilaRequest({@required this.amount}) : assert(amount != null);
 
   @override
   List<Object> get props => [amount];
