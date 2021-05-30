@@ -20,7 +20,7 @@ class IssueSilaBloc extends Bloc<IssueSilaEvent, IssueSilaState> {
             await silaRepository.issueSila(event.amount, event.account);
         yield IssueSilaLoadSuccess(response: response);
       } catch (_) {
-        yield IssueSilaLoadFailure(exception: _);
+        yield IssueSilaLoadFailure();
         print('error caught: $_');
       }
     }

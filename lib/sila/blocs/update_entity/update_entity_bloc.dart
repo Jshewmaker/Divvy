@@ -16,7 +16,8 @@ class UpdateEntityBloc extends Bloc<UpdateEntityEvent, UpdateEntityState> {
     if (event is UpdateEntityRequest) {
       yield UpdateEntityLoadInProgress();
       try {
-        final UpdateUserInfo response = await silaRepository.updateEntity();
+        final UpdateUserInfo response =
+            await silaRepository.updateEntity(event.entity);
         yield UpdateEntityLoadSuccess(response: response);
       } catch (_) {
         yield UpdateEntityLoadFailure();

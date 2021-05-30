@@ -8,7 +8,7 @@ class CheckKybResponse extends Equatable {
   final String reference;
   final String entityType;
   final String verificationStatus;
-  final List<dynamic> verificationHistory;
+  final List<VerificationHistory> verificationHistory;
   final List<String> validKycLevels;
   final String certificationStatus;
   final List<dynamic> certificationHistory;

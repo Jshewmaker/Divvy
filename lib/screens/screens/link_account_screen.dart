@@ -32,11 +32,13 @@ class LinkAccountScreen extends StatelessWidget {
           child: BlocListener<LinkAccountBloc, LinkAccountState>(
             listener: (context, state) {
               if (state is LinkAccountLoadSuccess) {
-                Navigator.pop(context, "Bank account linked.");
+                Navigator.pop(context);
               }
               if (state is LinkAccountLoadFailure) {
-                Navigator.pop(
-                    context, "Unable to link bank account. Please try again");
+                SnackBar snackBar = SnackBar(
+                    content:
+                        Text('Unable to link bank account. Please try again.'));
+                Scaffold.of(context).showSnackBar(snackBar);
               }
             },
             child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
@@ -51,6 +53,10 @@ class LinkAccountScreen extends StatelessWidget {
                 }
                 if (state is LinkAccountLoadInProgress) {
                   return Center(child: CircularProgressIndicator());
+                }
+                //if (state is LinkAccountLoadSuccess) {}
+                if (state is LinkAccountLoadFailure) {
+                  return PlaidLinkScreen();
                 }
                 return CircularProgressIndicator();
               },

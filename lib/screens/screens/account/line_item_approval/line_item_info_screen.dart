@@ -105,7 +105,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
             ),
           ),
           Visibility(
-            visible: _user.accountType == 'homeowner',
+            visible: _user.isHomeowner,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -123,7 +123,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
             ),
           ),
           Visibility(
-              visible: _user.accountType == 'business',
+              visible: !_user.isHomeowner,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -166,7 +166,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
         height: 300,
         width: double.maxFinite,
         child: GestureDetector(
-            onTap: (user.accountType == 'business' &&
+            onTap: (!user.isHomeowner &&
                     lineItem.generalContractorApprovalDate == null)
                 ? () {
                     _showPicker(context);
@@ -186,7 +186,7 @@ class _LineItemInfoScreenState extends State<LineItemInfoScreen> {
                         ? Image.network(_uploadedFileURL)
                         : Container(
                             child: Center(
-                              child: user.accountType == 'homeowner'
+                              child: user.isHomeowner
                                   ? Text('No photo submitted')
                                   : Text('Tap To Add Picture'),
                             ),
