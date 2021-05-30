@@ -1,5 +1,6 @@
+import 'package:authentication_repository/authentication_repository.dart';
 import 'package:divvy/screens/screens/tab_bar_container.dart';
-import 'package:divvy/sila/blocs/kyb_blocs/create_business/create_business.dart';
+import 'package:divvy/sila/blocs/kyb_blocs/create_business_cubit.dart';
 import 'package:divvy/sila/repositories/repositories.dart';
 import 'package:divvy/sila/repositories/sila_business_repository.dart';
 import 'package:flutter/material.dart';
@@ -14,134 +15,103 @@ class CreateSilaBusinessScreen extends StatelessWidget {
   final SilaBusinessRepository silaBusinessRepository = SilaBusinessRepository(
       silaApiClient: SilaApiClient(httpClient: http.Client()));
 
-  final SilaRepository silaRepository =
-      SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => CreateSilaBusinessBloc(
-          silaBusinessRepository: silaBusinessRepository,
-          silaRepository: silaRepository),
+      create: (context) => CreateSilaBusinessCubit(silaBusinessRepository),
       child: Scaffold(
         appBar: AppBar(
           title: Text('DivvySafe'),
         ),
         body: Center(
-          child: BlocListener<CreateSilaBusinessBloc, CreateSilaBusinessState>(
+          child: BlocListener<CreateSilaBusinessCubit, CreateSilaBusinessState>(
             listener: (context, state) {
               if (state is CreateSilaBusinessSuccess) {
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                        builder: (contest) =>
-                            HomeScreen(userID: state.user.id)),
+                        builder: (contest) => HomeScreen(user: state.user)),
                     (route) => false);
               }
             },
-            child: BlocBuilder<CreateSilaBusinessBloc, CreateSilaBusinessState>(
-                builder: (context, state) {
+            child:
+                BlocBuilder<CreateSilaBusinessCubit, CreateSilaBusinessState>(
+                    builder: (context, state) {
+              if (state is GetUserDataForProvider) {
+                //var userprovider = context.repository<UserModelProvider>();
+                //userprovider.add(state.user);
+              }
               if (state is CreateSilaBusinessInitial) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CreateBusinessHandle());
+                BlocProvider.of<CreateSilaBusinessCubit>(context)
+                    .createBusinesss();
               }
 
-              //Business Sila Handle Creation + Registration
-              else if (state is SilaBusinessHandleDoesNotExist ||
-                  state is BusinessHandleTaken) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CreateBusinessHandle());
-              } else if (state is CreateBusinessHandleSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(SilaCheckBusinessHandle(handle: state.handle));
-              } else if (state is CheckBusinessHandleSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(SilaRegisterBusiness(handle: state.handle));
-              } else if (state is RegisterBusinessFailure) {
+              if (state is CertifyBusinessFailure) {
                 return Text(
-                  "Register Business Failure" + state.exception.toString(),
+                  "Certify Business Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
-              //Admin Sila Handle Creation + Registration
-              else if (state is RegisterBusinessSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CreateAdminHandle());
-              } else if (state is SilaAdminHandleDoesNotExist ||
-                  state is AdminHandleTaken) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CreateAdminHandle());
-              } else if (state is CreateAdminHandleSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(SilaCheckAdminHandle(handle: state.handle));
-              } else if (state is CheckAdminHandleSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(SilaRegisterAdmin(handle: state.handle));
-              } else if (state is RegisterAdminFailure) {
+              if (state is CertifyBeneficialOwnerFailure) {
+                return Text(
+                  "Certify Beneficial Owner Failure" +
+                      state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is GetEntityFailure) {
+                return Text(
+                  "Get Entity Failure" + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is CheckKybFailure) {
                 return Text(
                   "Check Kyb Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
-              //Link Business Members
-              else if (state is RegisterAdminSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(LinkBusinessMembers());
-              } else if (state is LinkBusinessMembersFailure) {
+              if (state is RequestKYBFailure) {
+                return Text(
+                  "Request KYB Failure" + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is LinkBusinessMembersFailure) {
                 return Text(
                   "Link Business Members Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
-              //KYB Verification
-              else if (state is LinkBusinessMembersSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(RequestKYB());
-              } else if (state is RequestKybSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CheckKYB());
-              } else if (state is RequestKybFailure) {
+              if (state is GetBusinessRolesFailure) {
                 return Text(
-                  "Request KYB Failure" + state.exception.toString(),
-                  style: TextStyle(color: Colors.red),
-                );
-              } else if (state is CheckKybFailure) {
-                return Text(
-                  "Check Kyb Failure" + state.exception.toString(),
-                  style: TextStyle(color: Colors.red),
-                );
-              } else if (state is CheckKybNotPassed) {
-                int numOfTags =
-                    state.checkKYBResponse.verificationHistory[0].tags.length;
-                String message = "";
-                for (int i = 0; i < numOfTags; i++) {
-                  message +=
-                      "\n${state.checkKYBResponse.verificationHistory[0].tags[i]}";
-                }
-                return Text(
-                  "Business did not pass KYB" + message,
+                  "Get Business Roles Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
               }
 
-              //Certification
-              else if (state is CheckKybSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CertifyBeneficialOwner());
-              } else if (state is CertifyBeneficialOwnerSuccess) {
-                BlocProvider.of<CreateSilaBusinessBloc>(context)
-                    .add(CertifyBusiness());
-              } else if (state is CertifyBeneficialOwnerFailure) {
+              if (state is RegisterBusinessFailure) {
                 return Text(
-                  "Certify Beneficial Owner Failure" +
-                      state.exception.toString(),
+                  "Register Business Failure" + state.exception.toString(),
                   style: TextStyle(color: Colors.red),
                 );
-              } else if (state is CertifyBusinessFailure) {
+              }
+
+              if (state is RegisterBusinessRoleLoadFailure) {
                 return Text(
-                  "Certify Business Failure" + state.exception.toString(),
+                  "Register Business Role Failure" + state.exception.toString(),
+                  style: TextStyle(color: Colors.red),
+                );
+              }
+
+              if (state is CheckKybNotPassed) {
+                return Text(
+                  "Register Business Role Failure" + state.response,
                   style: TextStyle(color: Colors.red),
                 );
               }

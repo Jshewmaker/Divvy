@@ -20,7 +20,7 @@ class UserEntity extends Equatable {
   final String privateKey;
   final String silaEntityName;
   final String silaHandle;
-  final String accountType;
+  final bool isHomeowner;
   final String wallet;
   final String businessAdminDocumentID;
   final String projectID;
@@ -48,7 +48,7 @@ class UserEntity extends Equatable {
     this.privateKey,
     this.silaEntityName,
     this.silaHandle,
-    this.accountType,
+    this.isHomeowner,
     this.wallet,
     this.businessAdminDocumentID,
     this.projectID,
@@ -78,7 +78,7 @@ class UserEntity extends Equatable {
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
-      "accountType": accountType,
+      "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
@@ -108,7 +108,7 @@ class UserEntity extends Equatable {
         privateKey,
         silaEntityName,
         silaHandle,
-        accountType,
+        isHomeowner,
         wallet,
         businessAdminDocumentID,
         projectID,
@@ -138,7 +138,7 @@ class UserEntity extends Equatable {
       json["privateKey"] as String,
       json["silaEntityName"] as String,
       json["silaHandle"] as String,
-      json["account_type"] as String,
+      json["isHomeowner"] as bool,
       json["wallet"] as String,
       json["businessAdminDocumentID"] as String,
       json["project_id"] as String,
@@ -170,18 +170,14 @@ class UserEntity extends Equatable {
       snap.data['privateKey'],
       snap.data['silaEntityName'],
       snap.data['silaHandle'],
-      snap.data['account_type'] != null
-          ? snap.data['account_type']
-          : snap.data['isHomeowner'] != null
-              ? (snap.data['isHomeowner'] == true ? 'homeowner' : "business")
-              : null,
+      snap.data['isHomeowner'],
       snap.data['wallet'],
       snap.data['businessAdminDocumentID'],
       snap.data['project_id'],
       snap.data['bankAccountIsConnected'],
       snap.data['project_list'],
       snap.data['project_name'],
-      snap.data['kyc_status'] == null ? 'failed' : snap.data['kyc_status'],
+      snap.data['kyc_status'],
     );
   }
 
@@ -205,7 +201,7 @@ class UserEntity extends Equatable {
       "privateKey": privateKey,
       "silaEntityName": silaEntityName,
       "silaHandle": silaHandle,
-      "account_type": accountType,
+      "isHomeowner": isHomeowner,
       "wallet": wallet,
       "businessAdminDocumentID": businessAdminDocumentID,
       "project_id": projectID,
@@ -220,18 +216,11 @@ class UserEntity extends Equatable {
     return {
       "name": name,
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
+      "identity_value": identityValue,
       "phone": phone,
-      "account_type": accountType,
+      "isHomeowner": isHomeowner,
       "bankAccountIsConnected": bankAccountIsConnected,
       "kyc_status": kyc_status,
-    };
-  }
-
-  Map<String, Object> toDocumentNameDOBPhone() {
-    return {
-      "name": name,
-      "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
-      "phone": phone,
     };
   }
 
@@ -242,12 +231,7 @@ class UserEntity extends Equatable {
       "state": state,
       "country": country,
       "postal_code": postalCode,
-    };
-  }
-
-  Map<String, Object> toDocumentIdentityValue() {
-    return {
-      "identity_value": identityValue,
+      "kyc_status": kyc_status,
     };
   }
 
@@ -258,7 +242,7 @@ class UserEntity extends Equatable {
       "dateOfBirthYYYYMMDD": dateOfBirthYYYYMMDD,
       "identity_value": identityValue,
       "phone": phone,
-      "account_type": accountType,
+      "isHomeowner": isHomeowner,
       "kyc_status": kyc_status,
     };
   }
@@ -272,7 +256,7 @@ class UserEntity extends Equatable {
       "business_type": businessType,
       "naics_code": naicsCode,
       "phone": phone,
-      "account_type": accountType,
+      "isHomeowner": isHomeowner,
       "bankAccountIsConnected": bankAccountIsConnected,
       "kyc_status": kyc_status,
     };

@@ -1,6 +1,6 @@
 import 'package:divvy/authentication/authentication_bloc/authentication_bloc.dart';
 import 'package:divvy/screens/sign_up/view/contractor/select_business_type_screen.dart';
-import 'package:divvy/screens/sign_up/view/homeowner/sila_info/user_info_input_screen.dart';
+import 'package:divvy/screens/sign_up/view/homeowner/sila_info/homeowner_signup_page_1.dart';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,9 +105,7 @@ class HomeownerOrBusinessScreen extends StatelessWidget {
                   color: const Color(0xFF1E90FF),
                   textColor: Colors.white,
                   onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => UserInfoInputScreen(
-                            accountType: 'homeowner',
-                          ))),
+                      builder: (context) => HomeownerSignupPage1())),
                 )
               ],
             ),

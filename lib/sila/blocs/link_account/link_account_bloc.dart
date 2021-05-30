@@ -27,7 +27,7 @@ class LinkAccountBloc extends Bloc<LinkAccountEvent, LinkAccountState> {
         yield LinkAccountLoadSuccess(response: response);
       } catch (_) {
         print('error caught: $_');
-        yield LinkAccountLoadFailure(exception: _);
+        yield LinkAccountLoadFailure();
       }
     }
   }

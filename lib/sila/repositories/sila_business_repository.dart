@@ -36,11 +36,11 @@ class SilaBusinessRepository {
     return response;
   }
 
-  Future<KYBRegisterResponse> registerKYB(String handle) async {
+  Future<KYBRegisterResponse> registerKYB() async {
     UserModel user = await _firebaseService.getUserData();
 
     final KYBRegisterResponse response =
-        await silaApiClient.registerBusiness(user, handle);
+        await silaApiClient.registerBusiness(user);
     return response;
   }
 
@@ -49,9 +49,10 @@ class SilaBusinessRepository {
     return await silaApiClient.getBusinessRoles();
   }
 
-  Future<RegisterResponse> registerBusinessAdmin(String handle) async {
+  Future<RegisterResponse> registerBusinessAdmin(UserModel user) async {
     UserModel user = await _firebaseService.getBusinessUser();
-    return await silaApiClient.register(handle, user, isbusinessUser: true);
+    return await silaApiClient.register(user.silaHandle, user,
+        isbusinessUser: true);
   }
 
   Future<List<LinkBusinessMemberResponse>> linkBusinessMember(
