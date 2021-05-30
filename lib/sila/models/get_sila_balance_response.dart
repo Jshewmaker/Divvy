@@ -23,12 +23,11 @@ class GetSilaBalanceResponse extends Equatable {
 
   static GetSilaBalanceResponse fromJson(dynamic json) {
     return GetSilaBalanceResponse(
-      success: json['success'],
-      status: json['status'],
-      address: json['address'],
-      silaBalance:
-          json['sila_balance'] != null ? json['sila_balance'].toDouble() : null,
-    );
-
+        success: json['success'],
+        status: json['status'],
+        address: json['address'],
+        silaBalance: (json['sila_balance'] != null)
+            ? json['sila_balance'].toDouble()
+            : null);
   }
 }

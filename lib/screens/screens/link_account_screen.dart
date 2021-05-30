@@ -1,5 +1,4 @@
 import 'package:authentication_repository/authentication_repository.dart';
-import 'package:divvy/screens/screens/name_bank_account_screen.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_bloc.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_event.dart';
 import 'package:divvy/sila/blocs/link_account/link_account_state.dart';
@@ -14,14 +13,9 @@ import 'account/plaid_link_screen.dart';
 class LinkAccountScreen extends StatelessWidget {
   final String token;
   final String accountID;
-  final String accountName;
   final SilaRepository silaRepository =
       SilaRepository(silaApiClient: SilaApiClient(httpClient: http.Client()));
-  LinkAccountScreen(
-      {Key key,
-      @required this.token,
-      @required this.accountID,
-      @required this.accountName})
+  LinkAccountScreen({Key key, @required this.token, @required this.accountID})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -42,12 +36,9 @@ class LinkAccountScreen extends StatelessWidget {
             child: BlocBuilder<LinkAccountBloc, LinkAccountState>(
               builder: (context, state) {
                 if (state is LinkAccountInitial) {
-                  BlocProvider.of<LinkAccountBloc>(context)
-                      .add(LinkAccountRequest(
-                    plaidPublicToken: token,
-                    accountID: accountID,
-                    accountName: accountName,
-                  ));
+                  BlocProvider.of<LinkAccountBloc>(context).add(
+                      LinkAccountRequest(
+                          plaidPublicToken: token, accountID: accountID));
                 }
                 if (state is LinkAccountLoadInProgress) {
                   return Center(child: CircularProgressIndicator());

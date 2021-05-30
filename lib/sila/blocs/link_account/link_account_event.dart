@@ -8,15 +8,10 @@ abstract class LinkAccountEvent extends Equatable {
 class LinkAccountRequest extends LinkAccountEvent {
   final String plaidPublicToken;
   final String accountID;
-  final String accountName;
 
   const LinkAccountRequest(
-      {@required this.plaidPublicToken,
-      @required this.accountID,
-      @required this.accountName})
-      : assert(plaidPublicToken != null &&
-            accountID != null &&
-            accountName != null);
+      {@required this.plaidPublicToken, @required this.accountID})
+      : assert(plaidPublicToken != null && accountID != null);
 
   @override
   List<Object> get props => [plaidPublicToken, accountID];
