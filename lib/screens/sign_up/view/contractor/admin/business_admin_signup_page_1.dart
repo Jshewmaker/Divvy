@@ -325,7 +325,7 @@ class _SignUpFormState extends State<BusinessAdminSignupPage1> {
             dateOfBirthYYYYMMDD: '$yearDropDown-$monthDropDown-$dayDropDown',
             identityValue: _ssnController.text,
             phone: _phoneNumberController.text,
-            isHomeowner: false,
+            accountType: 'business',
             kyc_status: 'failed',
           ).toEntity().toDocumentAdminInfo());
       Navigator.push(

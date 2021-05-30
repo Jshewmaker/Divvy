@@ -16,8 +16,7 @@ class UpdateAddressBloc extends Bloc<UpdateAddressEvent, UpdateAddressState> {
     if (event is UpdateAddressRequest) {
       yield UpdateAddressLoadInProgress();
       try {
-        final UpdateUserInfo response =
-            await silaRepository.updateAddress(event.address);
+        final UpdateUserInfo response = await silaRepository.updateAddress();
         yield UpdateAddressLoadSuccess(response: response);
       } catch (_) {
         yield UpdateAddressLoadFailure();

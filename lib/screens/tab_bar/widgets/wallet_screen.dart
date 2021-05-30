@@ -43,65 +43,56 @@ class _WalletScreenState extends State<WalletScreen> {
       ],
       child: Scaffold(
         body: Center(
-          child: BlocListener<WalletScreenBloc, WalletScreenState>(
-            listener: (context, state) {
-              if (state is WalletScreenInitialConnection) {
-                SnackBar snackBar = SnackBar(
-                    content: Text("Bank account connection successful."));
-                Scaffold.of(context).showSnackBar(snackBar);
+          child: BlocBuilder<WalletScreenBloc, WalletScreenState>(
+            builder: (context, state) {
+              if (state is WalletScreenInitialState) {
+                BlocProvider.of<WalletScreenBloc>(context)
+                    .add(WalletScreenCheck(initial: false));
+                return Container();
               }
-            },
-            child: BlocBuilder<WalletScreenBloc, WalletScreenState>(
-              builder: (context, state) {
-                if (state is WalletScreenInitialState) {
-                  BlocProvider.of<WalletScreenBloc>(context)
-                      .add(WalletScreenCheck(initial: false));
-                  return Container();
-                }
-                if (state is WalletScreenAccountNotLinked) {
-                  return PlaidLinkScreen();
-                }
-                if (state is WalletScreenHasAccountLinked ||
-                    state is WalletScreenInitialConnection) {
-                  return BlocBuilder<GetSilaBalanceBloc, GetSilaBalanceState>(
-                    builder: (context, state) {
-                      if (state is GetSilaBalanceInitial) {
-                        BlocProvider.of<GetSilaBalanceBloc>(context)
-                            .add(GetSilaBalanceRequest(user));
-                        return Container();
-                      }
-                      if (state is GetSilaBalanceLoadInProgress) {
-                        return WalletScreenInitial(
+              if (state is WalletScreenAccountNotLinked) {
+                return PlaidLinkScreen();
+              }
+              if (state is WalletScreenHasAccountLinked ||
+                  state is WalletScreenInitialConnection) {
+                return BlocBuilder<GetSilaBalanceBloc, GetSilaBalanceState>(
+                  builder: (context, state) {
+                    if (state is GetSilaBalanceInitial) {
+                      BlocProvider.of<GetSilaBalanceBloc>(context)
+                          .add(GetSilaBalanceRequest(user));
+                      return Container();
+                    }
+                    if (state is GetSilaBalanceLoadInProgress) {
+                      return WalletScreenInitial(
+                        user: user,
+                      );
+                    }
+                    if (state is GetSilaBalanceLoadSuccess) {
+                      if (state.projectSilaResponse != null) {
+                        return WalletScreenPopulated(
+                          userSilaResponse: state.userSilaResponse,
+                          projectSilaResponse: state.projectSilaResponse,
+                          user: user,
+                        );
+                      } else {
+                        return WalletScreenPopulated(
+                          userSilaResponse: state.userSilaResponse,
                           user: user,
                         );
                       }
-                      if (state is GetSilaBalanceLoadSuccess) {
-                        if (state.projectSilaResponse != null) {
-                          return WalletScreenPopulated(
-                            userSilaResponse: state.userSilaResponse,
-                            projectSilaResponse: state.projectSilaResponse,
-                            user: user,
-                          );
-                        } else {
-                          return WalletScreenPopulated(
-                            userSilaResponse: state.userSilaResponse,
-                            user: user,
-                          );
-                        }
-                      }
-                      if (state is GetSilaBalanceLoadFailure) {
-                        return Text(
-                          'Something went wrong with sila_balance!',
-                          style: TextStyle(color: Colors.red),
-                        );
-                      }
-                      return Container();
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
+                    }
+                    if (state is GetSilaBalanceLoadFailure) {
+                      return Text(
+                        'Something went wrong with sila_balance!',
+                        style: TextStyle(color: Colors.red),
+                      );
+                    }
+                    return Container();
+                  },
+                );
+              }
+              return Container();
+            },
           ),
         ),
       ),
@@ -126,10 +117,10 @@ class WalletScreenInitial extends StatelessWidget {
               child: BalanceCard(
                   amountSila: 0,
                   title: "${user.projectName} Project",
-                  buttonVisible: user.isHomeowner,
+                  buttonVisible: user.accountType == 'homeowner',
                   user: user))),
       Visibility(
-        visible: !user.isHomeowner,
+        visible: user.accountType == 'business',
         child: Column(
           children: [
             SizedBox(
@@ -181,13 +172,14 @@ class WalletScreenPopulated extends StatelessWidget {
           child: Container(
               width: MediaQuery.of(context).size.width / 1.1,
               child: BalanceCard(
-                  amountSila:
-                      (user.isHomeowner) ? amountUserSila : amountProjectSila,
+                  amountSila: (user.accountType == 'homeowner')
+                      ? amountUserSila
+                      : amountProjectSila,
                   title: "${user.projectName} Project",
-                  buttonVisible: user.isHomeowner,
+                  buttonVisible: user.accountType == 'homeowner',
                   user: user))),
       Visibility(
-        visible: !user.isHomeowner,
+        visible: user.accountType == 'business',
         child: Column(
           children: [
             SizedBox(
@@ -264,7 +256,7 @@ class BalanceCard extends StatelessWidget {
             ),
             Visibility(
               visible: buttonVisible,
-              child: _button(context, user.isHomeowner, amountSila),
+              child: _button(context, user.accountType, amountSila),
             ),
             SizedBox(
               height: 20,
@@ -276,8 +268,8 @@ class BalanceCard extends StatelessWidget {
   }
 
   RaisedButton _button(
-      BuildContext context, bool isHomeowner, double amountSila) {
-    if (isHomeowner) {
+      BuildContext context, String accountType, double amountSila) {
+    if (accountType == 'homeowner') {
       return RaisedButton(
         child: Text("Add Money"),
         shape:
