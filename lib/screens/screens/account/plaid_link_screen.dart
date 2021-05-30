@@ -1,4 +1,5 @@
 import 'package:divvy/screens/screens/link_account_screen.dart';
+import 'package:divvy/screens/screens/name_bank_account_screen.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_bloc.dart';
 import 'package:divvy/sila/blocs/wallet_screen/wallet_screen_event.dart';
 import 'package:divvy/sila/plaid/plaid_bloc/plaid_bloc.dart';
@@ -71,10 +72,8 @@ class PlaidLinkScreen extends StatelessWidget {
                         if (result.token != null) {
                           Navigator.of(context)
                               .push(MaterialPageRoute(
-                                  builder: (contest) => LinkAccountScreen(
-                                        token: result.token,
-                                        accountID: result.accountId,
-                                      )))
+                                  builder: (contest) => NameBankAccountScreen(
+                                      result.accountId, result.token)))
                               .then((value) => {
                                     BlocProvider.of<WalletScreenBloc>(context)
                                         .add(WalletScreenCheck(initial: true))
